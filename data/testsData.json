@@ -1,0 +1,2936 @@
+
+[
+  {
+    "modality": "Echocardiography",
+    "body_part": "",
+    "protocol": "",
+    "price": "2800",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Audiometry",
+    "body_part": "",
+    "protocol": "",
+    "price": "1500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "Abd and Hepatic vein ",
+    "protocol": "color doppler",
+    "price": "3800",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "abdomen arterial and venous ",
+    "protocol": "doppler",
+    "price": "5500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "BOTH LOWER LIMB ",
+    "protocol": "Arterial Color Doppler",
+    "price": "5250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "BOTH LOWER LIMB ",
+    "protocol": "Venous Color Doppler",
+    "price": "5250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "Both Upper Limb ",
+    "protocol": "Arterial Color Doppler",
+    "price": "5250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "Both Upper Limb ",
+    "protocol": "Venous Color Doppler",
+    "price": "5250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "Carotid Arteries",
+    "protocol": " Color Doppler",
+    "price": "3000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "Left Lower Limb ",
+    "protocol": "Arterial Color Doppler",
+    "price": "2550",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "Left Lower Limb ",
+    "protocol": "Arterial Venous Doppler",
+    "price": "5250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "Left Lower Limb ",
+    "protocol": "Venous Color Doppler",
+    "price": "2550",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "Left Upper Limb ",
+    "protocol": "Arterial Color Doppler",
+    "price": "2550",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "Left Upper Limb ",
+    "protocol": "Venous Color Doppler",
+    "price": "2550",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "NECK ",
+    "protocol": "DOPPLER",
+    "price": "2600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "Obstetric",
+    "protocol": " Color Doppler",
+    "price": "2500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "PELVIS ",
+    "protocol": "Colour Doppler",
+    "price": "2400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "Penile ",
+    "protocol": "Color Doppler",
+    "price": "2100",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "Portal ",
+    "protocol": "",
+    "price": "2500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "RENAL ",
+    "protocol": "Doppler",
+    "price": "2550",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "Right Lower Limb ",
+    "protocol": "Arterial Color Doppler",
+    "price": "2550",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "Right Lower Limb ",
+    "protocol": "Arterial Venous Doppler",
+    "price": "5250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "Right Lower Limb ",
+    "protocol": "Venous Color Doppler",
+    "price": "2550",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "Right Upper Limb ",
+    "protocol": "Arterial Color Doppler",
+    "price": "2550",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "Right Upper Limb ",
+    "protocol": "Venous Color Doppler",
+    "price": "2550",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "Scrotal",
+    "protocol": " Color Doppler",
+    "price": "2300",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Colour Doppler",
+    "body_part": "Scrotal",
+    "protocol": " Doppler with Inguinal Region",
+    "price": "3000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "Knee Joint",
+    "protocol": "3D CT ",
+    "price": "6250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "3 WAY KOCK",
+    "protocol": "",
+    "price": "550",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "3D ANKLE",
+    "protocol": "",
+    "price": "6250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "3D CERVICAL SPINE",
+    "protocol": "",
+    "price": "6250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "3D Chest",
+    "protocol": "",
+    "price": "8750",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "3D ELBOW",
+    "protocol": "",
+    "price": "6250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "3D ELBOW JOINT",
+    "protocol": "",
+    "price": "6250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "3D FACE",
+    "protocol": "",
+    "price": "6250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "3D HIP JOINT",
+    "protocol": "",
+    "price": "6250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "3D KNEE JOINT",
+    "protocol": "",
+    "price": "6250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "ABDOMEN ",
+    "protocol": "Angio",
+    "price": "10250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "ABDOMEN PELVIS ",
+    "protocol": "ANGIOGRAPHY",
+    "price": "11400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "ABDOMEN PELVIS ",
+    "protocol": "PLAIN",
+    "price": "6350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "ABDOMEN PELVIS ",
+    "protocol": "PLAIN CONTRAST",
+    "price": "8850",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "ABDOMEN PELVIS ",
+    "protocol": "WITH IVP",
+    "price": "10750",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "Aortagram",
+    "protocol": "",
+    "price": "10600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "AXILLA ",
+    "protocol": "WITH CONTRAST",
+    "price": "6600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "ELBOW",
+    "protocol": "Both 3D CT",
+    "price": "12500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "BRAIN ",
+    "protocol": "ANGIO",
+    "price": "8100",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "BRAIN ",
+    "protocol": "PLAIN",
+    "price": "3350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "BRAIN ",
+    "protocol": "PLAIN CONTRAST",
+    "price": "5850",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "BRAIN ",
+    "protocol": "VENO",
+    "price": "8100",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "BROCHOSCOPY",
+    "protocol": "",
+    "price": "8850",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "CHEST ",
+    "protocol": "CECT WITH STERNO CLAVICULAR JOINT",
+    "price": "8850",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "CERVICAL SPINE",
+    "protocol": "",
+    "price": "5750",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "CERVICAL SPINE ",
+    "protocol": "FLEXION EXTENSION",
+    "price": "8250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "CHEST ABDOMEN PELVIS ",
+    "protocol": "PLAIN CONTRAST",
+    "price": "12850",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "CHEST AND UPPER ABDOMEN",
+    "protocol": "",
+    "price": "9250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "CHEST ",
+    "protocol": "CONTRAST WITH  ANGIO",
+    "price": "9250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "CHEST ",
+    "protocol": "PLAIN",
+    "price": "4000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "CHEST ",
+    "protocol": "PLAIN CONTRAST",
+    "price": "6500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "CONTRAST CHARGE",
+    "protocol": "",
+    "price": "2500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "CT CHEST AND MEDIASTINUM",
+    "protocol": "",
+    "price": "4000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "CT CHEST ",
+    "protocol": "WITH CONTRAST",
+    "price": "6500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "Cysternography PNS",
+    "protocol": "",
+    "price": "10600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "DORSAL SPINE",
+    "protocol": "",
+    "price": "5750",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "DORSOLUMBAR SPINE ",
+    "protocol": "WITH 3D RECON",
+    "price": "6850",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "Ear ",
+    "protocol": "screening",
+    "price": "2250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "Enterography",
+    "protocol": "",
+    "price": "11850",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "FACE 3D CT",
+    "protocol": "",
+    "price": "6600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "FOOT",
+    "protocol": "",
+    "price": "6250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "GUIDED ASPIRATION",
+    "protocol": "",
+    "price": "8500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "GUIDED ASPIRATION AND PIGTAIL",
+    "protocol": "",
+    "price": "12000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "GUIDED BIOPSY",
+    "protocol": "",
+    "price": "11000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "HIP JOINTS ",
+    "protocol": "3D SCAN",
+    "price": "7600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "HRCT CHEST VVMC",
+    "protocol": "",
+    "price": "3000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "HRCT TEMPORAL BONE",
+    "protocol": "",
+    "price": "4100",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "HRCT TEMPORAL BONE ",
+    "protocol": "PLAIN CONTRAST",
+    "price": "6600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "IVP",
+    "protocol": "",
+    "price": "9250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "IVU",
+    "protocol": "",
+    "price": "9250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "JOINTS 3D",
+    "protocol": "",
+    "price": "6600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "KUB",
+    "protocol": " PLAIN",
+    "price": "5750",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "LUMBAR SPINE",
+    "protocol": "",
+    "price": "5750",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "MAXILLA ",
+    "protocol": "WITH CONTRAST",
+    "price": "6600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "MYELOGRAPHY ",
+    "protocol": "WITH ANESTHESIA",
+    "price": "13850",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "NECK AND CHEST ",
+    "protocol": "PLAIN CONTRAST",
+    "price": "10650",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "NECK ANGIO",
+    "protocol": "",
+    "price": "8100",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "NECK CHEST ABDOMEN PELVIS  ",
+    "protocol": "CONTRAST",
+    "price": "17100",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "NECK ",
+    "protocol": "PLAIN",
+    "price": "4600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "NECK ",
+    "protocol": "PLAIN CONTRAST",
+    "price": "7100",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "ORBIT ",
+    "protocol": "PLAIN",
+    "price": "4350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "ORBIT",
+    "protocol": " PLAIN CONTRAST",
+    "price": "6850",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "Pelvis",
+    "protocol": "",
+    "price": "4600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "PERIPHERAL ANGIOGRAPHY",
+    "protocol": "",
+    "price": "13250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "PERIPHERAL VENOGRAPHY",
+    "protocol": "",
+    "price": "13250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "PIGTAIL DRAINAGE CATHE GA",
+    "protocol": "",
+    "price": "12800",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "PNS LTD",
+    "protocol": "",
+    "price": "3350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "PNS LTD PLAIN CONTRAST",
+    "protocol": "",
+    "price": "5850",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "PNS ",
+    "protocol": "PLAIN",
+    "price": "4350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "PULMONARY ",
+    "protocol": "ANGIO",
+    "price": "9250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "RECTAL ",
+    "protocol": "CONTRAST",
+    "price": "1100",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "RENAL ",
+    "protocol": "ANGIO",
+    "price": "9250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "RT WRIST",
+    "protocol": "",
+    "price": "6600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "SCREENING",
+    "protocol": "",
+    "price": "2250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "SHOULDER",
+    "protocol": "",
+    "price": "7600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "T M JOINT",
+    "protocol": "",
+    "price": "5250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "Temporal Bone",
+    "protocol": "",
+    "price": "4100",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "TRIPHASIC STUDY",
+    "protocol": "",
+    "price": "1100",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "CT",
+    "body_part": "Vertebral ",
+    "protocol": "biospsy with anesthesia",
+    "price": "13350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "ECG",
+    "body_part": "",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "EEG",
+    "body_part": "",
+    "protocol": "",
+    "price": "2500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Mammography",
+    "body_part": "",
+    "protocol": "",
+    "price": "2700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "ABDOMEN ",
+    "protocol": "PELVIS CONTRAST",
+    "price": "17350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "ABDOMEN ",
+    "protocol": "PELVIS PLAIN",
+    "price": "14350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "ABDOMEN ",
+    "protocol": "PLAIN",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "ABDOMEN ",
+    "protocol": "SCREENING",
+    "price": "3000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "ANGIOGRAPHY SCREEN",
+    "protocol": "",
+    "price": "4000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "ANKLE ",
+    "protocol": "LEFT",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "ANKLE",
+    "protocol": "RIGHT",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "AORTOGRAM ",
+    "protocol": "WITH CONTRAST",
+    "price": "13600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "ARM",
+    "protocol": "",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "AXILLA ",
+    "protocol": "PLAIN",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "BOTH LEG LOWER LIMB ",
+    "protocol": "ANGIO",
+    "price": "14750",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "BOTH LOWER LIMB ",
+    "protocol": "ANGIO",
+    "price": "14350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "BOTH T M JOINT ",
+    "protocol": "WITH CONTRAST",
+    "price": "14750",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "BOTH TM JOINT ",
+    "protocol": "PLAIN",
+    "price": "10350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "BOTH TM JOINT ",
+    "protocol": "WITH CONTRAST",
+    "price": "13350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "BOTH TM JOINT WITH CONTRAST",
+    "protocol": "",
+    "price": "7850",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "BRAIN ",
+    "protocol": "CP ANGEL",
+    "price": "8850",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "BRAIN EPILEPSY ",
+    "protocol": "PROTOCOL",
+    "price": "8850",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "BRAIN PITUATARY ",
+    "protocol": "PLAIN",
+    "price": "10800",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "BRAIN PITUTARY ",
+    "protocol": "WITH CONTRAST",
+    "price": "12950",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "BRAIN ",
+    "protocol": "PLAIN",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "BRAIN ",
+    "protocol": "PLAIN CONTRAST",
+    "price": "10350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "BRAIN ",
+    "protocol": "SCREENING",
+    "price": "3000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "BRAIN ",
+    "protocol": "SPECTORSCOPY PERFUSION  WITH CONTRAST",
+    "price": "14900",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "BRAIN ",
+    "protocol": "SPECTORSCOPY PLAIN",
+    "price": "11600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "BRAIN ",
+    "protocol": "WITH ANGIOGRAPHY",
+    "price": "12500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "BRAIN ",
+    "protocol": "WITH ANGIOGRAPHY CONTRAST",
+    "price": "15500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "BRAIN ",
+    "protocol": "WITH VENOGRAPHY",
+    "price": "12500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "BREAST ",
+    "protocol": "BOTH WITH CONTRAST",
+    "price": "14600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "CERVICAL ",
+    "protocol": "SCREENING",
+    "price": "3000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "CERVICAL SPINE",
+    "protocol": "",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "CHEECK ",
+    "protocol": "PLAIN",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "CHEST ",
+    "protocol": "PLAIN",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "CLAVICLE ",
+    "protocol": "PLAIN",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "CV JUNCTION",
+    "protocol": "",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "DORSAL LUMBER SPINE",
+    "protocol": "",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "DORSAL ",
+    "protocol": "SCREENING",
+    "price": "3000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "DORSAL",
+    "protocol": " SPINE",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "ELBOW ",
+    "protocol": "LEFT",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "ELBOW ",
+    "protocol": "RIGHT",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "FACE",
+    "protocol": "",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "FEMUR ",
+    "protocol": "LEFT",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "FEMUR ",
+    "protocol": "RIGHT",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "FETAL",
+    "protocol": "",
+    "price": "9350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "FISTULOGRAM ",
+    "protocol": "PLAIN",
+    "price": "8600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "FISTULOGRAM ",
+    "protocol": "WITH CONTRAST",
+    "price": "11600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "FOOT ",
+    "protocol": "LEFT",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "FOOT ",
+    "protocol": "RIGHT",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "FOREARM",
+    "protocol": "",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "GLUTIAL REGION",
+    "protocol": "",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "HAND ",
+    "protocol": "LEFT",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "HAND ",
+    "protocol": "RIGHT",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "HEEL ",
+    "protocol": "LEFT",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "HEEL ",
+    "protocol": "RIGHT",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "HIP ",
+    "protocol": "JOINT",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "HIP ",
+    "protocol": "JOINT SCREENING",
+    "price": "3000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "KNEE",
+    "protocol": " LEFT",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "KNEE ",
+    "protocol": "RIGHT",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "L S SPINE",
+    "protocol": "",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "L S SPINE ",
+    "protocol": "SCREENING",
+    "price": "3000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "LEG ",
+    "protocol": "LEFT",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "LEG ",
+    "protocol": "RIGHT",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "LIVER",
+    "protocol": "",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "LIVER ",
+    "protocol": "TRIPHASIC CONTRAST STUDY",
+    "price": "11800",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "BOTH BREAST",
+    "protocol": "WITH CONTRAST",
+    "price": "14600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "NECK",
+    "protocol": "",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "NECK ",
+    "protocol": "PLAIN CONTRAST",
+    "price": "10350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "PELVIS ",
+    "protocol": "PLAIN",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "PELVIS ",
+    "protocol": "PLAIN CONTRAST",
+    "price": "10350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "PELVIS ",
+    "protocol": "SCREENING",
+    "price": "3000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "Penis",
+    "protocol": "",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "PNS ",
+    "protocol": "PLAIN",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "PROSTATE",
+    "protocol": "",
+    "price": "8650",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "RENAL ANGIO ",
+    "protocol": "PLAIN",
+    "price": "10850",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "RENAL ANGIO ",
+    "protocol": "WITH CONTRAST",
+    "price": "13600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "S C JOINT",
+    "protocol": "",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "S I JOINT",
+    "protocol": "",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "S I JOINT ",
+    "protocol": "SCREENING",
+    "price": "3000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "SACRO COCYGEAL",
+    "protocol": "",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "SACRUM COCCYX",
+    "protocol": "",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "SCROTUM",
+    "protocol": "",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "SELLA ",
+    "protocol": "PLAIN AND CONTRAST",
+    "price": "12100",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "SHOULDER ",
+    "protocol": "LEFT",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "SHOULDER ",
+    "protocol": "RIGHT",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "SHOULDER ",
+    "protocol": "SCREENING",
+    "price": "3000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "SKULL BASE",
+    "protocol": "",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "STERNUM ",
+    "protocol": "PLAIN",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "T L SPINE",
+    "protocol": "",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "TEMPORAL BONE",
+    "protocol": "",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "THIGH",
+    "protocol": "",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "TONGUE ",
+    "protocol": "PLAIN",
+    "price": "8850",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "TONGUE ",
+    "protocol": "PLAIN CONTRAST",
+    "price": "11850",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "Venography",
+    "protocol": "",
+    "price": "8500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "WHOLE SPINE ",
+    "protocol": "SCREENING",
+    "price": "3000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "WRIST ",
+    "protocol": "LEFT",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "MRI",
+    "body_part": "WRIST ",
+    "protocol": "RIGHT",
+    "price": "7350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": " ASCITIC TAPPING  THEURAPATIC",
+    "protocol": "",
+    "price": "3500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "3D Obstetric",
+    "protocol": "",
+    "price": "3500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "3D PELVIS",
+    "protocol": "",
+    "price": "4500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "3D Pelvis Doppler",
+    "protocol": "",
+    "price": "3500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Abd and Pel",
+    "protocol": "",
+    "price": "1750",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Abd and Pel of PED",
+    "protocol": "",
+    "price": "2600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "ABDOMEN",
+    "protocol": "",
+    "price": "1500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "ABDOMEN PELVIS OBST",
+    "protocol": "",
+    "price": "3150",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "ANKLE",
+    "protocol": "",
+    "price": "1950",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Anomaly Scan",
+    "protocol": "",
+    "price": "2800",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Anomaly Twins Scan",
+    "protocol": "",
+    "price": "5600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Ant Abd Wall",
+    "protocol": "",
+    "price": "1600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "ARM",
+    "protocol": "",
+    "price": "2000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "ASCITIC TAPPING DIAGNOSTIC",
+    "protocol": "",
+    "price": "3000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "AXILLA",
+    "protocol": "",
+    "price": "1750",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "B SCAN",
+    "protocol": "",
+    "price": "2250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "BIOPSY SAMPLE",
+    "protocol": "",
+    "price": "6000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Breast",
+    "protocol": "",
+    "price": "2500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Breast Aspiration",
+    "protocol": "",
+    "price": "4500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Chest",
+    "protocol": "",
+    "price": "1000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Endorectal Prostate",
+    "protocol": "",
+    "price": "2250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "FIBROSCAN",
+    "protocol": "",
+    "price": "2500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "FISTULA",
+    "protocol": "",
+    "price": "2250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "FNAC",
+    "protocol": "",
+    "price": "4250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Gluetal Region",
+    "protocol": "",
+    "price": "1600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Groin",
+    "protocol": "",
+    "price": "1600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "GUIDED BIOPSY",
+    "protocol": "",
+    "price": "8650",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Guided Liver Aspiration",
+    "protocol": "",
+    "price": "5700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "GUIDED NECK ASPIRATION",
+    "protocol": "",
+    "price": "5700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "GUIDED THIGH ASPIRATION",
+    "protocol": "",
+    "price": "5700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "HIP",
+    "protocol": "",
+    "price": "2000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "INGUINAL HERNIA",
+    "protocol": "",
+    "price": "2300",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "INGUINAL REGION",
+    "protocol": "",
+    "price": "2300",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Inguinal Region",
+    "protocol": "",
+    "price": "2300",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "INGUINAL SCROTUM REGION",
+    "protocol": "",
+    "price": "3250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "INTRAARTICULAR INJECTION",
+    "protocol": "",
+    "price": "4500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "JOINT",
+    "protocol": "",
+    "price": "2000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Knee Joint",
+    "protocol": "",
+    "price": "2000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "KUB OF PED",
+    "protocol": "",
+    "price": "2000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "KUB PELVIS FEMALE",
+    "protocol": "",
+    "price": "2750",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "KUB TRANS",
+    "protocol": "",
+    "price": "1500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "KUB Urinary System",
+    "protocol": "",
+    "price": "1250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "KUB WITH RIF",
+    "protocol": "",
+    "price": "1750",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Left Gluteal Region",
+    "protocol": "",
+    "price": "2000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "LIVER ELASTOGRAPHY",
+    "protocol": "",
+    "price": "3200",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "LIVER GB PANCREAS",
+    "protocol": "",
+    "price": "1350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "LOCAL PART",
+    "protocol": "",
+    "price": "2000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "MARKING",
+    "protocol": "",
+    "price": "500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Mbilical Hernia",
+    "protocol": "",
+    "price": "1750",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Musculoskeletal",
+    "protocol": "",
+    "price": "1950",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Neck",
+    "protocol": "",
+    "price": "2300",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "NT Scan",
+    "protocol": "",
+    "price": "2500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "O2",
+    "protocol": "",
+    "price": "300",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Obstetric",
+    "protocol": "",
+    "price": "1350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "PAROTID REGION",
+    "protocol": "",
+    "price": "2200",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "PCN",
+    "protocol": "",
+    "price": "10350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Pelvis",
+    "protocol": "",
+    "price": "1350",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Penis",
+    "protocol": "",
+    "price": "2250",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "penis",
+    "protocol": "",
+    "price": "0",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "PER RECTAL",
+    "protocol": "",
+    "price": "1000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "PERINAL REGION",
+    "protocol": "",
+    "price": "1850",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "PIGTAIL DRAINAGE CATHE GA",
+    "protocol": "",
+    "price": "9500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "PLEURAL TAPPING DIAGNOSTIC",
+    "protocol": "",
+    "price": "3500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "PLEURAL TAPPING THEURAPATIC",
+    "protocol": "",
+    "price": "4500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "POPLITEL FOSSA",
+    "protocol": "",
+    "price": "1950",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "PROSTATE BIOPSY",
+    "protocol": "",
+    "price": "13000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "PROSTATE PER RECTAL",
+    "protocol": "",
+    "price": "1500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "right gluteal region",
+    "protocol": "",
+    "price": "0",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "RIGHT ILIAC FOSSA",
+    "protocol": "",
+    "price": "0",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Sacral",
+    "protocol": "",
+    "price": "1200",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "SCREEING",
+    "protocol": "",
+    "price": "500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Scrotum DOPPLER",
+    "protocol": "",
+    "price": "2200",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Skull",
+    "protocol": "",
+    "price": "2000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "SMALL PART",
+    "protocol": "",
+    "price": "1950",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Soft Tissue Swelling",
+    "protocol": "",
+    "price": "1000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "spine",
+    "protocol": "",
+    "price": "1950",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "SUBMANDIBULAR REGION",
+    "protocol": "",
+    "price": "1950",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "TARGET ULTRASOUND",
+    "protocol": "",
+    "price": "1500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Thayroid Neck",
+    "protocol": "",
+    "price": "2100",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Thyroid",
+    "protocol": "",
+    "price": "2100",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "TRANS RECTAL",
+    "protocol": "",
+    "price": "2500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "TWINS OBSTETRICS",
+    "protocol": "",
+    "price": "2500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Umbilical Hernia",
+    "protocol": "",
+    "price": "850",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "UMBILICAL REGION",
+    "protocol": "",
+    "price": "1500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "Ultrasonography",
+    "body_part": "Upper Abdomen",
+    "protocol": "",
+    "price": "1800",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "ABDOMEN LAT",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Abdomen Standing",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Adenoid",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Ankle AP and Lateral Views",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Ankle AP View",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "ANKLE LAT",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "ARM AP  LAT",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Ascending Urethrogram",
+    "protocol": "",
+    "price": "4000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "BarimMeal Follow Through",
+    "protocol": "",
+    "price": "4000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "BARIUM SWALLOW",
+    "protocol": "",
+    "price": "4000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "BMD DEXA",
+    "protocol": "",
+    "price": "4500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Both Ankle AP and Lateral View",
+    "protocol": "",
+    "price": "1400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "BOTH CLAVICLE AP",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "BOTH FEET AP LAT",
+    "protocol": "",
+    "price": "1400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "BOTH HAND AP LAT",
+    "protocol": "",
+    "price": "1400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Both Hands AP View",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "BOTH HEEL AP LAT",
+    "protocol": "",
+    "price": "1400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "BOTH HEEL LAT",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "BOTH HIP AP",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "BOTH HIP AP LAT",
+    "protocol": "",
+    "price": "1400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "BOTH HIP LAT",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Both knee Ap In varus valgus view",
+    "protocol": "",
+    "price": "1400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "BOTH KNEE PATELA",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "BOTH KNEE SKYLINE VIEW",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Both knee Standing AP",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Both Knees AP and Lateral Views",
+    "protocol": "",
+    "price": "1400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Both Knees AP Standing and Lateral Views",
+    "protocol": "",
+    "price": "1400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Both Knees AP View",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "BOTH LOWER LIMB AP",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Both Mandible",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Both Mastoid",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "BOTH OBLIQUE",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Both TMJoint Open and Close mouth",
+    "protocol": "",
+    "price": "1400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Both Wrist Ap Lat",
+    "protocol": "",
+    "price": "1400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Both Wrist Oblique",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Both Wrists AP View",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "CARD PAYMENT",
+    "protocol": "",
+    "price": "0",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "CAT",
+    "protocol": "",
+    "price": "1000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "CERVICAL AP",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "CERVICAL LAT",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Cervical Spine AP and Lateral",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "CERVICAL SPINE FLEXION EXTENSION",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Chest AP View",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Chest Decubitus view",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Chest Lateral",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Chest Lordotic View",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "CHEST OBLIQUE",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Chest PA View",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Clavicle",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "COCCYX LAT",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "DOG",
+    "protocol": "",
+    "price": "1000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Dorsal Spine Ap",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Dorsal Spine AP and Lateral",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Dorsal Spine Lat",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Dorsolumbar Ap and Lateral",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "DUPLICATE FILM",
+    "protocol": "",
+    "price": "0",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "DUPLICATE REPORT",
+    "protocol": "",
+    "price": "0",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "ELBOW AP",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Elbow AP and Lateral Views",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "EXTRA STUDY",
+    "protocol": "",
+    "price": "0",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Femur AP and Lat View",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Femur AP View",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Finger Ap and Lateral View",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Foot Ap",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Foot AP and Lateral Views",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Foot AP and Oblique Views",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Forearm Ap and Lateral Views",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "HAND AP",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Hand AP and Oblique Views",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "HAND AP LAT",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "HAND LAT",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "HEEL AP And LAT",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "HEEL LAT",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "HIP AP",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Hip AP AND LAT",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "HIP LAT",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "HUMERUS  AP  LAT",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "INFANTOGRAM",
+    "protocol": "",
+    "price": "600",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "IVP_Intra Venous Urography",
+    "protocol": "",
+    "price": "4500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Knee Ap",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Knee AP and Lateral Views",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "knee Ap In varus valgus view",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Knee Skyline Views",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "KUB",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "L S Spine Ap",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "L S Spine AP and Lateral",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "L S SPINE FLEXION EXTENSION",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "L S Spine Lat",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "L S SPINE LAT VIEW",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Leg Ap",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Leg Ap Lateral",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "LS SPINE BOTH  OBL",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Lumbo Sacral AP and Lateral",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Mandible AP LAT",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Mandible Oblique",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Mastoid",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "MCU_Micturating Cysto Urethrogram",
+    "protocol": "",
+    "price": "4000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Nasal Bone",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Nasopharynx",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Neck Ap",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Neck Ap Lat",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Neck Lat",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "ORBIT AP LAT",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "PBH _FROG LEG VIEW",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Pelvis with Both Hips Ap view",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "PNS_Paranasal Sinuses Water and Caldwel Views",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "PNS_Paranasal Sinuses Water View",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "RGU",
+    "protocol": "",
+    "price": "4000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "RIGHT Or LEFT TM Joint Open Close mouth",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "S I JOINT",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Sacro Coccyx  AP and Lateral",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "SCAPULA AP LAT",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Shoulder AP and Lateral View",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Shoulder AP View",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Shoulder Axilliary View",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Sinusogram",
+    "protocol": "",
+    "price": "2500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Skull AP",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Skull Ap and Lateral Views",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Skull Towens View",
+    "protocol": "",
+    "price": "500",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Spine Flexion And Extension",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "THORCIC SPINE AP LAT",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "THUMB AP LAT",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "TM JOINTS",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "TOE AP OBL",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "WRIST AP",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "Wrist AP and Lateral Views",
+    "protocol": "",
+    "price": "700",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "WRIST AP LAT OBLIQUE",
+    "protocol": "",
+    "price": "1000",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "WRIST LAT",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  },
+  {
+    "modality": "X-Ray",
+    "body_part": "X RAY ANKLE MORTISE VIEW",
+    "protocol": "",
+    "price": "400",
+    "diagnostic_centre_fk": "1"
+  }
+]

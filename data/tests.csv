@@ -1,0 +1,420 @@
+modality,body_part,protocol,price,diagnostic_centre_fk
+Echocardiography,,,2800,1
+Audiometry,,,1500,1
+Colour Doppler,Abd and Hepatic vein ,color doppler,3800,1
+Colour Doppler,abdomen arterial and venous ,doppler,5500,1
+Colour Doppler,BOTH LOWER LIMB ,Arterial Color Doppler,5250,1
+Colour Doppler,BOTH LOWER LIMB ,Venous Color Doppler,5250,1
+Colour Doppler,Both Upper Limb ,Arterial Color Doppler,5250,1
+Colour Doppler,Both Upper Limb ,Venous Color Doppler,5250,1
+Colour Doppler,Carotid Arteries, Color Doppler,3000,1
+Colour Doppler,Left Lower Limb ,Arterial Color Doppler,2550,1
+Colour Doppler,Left Lower Limb ,Arterial Venous Doppler,5250,1
+Colour Doppler,Left Lower Limb ,Venous Color Doppler,2550,1
+Colour Doppler,Left Upper Limb ,Arterial Color Doppler,2550,1
+Colour Doppler,Left Upper Limb ,Venous Color Doppler,2550,1
+Colour Doppler,NECK ,DOPPLER,2600,1
+Colour Doppler,Obstetric, Color Doppler,2500,1
+Colour Doppler,PELVIS ,Colour Doppler,2400,1
+Colour Doppler,Penile ,Color Doppler,2100,1
+Colour Doppler,Portal ,,2500,1
+Colour Doppler,RENAL ,Doppler,2550,1
+Colour Doppler,Right Lower Limb ,Arterial Color Doppler,2550,1
+Colour Doppler,Right Lower Limb ,Arterial Venous Doppler,5250,1
+Colour Doppler,Right Lower Limb ,Venous Color Doppler,2550,1
+Colour Doppler,Right Upper Limb ,Arterial Color Doppler,2550,1
+Colour Doppler,Right Upper Limb ,Venous Color Doppler,2550,1
+Colour Doppler,Scrotal, Color Doppler,2300,1
+Colour Doppler,Scrotal, Doppler with Inguinal Region,3000,1
+CT,Knee Joint,3D CT ,6250,1
+CT,3 WAY KOCK,,550,1
+CT,3D ANKLE,,6250,1
+CT,3D CERVICAL SPINE,,6250,1
+CT,3D Chest,,8750,1
+CT,3D ELBOW,,6250,1
+CT,3D ELBOW JOINT,,6250,1
+CT,3D FACE,,6250,1
+CT,3D HIP JOINT,,6250,1
+CT,3D KNEE JOINT,,6250,1
+CT,ABDOMEN ,Angio,10250,1
+CT,ABDOMEN PELVIS ,ANGIOGRAPHY,11400,1
+CT,ABDOMEN PELVIS ,PLAIN,6350,1
+CT,ABDOMEN PELVIS ,PLAIN CONTRAST,8850,1
+CT,ABDOMEN PELVIS ,WITH IVP,10750,1
+CT,Aortagram,,10600,1
+CT,AXILLA ,WITH CONTRAST,6600,1
+CT,ELBOW,Both 3D CT,12500,1
+CT,BRAIN ,ANGIO,8100,1
+CT,BRAIN ,PLAIN,3350,1
+CT,BRAIN ,PLAIN CONTRAST,5850,1
+CT,BRAIN ,VENO,8100,1
+CT,BROCHOSCOPY,,8850,1
+CT,CHEST ,CECT WITH STERNO CLAVICULAR JOINT,8850,1
+CT,CERVICAL SPINE,,5750,1
+CT,CERVICAL SPINE ,FLEXION EXTENSION,8250,1
+CT,CHEST ABDOMEN PELVIS ,PLAIN CONTRAST,12850,1
+CT,CHEST AND UPPER ABDOMEN,,9250,1
+CT,CHEST ,CONTRAST WITH  ANGIO,9250,1
+CT,CHEST ,PLAIN,4000,1
+CT,CHEST ,PLAIN CONTRAST,6500,1
+CT,CONTRAST CHARGE,,2500,1
+CT,CT CHEST AND MEDIASTINUM,,4000,1
+CT,CT CHEST ,WITH CONTRAST,6500,1
+CT,Cysternography PNS,,10600,1
+CT,DORSAL SPINE,,5750,1
+CT,DORSOLUMBAR SPINE ,WITH 3D RECON,6850,1
+CT,Ear ,screening,2250,1
+CT,Enterography,,11850,1
+CT,FACE 3D CT,,6600,1
+CT,FOOT,,6250,1
+CT,GUIDED ASPIRATION,,8500,1
+CT,GUIDED ASPIRATION AND PIGTAIL,,12000,1
+CT,GUIDED BIOPSY,,11000,1
+CT,HIP JOINTS ,3D SCAN,7600,1
+CT,HRCT CHEST VVMC,,3000,1
+CT,HRCT TEMPORAL BONE,,4100,1
+CT,HRCT TEMPORAL BONE ,PLAIN CONTRAST,6600,1
+CT,IVP,,9250,1
+CT,IVU,,9250,1
+CT,JOINTS 3D,,6600,1
+CT,KUB, PLAIN,5750,1
+CT,LUMBAR SPINE,,5750,1
+CT,MAXILLA ,WITH CONTRAST,6600,1
+CT,MYELOGRAPHY ,WITH ANESTHESIA,13850,1
+CT,NECK AND CHEST ,PLAIN CONTRAST,10650,1
+CT,NECK ANGIO,,8100,1
+CT,NECK CHEST ABDOMEN PELVIS  ,CONTRAST,17100,1
+CT,NECK ,PLAIN,4600,1
+CT,NECK ,PLAIN CONTRAST,7100,1
+CT,ORBIT ,PLAIN,4350,1
+CT,ORBIT, PLAIN CONTRAST,6850,1
+CT,Pelvis,,4600,1
+CT,PERIPHERAL ANGIOGRAPHY,,13250,1
+CT,PERIPHERAL VENOGRAPHY,,13250,1
+CT,PIGTAIL DRAINAGE CATHE GA,,12800,1
+CT,PNS LTD,,3350,1
+CT,PNS LTD PLAIN CONTRAST,,5850,1
+CT,PNS ,PLAIN,4350,1
+CT,PULMONARY ,ANGIO,9250,1
+CT,RECTAL ,CONTRAST,1100,1
+CT,RENAL ,ANGIO,9250,1
+CT,RT WRIST,,6600,1
+CT,SCREENING,,2250,1
+CT,SHOULDER,,7600,1
+CT,T M JOINT,,5250,1
+CT,Temporal Bone,,4100,1
+CT,TRIPHASIC STUDY,,1100,1
+CT,Vertebral ,biospsy with anesthesia,13350,1
+ECG,,,400,1
+EEG,,,2500,1
+Mammography,,,2700,1
+MRI,ABDOMEN ,PELVIS CONTRAST,17350,1
+MRI,ABDOMEN ,PELVIS PLAIN,14350,1
+MRI,ABDOMEN ,PLAIN,7350,1
+MRI,ABDOMEN ,SCREENING,3000,1
+MRI,ANGIOGRAPHY SCREEN,,4000,1
+MRI,ANKLE ,LEFT,7350,1
+MRI,ANKLE,RIGHT,7350,1
+MRI,AORTOGRAM ,WITH CONTRAST,13600,1
+MRI,ARM,,7350,1
+MRI,AXILLA ,PLAIN,7350,1
+MRI,BOTH LEG LOWER LIMB ,ANGIO,14750,1
+MRI,BOTH LOWER LIMB ,ANGIO,14350,1
+MRI,BOTH T M JOINT ,WITH CONTRAST,14750,1
+MRI,BOTH TM JOINT ,PLAIN,10350,1
+MRI,BOTH TM JOINT ,WITH CONTRAST,13350,1
+MRI,BOTH TM JOINT WITH CONTRAST,,7850,1
+MRI,BRAIN ,CP ANGEL,8850,1
+MRI,BRAIN EPILEPSY ,PROTOCOL,8850,1
+MRI,BRAIN PITUATARY ,PLAIN,10800,1
+MRI,BRAIN PITUTARY ,WITH CONTRAST,12950,1
+MRI,BRAIN ,PLAIN,7350,1
+MRI,BRAIN ,PLAIN CONTRAST,10350,1
+MRI,BRAIN ,SCREENING,3000,1
+MRI,BRAIN ,SPECTORSCOPY PERFUSION  WITH CONTRAST,14900,1
+MRI,BRAIN ,SPECTORSCOPY PLAIN,11600,1
+MRI,BRAIN ,WITH ANGIOGRAPHY,12500,1
+MRI,BRAIN ,WITH ANGIOGRAPHY CONTRAST,15500,1
+MRI,BRAIN ,WITH VENOGRAPHY,12500,1
+MRI,BREAST ,BOTH WITH CONTRAST,14600,1
+MRI,CERVICAL ,SCREENING,3000,1
+MRI,CERVICAL SPINE,,7350,1
+MRI,CHEECK ,PLAIN,7350,1
+MRI,CHEST ,PLAIN,7350,1
+MRI,CLAVICLE ,PLAIN,7350,1
+MRI,CV JUNCTION,,7350,1
+MRI,DORSAL LUMBER SPINE,,7350,1
+MRI,DORSAL ,SCREENING,3000,1
+MRI,DORSAL, SPINE,7350,1
+MRI,ELBOW ,LEFT,7350,1
+MRI,ELBOW ,RIGHT,7350,1
+MRI,FACE,,7350,1
+MRI,FEMUR ,LEFT,7350,1
+MRI,FEMUR ,RIGHT,7350,1
+MRI,FETAL,,9350,1
+MRI,FISTULOGRAM ,PLAIN,8600,1
+MRI,FISTULOGRAM ,WITH CONTRAST,11600,1
+MRI,FOOT ,LEFT,7350,1
+MRI,FOOT ,RIGHT,7350,1
+MRI,FOREARM,,7350,1
+MRI,GLUTIAL REGION,,7350,1
+MRI,HAND ,LEFT,7350,1
+MRI,HAND ,RIGHT,7350,1
+MRI,HEEL ,LEFT,7350,1
+MRI,HEEL ,RIGHT,7350,1
+MRI,HIP ,JOINT,7350,1
+MRI,HIP ,JOINT SCREENING,3000,1
+MRI,KNEE, LEFT,7350,1
+MRI,KNEE ,RIGHT,7350,1
+MRI,L S SPINE,,7350,1
+MRI,L S SPINE ,SCREENING,3000,1
+MRI,LEG ,LEFT,7350,1
+MRI,LEG ,RIGHT,7350,1
+MRI,LIVER,,7350,1
+MRI,LIVER ,TRIPHASIC CONTRAST STUDY,11800,1
+MRI,BOTH BREAST,WITH CONTRAST,14600,1
+MRI,NECK,,7350,1
+MRI,NECK ,PLAIN CONTRAST,10350,1
+MRI,PELVIS ,PLAIN,7350,1
+MRI,PELVIS ,PLAIN CONTRAST,10350,1
+MRI,PELVIS ,SCREENING,3000,1
+MRI,Penis,,7350,1
+MRI,PNS ,PLAIN,7350,1
+MRI,PROSTATE,,8650,1
+MRI,RENAL ANGIO ,PLAIN,10850,1
+MRI,RENAL ANGIO ,WITH CONTRAST,13600,1
+MRI,S C JOINT,,7350,1
+MRI,S I JOINT,,7350,1
+MRI,S I JOINT ,SCREENING,3000,1
+MRI,SACRO COCYGEAL,,7350,1
+MRI,SACRUM COCCYX,,7350,1
+MRI,SCROTUM,,7350,1
+MRI,SELLA ,PLAIN AND CONTRAST,12100,1
+MRI,SHOULDER ,LEFT,7350,1
+MRI,SHOULDER ,RIGHT,7350,1
+MRI,SHOULDER ,SCREENING,3000,1
+MRI,SKULL BASE,,7350,1
+MRI,STERNUM ,PLAIN,7350,1
+MRI,T L SPINE,,7350,1
+MRI,TEMPORAL BONE,,7350,1
+MRI,THIGH,,7350,1
+MRI,TONGUE ,PLAIN,8850,1
+MRI,TONGUE ,PLAIN CONTRAST,11850,1
+MRI,Venography,,8500,1
+MRI,WHOLE SPINE ,SCREENING,3000,1
+MRI,WRIST ,LEFT,7350,1
+MRI,WRIST ,RIGHT,7350,1
+Ultrasonography, ASCITIC TAPPING  THEURAPATIC,,3500,1
+Ultrasonography,3D Obstetric,,3500,1
+Ultrasonography,3D PELVIS,,4500,1
+Ultrasonography,3D Pelvis Doppler,,3500,1
+Ultrasonography,Abd and Pel,,1750,1
+Ultrasonography,Abd and Pel of PED,,2600,1
+Ultrasonography,ABDOMEN,,1500,1
+Ultrasonography,ABDOMEN PELVIS OBST,,3150,1
+Ultrasonography,ANKLE,,1950,1
+Ultrasonography,Anomaly Scan,,2800,1
+Ultrasonography,Anomaly Twins Scan,,5600,1
+Ultrasonography,Ant Abd Wall,,1600,1
+Ultrasonography,ARM,,2000,1
+Ultrasonography,ASCITIC TAPPING DIAGNOSTIC,,3000,1
+Ultrasonography,AXILLA,,1750,1
+Ultrasonography,B SCAN,,2250,1
+Ultrasonography,BIOPSY SAMPLE,,6000,1
+Ultrasonography,Breast,,2500,1
+Ultrasonography,Breast Aspiration,,4500,1
+Ultrasonography,Chest,,1000,1
+Ultrasonography,Endorectal Prostate,,2250,1
+Ultrasonography,FIBROSCAN,,2500,1
+Ultrasonography,FISTULA,,2250,1
+Ultrasonography,FNAC,,4250,1
+Ultrasonography,Gluetal Region,,1600,1
+Ultrasonography,Groin,,1600,1
+Ultrasonography,GUIDED BIOPSY,,8650,1
+Ultrasonography,Guided Liver Aspiration,,5700,1
+Ultrasonography,GUIDED NECK ASPIRATION,,5700,1
+Ultrasonography,GUIDED THIGH ASPIRATION,,5700,1
+Ultrasonography,HIP,,2000,1
+Ultrasonography,INGUINAL HERNIA,,2300,1
+Ultrasonography,INGUINAL REGION,,2300,1
+Ultrasonography,Inguinal Region,,2300,1
+Ultrasonography,INGUINAL SCROTUM REGION,,3250,1
+Ultrasonography,INTRAARTICULAR INJECTION,,4500,1
+Ultrasonography,JOINT,,2000,1
+Ultrasonography,Knee Joint,,2000,1
+Ultrasonography,KUB OF PED,,2000,1
+Ultrasonography,KUB PELVIS FEMALE,,2750,1
+Ultrasonography,KUB TRANS,,1500,1
+Ultrasonography,KUB Urinary System,,1250,1
+Ultrasonography,KUB WITH RIF,,1750,1
+Ultrasonography,Left Gluteal Region,,2000,1
+Ultrasonography,LIVER ELASTOGRAPHY,,3200,1
+Ultrasonography,LIVER GB PANCREAS,,1350,1
+Ultrasonography,LOCAL PART,,2000,1
+Ultrasonography,MARKING,,500,1
+Ultrasonography,Mbilical Hernia,,1750,1
+Ultrasonography,Musculoskeletal,,1950,1
+Ultrasonography,Neck,,2300,1
+Ultrasonography,NT Scan,,2500,1
+Ultrasonography,O2,,300,1
+Ultrasonography,Obstetric,,1350,1
+Ultrasonography,PAROTID REGION,,2200,1
+Ultrasonography,PCN,,10350,1
+Ultrasonography,Pelvis,,1350,1
+Ultrasonography,Penis,,2250,1
+Ultrasonography,penis,,0,1
+Ultrasonography,PER RECTAL,,1000,1
+Ultrasonography,PERINAL REGION,,1850,1
+Ultrasonography,PIGTAIL DRAINAGE CATHE GA,,9500,1
+Ultrasonography,PLEURAL TAPPING DIAGNOSTIC,,3500,1
+Ultrasonography,PLEURAL TAPPING THEURAPATIC,,4500,1
+Ultrasonography,POPLITEL FOSSA,,1950,1
+Ultrasonography,PROSTATE BIOPSY,,13000,1
+Ultrasonography,PROSTATE PER RECTAL,,1500,1
+Ultrasonography,right gluteal region,,0,1
+Ultrasonography,RIGHT ILIAC FOSSA,,0,1
+Ultrasonography,Sacral,,1200,1
+Ultrasonography,SCREEING,,500,1
+Ultrasonography,Scrotum DOPPLER,,2200,1
+Ultrasonography,Skull,,2000,1
+Ultrasonography,SMALL PART,,1950,1
+Ultrasonography,Soft Tissue Swelling,,1000,1
+Ultrasonography,spine,,1950,1
+Ultrasonography,SUBMANDIBULAR REGION,,1950,1
+Ultrasonography,TARGET ULTRASOUND,,1500,1
+Ultrasonography,Thayroid Neck,,2100,1
+Ultrasonography,Thyroid,,2100,1
+Ultrasonography,TRANS RECTAL,,2500,1
+Ultrasonography,TWINS OBSTETRICS,,2500,1
+Ultrasonography,Umbilical Hernia,,850,1
+Ultrasonography,UMBILICAL REGION,,1500,1
+Ultrasonography,Upper Abdomen,,1800,1
+X-Ray,ABDOMEN LAT,,400,1
+X-Ray,Abdomen Standing,,400,1
+X-Ray,Adenoid,,400,1
+X-Ray,Ankle AP and Lateral Views,,700,1
+X-Ray,Ankle AP View,,400,1
+X-Ray,ANKLE LAT,,400,1
+X-Ray,ARM AP  LAT,,700,1
+X-Ray,Ascending Urethrogram,,4000,1
+X-Ray,BarimMeal Follow Through,,4000,1
+X-Ray,BARIUM SWALLOW,,4000,1
+X-Ray,BMD DEXA,,4500,1
+X-Ray,Both Ankle AP and Lateral View,,1400,1
+X-Ray,BOTH CLAVICLE AP,,700,1
+X-Ray,BOTH FEET AP LAT,,1400,1
+X-Ray,BOTH HAND AP LAT,,1400,1
+X-Ray,Both Hands AP View,,700,1
+X-Ray,BOTH HEEL AP LAT,,1400,1
+X-Ray,BOTH HEEL LAT,,700,1
+X-Ray,BOTH HIP AP,,700,1
+X-Ray,BOTH HIP AP LAT,,1400,1
+X-Ray,BOTH HIP LAT,,700,1
+X-Ray,Both knee Ap In varus valgus view,,1400,1
+X-Ray,BOTH KNEE PATELA,,700,1
+X-Ray,BOTH KNEE SKYLINE VIEW,,700,1
+X-Ray,Both knee Standing AP,,700,1
+X-Ray,Both Knees AP and Lateral Views,,1400,1
+X-Ray,Both Knees AP Standing and Lateral Views,,1400,1
+X-Ray,Both Knees AP View,,700,1
+X-Ray,BOTH LOWER LIMB AP,,400,1
+X-Ray,Both Mandible,,700,1
+X-Ray,Both Mastoid,,700,1
+X-Ray,BOTH OBLIQUE,,700,1
+X-Ray,Both TMJoint Open and Close mouth,,1400,1
+X-Ray,Both Wrist Ap Lat,,1400,1
+X-Ray,Both Wrist Oblique,,700,1
+X-Ray,Both Wrists AP View,,700,1
+X-Ray,CARD PAYMENT,,0,1
+X-Ray,CAT,,1000,1
+X-Ray,CERVICAL AP,,400,1
+X-Ray,CERVICAL LAT,,400,1
+X-Ray,Cervical Spine AP and Lateral,,700,1
+X-Ray,CERVICAL SPINE FLEXION EXTENSION,,700,1
+X-Ray,Chest AP View,,400,1
+X-Ray,Chest Decubitus view,,400,1
+X-Ray,Chest Lateral,,400,1
+X-Ray,Chest Lordotic View,,400,1
+X-Ray,CHEST OBLIQUE,,400,1
+X-Ray,Chest PA View,,400,1
+X-Ray,Clavicle,,400,1
+X-Ray,COCCYX LAT,,400,1
+X-Ray,DOG,,1000,1
+X-Ray,Dorsal Spine Ap,,400,1
+X-Ray,Dorsal Spine AP and Lateral,,700,1
+X-Ray,Dorsal Spine Lat,,400,1
+X-Ray,Dorsolumbar Ap and Lateral,,700,1
+X-Ray,DUPLICATE FILM,,0,1
+X-Ray,DUPLICATE REPORT,,0,1
+X-Ray,ELBOW AP,,400,1
+X-Ray,Elbow AP and Lateral Views,,700,1
+X-Ray,EXTRA STUDY,,0,1
+X-Ray,Femur AP and Lat View,,700,1
+X-Ray,Femur AP View,,400,1
+X-Ray,Finger Ap and Lateral View,,700,1
+X-Ray,Foot Ap,,400,1
+X-Ray,Foot AP and Lateral Views,,700,1
+X-Ray,Foot AP and Oblique Views,,700,1
+X-Ray,Forearm Ap and Lateral Views,,700,1
+X-Ray,HAND AP,,400,1
+X-Ray,Hand AP and Oblique Views,,700,1
+X-Ray,HAND AP LAT,,700,1
+X-Ray,HAND LAT,,400,1
+X-Ray,HEEL AP And LAT,,700,1
+X-Ray,HEEL LAT,,400,1
+X-Ray,HIP AP,,400,1
+X-Ray,Hip AP AND LAT,,700,1
+X-Ray,HIP LAT,,400,1
+X-Ray,HUMERUS  AP  LAT,,700,1
+X-Ray,INFANTOGRAM,,600,1
+X-Ray,IVP_Intra Venous Urography,,4500,1
+X-Ray,Knee Ap,,400,1
+X-Ray,Knee AP and Lateral Views,,700,1
+X-Ray,knee Ap In varus valgus view,,700,1
+X-Ray,Knee Skyline Views,,400,1
+X-Ray,KUB,,700,1
+X-Ray,L S Spine Ap,,400,1
+X-Ray,L S Spine AP and Lateral,,700,1
+X-Ray,L S SPINE FLEXION EXTENSION,,700,1
+X-Ray,L S Spine Lat,,400,1
+X-Ray,L S SPINE LAT VIEW,,400,1
+X-Ray,Leg Ap,,400,1
+X-Ray,Leg Ap Lateral,,700,1
+X-Ray,LS SPINE BOTH  OBL,,700,1
+X-Ray,Lumbo Sacral AP and Lateral,,700,1
+X-Ray,Mandible AP LAT,,700,1
+X-Ray,Mandible Oblique,,400,1
+X-Ray,Mastoid,,400,1
+X-Ray,MCU_Micturating Cysto Urethrogram,,4000,1
+X-Ray,Nasal Bone,,700,1
+X-Ray,Nasopharynx,,400,1
+X-Ray,Neck Ap,,400,1
+X-Ray,Neck Ap Lat,,700,1
+X-Ray,Neck Lat,,400,1
+X-Ray,ORBIT AP LAT,,700,1
+X-Ray,PBH _FROG LEG VIEW,,400,1
+X-Ray,Pelvis with Both Hips Ap view,,400,1
+X-Ray,PNS_Paranasal Sinuses Water and Caldwel Views,,700,1
+X-Ray,PNS_Paranasal Sinuses Water View,,400,1
+X-Ray,RGU,,4000,1
+X-Ray,RIGHT Or LEFT TM Joint Open Close mouth,,700,1
+X-Ray,S I JOINT,,400,1
+X-Ray,Sacro Coccyx  AP and Lateral,,700,1
+X-Ray,SCAPULA AP LAT,,700,1
+X-Ray,Shoulder AP and Lateral View,,700,1
+X-Ray,Shoulder AP View,,400,1
+X-Ray,Shoulder Axilliary View,,400,1
+X-Ray,Sinusogram,,2500,1
+X-Ray,Skull AP,,400,1
+X-Ray,Skull Ap and Lateral Views,,700,1
+X-Ray,Skull Towens View,,500,1
+X-Ray,Spine Flexion And Extension,,700,1
+X-Ray,THORCIC SPINE AP LAT,,700,1
+X-Ray,THUMB AP LAT,,700,1
+X-Ray,TM JOINTS,,700,1
+X-Ray,TOE AP OBL,,700,1
+X-Ray,WRIST AP,,400,1
+X-Ray,Wrist AP and Lateral Views,,700,1
+X-Ray,WRIST AP LAT OBLIQUE,,1000,1
+X-Ray,WRIST LAT,,400,1
+X-Ray,X RAY ANKLE MORTISE VIEW,,400,1
