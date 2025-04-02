@@ -1,5 +1,5 @@
 "use client"
-import { Alert, Autocomplete, Box, Button, Card, Chip, Container, FormControlLabel, IconButton, InputAdornment, InputLabel, MenuItem, Paper, Radio, RadioGroup, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tabs, TextField, Tooltip, Typography } from '@mui/material'
+import { Alert, Autocomplete, Box, Button, Card, Chip, Container, FormControlLabel, IconButton, InputAdornment, InputLabel, ListItemIcon, ListItemText, MenuItem, Paper, Radio, RadioGroup, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tabs, TextField, Tooltip, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2';
 import React, { useEffect, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search';
@@ -20,6 +20,10 @@ import HowToRegIcon from '@mui/icons-material/HowToReg';
 import PaymentIcon from '@mui/icons-material/Payment';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import PaymentMode from './PaymentMode';
+import MoneyIcon from '@mui/icons-material/Money';
+import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import LocalAtmIcon from '@mui/icons-material/LocalAtm';
 
 
 interface TabPanelProps {
@@ -81,7 +85,7 @@ const RegisterPatientForm = () => {
     const [modality, setModality] = useState("");
     const [bodyParts, setBodyParts] = useState("");
     const [subTotalPrice, setSubTotalPrice] = useState(0);
-    const [testTableData, setTestTableData] = useState<{ id: number; name: string; price: number; }[]>([]);
+    const [testTableData, setTestTableData] = useState<{ id: number; name: string; price: number; consession: number }[]>([]);
     const [testData, setTestData] = useState<{ modality: string; body_part: string; protocol: string; price: string; diagnostic_centre_fk: string; }[]>([]);
     const [filteredModality, setFilteredModality] = useState<{ modality: string; body_part: string; protocol: string; price: string; diagnostic_centre_fk: string; }[]>([]);
     const [filteredBodyParts, setFilteredBodyParts] = useState<{ modality: string; body_part: string; protocol: string; price: string; diagnostic_centre_fk: string; }[]>([]);
@@ -91,13 +95,19 @@ const RegisterPatientForm = () => {
     const [amount, setAmount] = useState(0);
     const [comment, setComment] = useState("");
     const [subTotalAmount, setSubTotalAmount] = useState(0);
-    const [tax , setTax] = useState(0);
+    const [tax, setTax] = useState(0);
     const [totalTax, setTotalTax] = useState(0);
     const [totalBill, setTotalBill] = useState(0);
     const [birthDate, setBirthDate] = useState<Dayjs | null>(null);
     const [age, setAge] = useState<number | null>(null);
     const [mobNum, setMobNum] = useState("");
+    const [defaultComment, setDefaultComment] = useState("");
+    const [isEditableComment, setIsEditableComment] = useState(false);
+    const [consessionInTest, setConsessionInTest] = useState(0);
+    const [balanceRemaining, setBalanceRemaining] = useState(0);
+    const [amountPaid, setAmountPaid] = useState(0);
     const [transactionTableData, setTransactionTableData] = useState<{ id: number; transactionType: string; tax: number; amount: number; comment: string; }[]>([]);
+    const [selectPaymentMode , setSelectPaymentMode] = useState("");
 
     const tynsactionTypes = [
         {
@@ -108,6 +118,34 @@ const RegisterPatientForm = () => {
             id: 2,
             type: "Credit"
         },
+    ]
+
+    const paymentMode =[
+        {
+            id: 1,
+            PaymentMode:"Payment Mode(Default: Cash)",
+            icon: <MoneyIcon />,
+        },
+        {
+            id: 2,
+            PaymentMode:"UPI (Pay via any app)",
+            icon: <QrCodeScannerIcon />,
+        },
+        {
+            id: 3,
+            PaymentMode:"Credit/Debit card",
+            icon: <PaymentIcon />
+        },
+        {
+            id: 4,
+            PaymentMode:"NET BANKING",
+             icon: <AccountBalanceIcon />
+        },
+        {
+            id: 5,
+            PaymentMode:"CHEQUE",
+            icon: <LocalAtmIcon />
+        }
     ]
 
     const handleTestTable = (test: any) => {
@@ -132,8 +170,8 @@ const RegisterPatientForm = () => {
         }
         );
         // setSelectedTest(test.name);
-        setSubTotalPrice((prevTotal) => prevTotal + Number(item.price));
-        setTotalBill(subTotalPrice + subTotalAmount + totalTax);
+        // setSubTotalPrice((prevTotal) => prevTotal + Number(item.price));
+        // setTotalBill(subTotalPrice + subTotalAmount + totalTax);
         // console.log("table data is...", testTableData);
     }
 
@@ -246,16 +284,10 @@ const RegisterPatientForm = () => {
             comment: comment
         };
         setTransactionTableData(prevData => [...(prevData || []), data]);
-        setSubTotalAmount((prevTotal) => prevTotal + amount);
-        setTotalTax((prevTax) => prevTax + tax);
-        setTotalBill(subTotalPrice + subTotalAmount + totalTax);
+        // setSubTotalAmount((prevTotal) => prevTotal + amount);
+        // setTotalTax((prevTax) => prevTax + tax);
+        // setTotalBill(subTotalPrice + subTotalAmount + totalTax);
     }
-
-    useEffect(()=>{
-        setSubTotalAmount((prevTotal) => prevTotal + amount);
-        setTotalTax((prevTax) => prevTax + tax);
-        setTotalBill(subTotalPrice + subTotalAmount + totalTax);
-    },[])
 
     const handleBirthdate = (newDate: Dayjs | null) => {
         setBirthDate(newDate);
@@ -264,15 +296,77 @@ const RegisterPatientForm = () => {
         console.log("age is...", age)
     }
 
-    const handleTransaction = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleTransaction = (e: any) => {
         const newType = e.target.value;
         setTransactionType(newType);
         console.log("transaction type...", transactionType);
     }
 
+    const handleDefaultComment = () => {
+        console.log("editable")
+        if (!isEditableComment) {
+            setIsEditableComment(true);
+        }
+    }
+
+    const proceedToBill = () => {
+        setTabValue(1);
+    }
+
+    const handleConsessionChange = (id: number, e: any) => {
+        console.log("consession is...")
+        const value = e.target.value;
+        setTestTableData((prevData) =>
+            prevData.map((item) =>
+                item.id === id ? { ...item, consession: Number(value) } : item // Update only the matching row
+            )
+        );
+        console.log("table test consession...", value);
+    };
+
+    const handleAmount = (e: any) => {
+        let amt = Number(e.target.value);
+        if (transactionType == "Credit") {
+            amt = -amt
+            console.log("amt is...", amt)
+        }
+        else {
+            amt = amt
+        }
+        setAmount(amt);
+    }
+
     useEffect(() => {
-        transactionType === "Credit" ? setComment("Discount") : setComment("Add Charges");
-      }, [transactionType]);
+        const newTotal = testTableData.reduce(
+            (sum, item) => sum + (item.price - (item.consession || 0)),
+            0
+        );
+        setSubTotalPrice(newTotal);
+        setTotalBill(newTotal + subTotalAmount + totalTax);
+        setBalanceRemaining(newTotal + subTotalAmount + totalTax);
+    }, [testTableData]);
+
+    // useEffect(() => {
+    //     transactionType === "Credit" ? setComment("Discount") : setComment("Add Charges");
+    // }, [transactionType]);
+
+    useEffect(() => {
+        setSubTotalAmount((prevTotal) => prevTotal + amount);
+        setTotalTax((prevTax) => prevTax + tax);
+        setTotalBill((prevBill) => {
+            const newBill = subTotalPrice + (subTotalAmount + amount) + (totalTax + tax);
+            return newBill;
+        });
+        setBalanceRemaining(() => {
+            const newBill = subTotalPrice + (subTotalAmount + amount) + (totalTax + tax);
+            return newBill;
+        });
+    }, [transactionTableData])
+
+    useEffect(() => {
+        const balance = totalBill - amountPaid;
+        setBalanceRemaining(balance);
+    }, [amountPaid])
 
     return (
         <>
@@ -289,37 +383,39 @@ const RegisterPatientForm = () => {
 
                 {/* Patient Information pannel */}
                 <CustomTabPanel value={tabValue} index={0}>
-                    <Grid container>
-                        <Grid size={{ xs: 12, md: 8, lg: 4 }} >
-                            <TextField
-                                id="search"
-                                slotProps={{
-                                    input: {
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <SearchIcon />
-                                            </InputAdornment>
-                                        ),
-                                    },
-                                }}
-                                variant="outlined"
-                                placeholder='Search Patient'
-                                size='small'
-                                color='primary'
-                                fullWidth
-                            />
-                        </Grid>
-                    </Grid>
+                    {/* <Grid container> */}
+                    {/* <Grid size={{ xs: 12, md: 8, lg: 4 }} > */}
+                    <div className='flex grid-cols-3 gap-4' >
+                        <TextField
+                            id="search"
+                            slotProps={{
+                                input: {
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <SearchIcon />
+                                        </InputAdornment>
+                                    ),
+                                },
+                            }}
+                            variant="outlined"
+                            placeholder='Search Patient'
+                            size='small'
+                            color='primary'
+                            className='w-full md:w-2/4'
+                        />
+                    </div>
+                    {/* </Grid> */}
+                    {/* </Grid> */}
                     <Divider className='my-6 ' textAlign='left'>
                         <Chip label="Basic Information" color="primary" variant="outlined" size='small' />
                     </Divider>
 
                     {/* Basic Information */}
-                    <Grid container columnSpacing={{ xs: 2, lg: 3 }} rowSpacing={2} >
-
+                    {/* <Grid container columnSpacing={{ xs: 2, lg: 3 }} rowSpacing={2} > */}
+                    <div className='flex flex-wrap gap-5'>
                         {/* Name */}
                         <TextField id="name" label="Name*" variant="outlined"
-                            size='small' color='primary' autoComplete="off" className='w-4/12'
+                            size='small' color='primary' autoComplete="off" className='w-full md:w-4/12'
                             onChange={(e) => setPatientName(e.target.value)}
                         />
 
@@ -335,6 +431,7 @@ const RegisterPatientForm = () => {
                                     }}
                                     value={birthDate}
                                     onChange={(newDate) => handleBirthdate(newDate)}
+                                    className='w-full'
                                 />
                             </DemoItem>
 
@@ -342,7 +439,7 @@ const RegisterPatientForm = () => {
 
                         {/* Age */}
                         <TextField id="age" label="Age" variant="outlined"
-                            size='small' color='primary' autoComplete="off" className='w-1/12'
+                            size='small' color='primary' autoComplete="off" className='w-2/4 md:w-1/12'
                             value={age !== null && age !== undefined ? age : ""}
                         />
 
@@ -359,27 +456,29 @@ const RegisterPatientForm = () => {
 
                         {/* Address */}
                         <TextField id="address" label="Address" variant="outlined"
-                            size='small' color='primary' autoComplete="off" className='w-4/12'
+                            size='small' color='primary' autoComplete="off" className='w-full md:w-4/12'
                         />
                         {/* Mobile number */}
                         <TextField id="mobile" label="Mobile Number" variant="outlined"
-                            size='small' color='primary' autoComplete="off" className='w-3/12'
+                            size='small' color='primary' autoComplete="off" className='w-full md:w-3/12'
                         />
-                    </Grid>
+                    </div>
+                    {/* </Grid> */}
 
                     <Divider className='my-6 ' textAlign='left'>
                         <Chip label="Referred Doctor" color="primary" variant="outlined" size='small' />
                     </Divider>
 
                     {/* Refrred Doctor */}
-                    <Grid container columnSpacing={{ xs: 2, lg: 5 }} rowSpacing={2} className="mb-4">
+                    {/* <Grid container columnSpacing={{ xs: 2, lg: 5 }} rowSpacing={2} className="mb-4"> */}
+                    <div className='flex flex-wrap gap-5'>
                         <Select
                             labelId="referred_doctor"
                             id="referred_doctor"
                             value={referredDoctor}
                             label="Referred Doctor"
                             onChange={(e) => setReferredDoctor(e.target.value)}
-                            className="w-1/3"
+                            className="w-4/5 md:w-1/3 mb-5"
                             size="small"
                             displayEmpty
                             renderValue={(selected) => {
@@ -402,46 +501,49 @@ const RegisterPatientForm = () => {
 
                         </Select>
                         <Tooltip title="Add Referreing Physician" placement="right" arrow>
-                            <IconButton aria-label="Add" color='primary' onClick={handleReferrer}>
+                            <IconButton aria-label="Add" color='primary' onClick={handleReferrer} className='pb-6'>
                                 <AddCircleIcon />
                             </IconButton>
                         </Tooltip>
-                    </Grid>
+                    </div>
+                    {/* </Grid> */}
                     {
                         isNewReferrer ?
                             (
-                                <Grid container columnSpacing={{ xs: 2, lg: 5 }} rowSpacing={2} >
+                                // <Grid container columnSpacing={{ xs: 2, lg: 5 }} rowSpacing={2} >
+                                <div className='flex flex-wrap gap-5'>
                                     {/* Doctor's Name */}
                                     <TextField id="doctor_name" label="Doctor's Name" variant="outlined"
-                                        size='small' color='primary' autoComplete="off" className='w-4/12'
+                                        size='small' color='primary' autoComplete="off" className='w-full md:w-4/12'
                                         name='referrerName' required
                                         value={referrerName}
                                         onChange={(e) => setReferrerName(e.target.value)}
                                     />
                                     {/* Email address */}
                                     <TextField id="doctor_email" label="Email Address" variant="outlined"
-                                        size='small' color='primary' autoComplete="off" className='w-3/12'
+                                        size='small' color='primary' autoComplete="off" className='w-full md:w-3/12'
                                         name='referrerEmail' value={referrerEmail}
                                         onChange={(e) => setReferrerEmail(e.target.value)}
                                     />
                                     {/* Medical Degree */}
                                     <TextField id="medical_degree" label="Medical Degree" variant="outlined"
-                                        size='small' color='primary' autoComplete="off" className='w-3/12'
+                                        size='small' color='primary' autoComplete="off" className='w-full md:w-3/12'
                                         name='referrerEducation' value={referrerDegree} onChange={(e) => setReferrerDegree(e.target.value)}
                                     />
 
                                     {/* Communication address */}
                                     <TextField id="doctor_address" label="Communication address" variant="outlined"
-                                        size='small' color='primary' autoComplete="off" className='w-4/12'
+                                        size='small' color='primary' autoComplete="off" className='w-full md:w-4/12'
                                         name='referrerAddress' value={referrerAddress} onChange={(e) => setReferrerAddress(e.target.value)}
                                     />
                                     {/* Communication Mobile Number */}
                                     <TextField id="doctor_mobile" label="Mobile Number" variant="outlined"
-                                        size='small' color='primary' autoComplete="off" className='w-3/12'
+                                        size='small' color='primary' autoComplete="off" className='w-full md:w-3/12'
                                         name='referrermobileNumber' value={referrerMobNumber} onChange={(e) => setReferrerMobNumber(e.target.value)}
                                     />
 
-                                    <Grid size={12} >
+                                    {/* <Grid size={12} > */}
+                                    <div className='flex w-full'>
                                         <Button variant="outlined" color="success" className='mr-8'
                                             startIcon={<SaveIcon />} onClick={handleReferrerDoctor}  >
                                             Save
@@ -450,8 +552,10 @@ const RegisterPatientForm = () => {
                                             onClick={cancelreferrer} >
                                             Cancel
                                         </Button>
-                                    </Grid>
-                                </Grid>
+                                    </div>
+                                    {/* </Grid> */}
+                                </div>
+                                // </Grid>
 
                             ) :
                             (
@@ -470,7 +574,8 @@ const RegisterPatientForm = () => {
                     </Divider>
 
                     {/* Tests & Price */}
-                    <Grid container columnSpacing={{ xs: 2, lg: 5 }} rowSpacing={2}>
+                    {/* <Grid container columnSpacing={{ xs: 2, lg: 5 }} rowSpacing={2}> */}
+                    <div className='flex flex-wrap gap-5'>
                         {/* Select Modality  */}
                         <Autocomplete
                             disablePortal
@@ -479,7 +584,7 @@ const RegisterPatientForm = () => {
                             options={testData.map((t, index) => ({ id: index, label: t.modality }))}
                             onChange={(e, newValue) => handleModality(newValue)}
                             size="small"
-                            className="w-1/3"
+                            className="w-full md:w-1/3"
                             getOptionLabel={(option) => option.label}
                             isOptionEqualToValue={(option, value) => option.label === value.label}
                             renderOption={(props, option, { index }) => (
@@ -501,7 +606,7 @@ const RegisterPatientForm = () => {
                             options={filteredModality.map((t, index) => ({ id: index, label: t.body_part }))}
                             onChange={(e, newValue) => handleBodyParts(newValue)}
                             size="small"
-                            className="w-1/3"
+                            className="w-full md:w-1/3"
                             getOptionLabel={(option) => option.label}
                             isOptionEqualToValue={(option, value) => option.label === value.label}
                             renderOption={(props, option, { index }) => (
@@ -522,7 +627,7 @@ const RegisterPatientForm = () => {
                             options={filteredBodyParts.map((t, index) => ({ id: index, label: t.protocol }))}
                             onChange={(e, newValue) => handleTestTable(newValue)}
                             size="small"
-                            className="w-2/3"
+                            className="w-full md:w-2/3"
                             getOptionLabel={(option) => option.label}
                             isOptionEqualToValue={(option, value) => option.label === value.label}
                             renderOption={(props, option, { index }) => (
@@ -540,16 +645,30 @@ const RegisterPatientForm = () => {
                             <Table sx={{ minWidth: 650 }} aria-label="spanning table" className='border rounded-lg'>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell className=" font-bold border">Tests</TableCell>
+                                        <TableCell className=" font-bold">Tests</TableCell>
                                         <TableCell align="right" className="font-bold">Price</TableCell>
+                                        <TableCell align="center" className="font-bold">Consession</TableCell>
                                         <TableCell className="font-bold"></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {testTableData.map((data, index) => (
-                                        <TableRow key={data.id} className={`${index % 2 === 0 ? "bg-gray-100" : "bg-white"}`}>
+                                        <TableRow key={data.id}>
                                             <TableCell className='py-0'>{data.name}</TableCell>
                                             <TableCell align="right" className='py-0'>{data.price}</TableCell>
+                                            <TableCell align="center" className='py-0'>
+                                                <TextField
+                                                    id={`consession-${data.id}`}
+                                                    label="Consession"
+                                                    variant="standard"
+                                                    type="number"
+                                                    size="small"
+                                                    color="primary"
+                                                    autoComplete="off"
+                                                    value={data.consession || ""}
+                                                    onChange={(e) => handleConsessionChange(data.id, e)}
+                                                />
+                                            </TableCell>
                                             <TableCell align="right" className='py-0'>
                                                 <IconButton aria-label="delete" onClick={() => deleteTest(data)}>
                                                     <DeleteOutlineIcon color='error' />
@@ -558,13 +677,19 @@ const RegisterPatientForm = () => {
                                         </TableRow>
                                     ))}
                                     <TableRow>
-                                        <TableCell className='font-bold border'>Total</TableCell>
+                                        <TableCell colSpan={3} className='font-bold' align='right'>Total</TableCell>
                                         <TableCell align="right" className='font-bold'>{ccyFormat(subTotalPrice)}</TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>
                         </TableContainer>
-                    </Grid>
+
+                        {/* Proceed to Billing details */}
+                        <div className='mt-6'>
+                            <Button variant="contained" onClick={proceedToBill}>Proceed To Bill</Button>
+                        </div>
+                    </div>
+                    {/* </Grid> */}
                 </CustomTabPanel>
 
                 {/* Billing Deatils custom pannel */}
@@ -578,7 +703,7 @@ const RegisterPatientForm = () => {
                     <Input placeholder='name' />
                     </div> */}
 
-                    <Grid container columnSpacing={{ xs: 2, lg: 5 }} rowSpacing={2}>
+                    <div className='flex flex-wrap gap-5'>
                         {/* Transaction Type  */}
                         <Select
                             labelId="transaction_type"
@@ -586,7 +711,7 @@ const RegisterPatientForm = () => {
                             value={transactionType}
                             label="Transaction Type"
                             // onChange={(e) => setTransactionType(e.target.value)}
-                            onChange={handleTransaction}
+                            onChange={(e) => handleTransaction(e)}
                             className="w-1/3"
                             size="small"
                             displayEmpty
@@ -606,14 +731,56 @@ const RegisterPatientForm = () => {
                             }
 
                         </Select>
+
+                        {/* Comment Add charges or Discount */}
+                        <Select
+                            labelId="default_comment"
+                            id="default_comment"
+                            value={defaultComment}
+                            label="Comments"
+                            onChange={(e) => setDefaultComment(e.target.value)}
+                            // onChange={handleTransaction}
+                            className="w-1/3"
+                            size="small"
+                            displayEmpty
+                            renderValue={(selected) => {
+                                if (selected === "") {
+                                    return "Comments";
+                                }
+                                return selected;
+                            }}
+                        >
+                            {
+                                transactionType == "Credit" ? (
+                                    <MenuItem value="discount">
+                                        Discount
+                                    </MenuItem>
+                                ) :
+                                    (
+                                        <MenuItem value="addcharges" >
+                                            Add Charges
+                                        </MenuItem>
+                                    )
+                            }
+                            <MenuItem value="other">
+                                Other
+                            </MenuItem>
+
+                        </Select>
+
                         {/* Amount */}
                         <TextField id="amount" label="Amount" variant="outlined"
-                            size='small' autoComplete="off" className='w-4/12' onChange={(e) => setAmount(Number((e.target.value)))}
+                            size='small' autoComplete="off" className='w-4/12' onChange={(e) => handleAmount(e)}
                         />
 
                         {/* Comments */}
                         <TextField id="comments" label="Comments" variant="outlined" value={comment}
-                            size='small' autoComplete="off" className='w-8/12' onChange={(e) => setComment(e.target.value)}
+                            size='small' autoComplete="off" className='w-8/12'
+                            onChange={(e) => setComment(e.target.value)}
+                            placeholder={`Reason for ${defaultComment}`}
+                            onClick={handleDefaultComment}
+                        // onFocus={handleDefaultComment}
+
                         />
 
                         {/* Add Transaction to table */}
@@ -622,7 +789,8 @@ const RegisterPatientForm = () => {
                                 <AddCircleIcon />
                             </IconButton>
                         </Tooltip>
-                    </Grid>
+                    </div>
+                    {/* </Grid> */}
 
                     {/* Payment Details */}
                     <TableContainer className='mt-5 shadow-lg' component={Paper}>
@@ -638,7 +806,7 @@ const RegisterPatientForm = () => {
                             </TableHead>
                             <TableBody>
                                 {transactionTableData.map((data, index) => (
-                                    <TableRow key={data.id} className={`${index % 2 === 0 ? "bg-gray-100" : "bg-white"}`}>
+                                    <TableRow key={data.id}>
                                         <TableCell >{data.transactionType}</TableCell>
                                         <TableCell align="center" >{data.amount}</TableCell>
                                         <TableCell align="center" >{data.tax}</TableCell>
@@ -650,10 +818,10 @@ const RegisterPatientForm = () => {
                                     <TableCell colSpan={3} align='right' className='border-none'>Test Charges</TableCell>
                                     <TableCell align="right">{ccyFormat(subTotalPrice)}</TableCell>
                                 </TableRow>
-                                <TableRow>
+                                {/* <TableRow>
                                     <TableCell colSpan={3} align='right' className='border-none'>SubTotal</TableCell>
                                     <TableCell align="right">{ccyFormat(subTotalAmount)}</TableCell>
-                                </TableRow>
+                                </TableRow> */}
                                 <TableRow>
                                     <TableCell colSpan={3} align='right' className='border-none'>Tax</TableCell>
                                     <TableCell align="right">{ccyFormat(totalTax)}</TableCell>
@@ -662,12 +830,64 @@ const RegisterPatientForm = () => {
                                     <TableCell colSpan={3} align='right' className='border-none font-semibold'>Total</TableCell>
                                     <TableCell align="right">{ccyFormat(totalBill)}</TableCell>
                                 </TableRow>
+                                {/* Invoice Payment */}
+                                <TableRow>
+                                    <TableCell align='right' colSpan={2} className='border-none font-semibold'>Amount Paid : </TableCell>
+                                    <TableCell >
+                                        <div className='w-full'>
+                                            <TextField id="invoicePayment" label="Payment" variant="outlined"
+                                                size='small' color='primary' autoComplete="off" className='w-11/12'
+                                                value={amountPaid} onChange={(e) => setAmountPaid(Number(e.target.value))}
+                                            />
+                                        </div>
+                                    </TableCell>
+                                    <TableCell >
+                                        <div className='w-full'>
+                                            <TextField id="invoicePayment" label="Comment" variant="outlined"
+                                                size='small' color='primary' autoComplete="off" className='w-11/12'
+                                            />
+                                        </div>
+                                    </TableCell>
+
+                                </TableRow>
+                                {/* Payment Mode */}
+                                <TableRow>
+                                    <TableCell colSpan={4} align='right'>
+                                        <Select
+                                            labelId="payment_mode"
+                                            id="payment_mode"
+                                            value={selectPaymentMode}
+                                            label=" Payment Mode"
+                                            onChange={(e) => setSelectPaymentMode(e.target.value)}
+                                            className="w-4/5 md:w-1/3 mb-5"
+                                            size="small"
+                                            displayEmpty
+                                            renderValue={(selected) => {
+                                                if (selected === "") {
+                                                    return "Payment Mode";
+                                                }
+                                                return selected;
+                                            }}
+                                        >
+                                            {
+                                                paymentMode.map((data, index) =>
+                                                    <MenuItem value={data.PaymentMode} key={index}>
+                                                         <ListItemIcon>{data.icon}</ListItemIcon>
+                                                         <ListItemText primary={data.PaymentMode} />
+                                                    </MenuItem>
+                                                )
+                                            }
+                                        </Select>
+                                    </TableCell>
+                                </TableRow>
                             </TableBody>
                         </Table>
                     </TableContainer>
 
-                    <div className='mt-6'>
-                        <Button variant="contained" onClick={proceedToPayment}>Proceed To Payment</Button>
+                    <Divider className='mt-5' />
+                    <div className='mt-6 flex justify-end gap-x-10 w-full'>
+                        <Typography color='textDisabled' className='mt-3'> Balance Remaining : <CurrencyRupeeIcon fontSize='small' /> {ccyFormat(balanceRemaining)} </Typography>
+                        <Button variant="contained" onClick={proceedToPayment}>Confirm & Proceed</Button>
                     </div>
                 </CustomTabPanel>
 

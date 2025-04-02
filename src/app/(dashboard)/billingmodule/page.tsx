@@ -18,7 +18,7 @@ const billingmodule = () => {
     <div>
       <Container disableGutters>
         <Box className="flex justify-between mb-4">
-          <Box className="flex text-gray-600">
+          <Box className="flex" color="GrayText">
             <DescriptionIcon fontSize='medium' />
             <Typography variant='h5' align='right' className='ml-2 mb-1 font-extrabold'>Invoices</Typography>
           </Box>
