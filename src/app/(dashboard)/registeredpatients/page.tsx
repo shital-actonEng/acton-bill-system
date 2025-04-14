@@ -18,12 +18,12 @@ const billingmodule = () => {
     <div>
       <Container disableGutters>
         <Box className="flex justify-between mb-4">
-          <Box className="flex" color="GrayText">
-            <DescriptionIcon fontSize='medium' />
-            <Typography variant='h5' align='right' className='ml-2 mb-1 font-extrabold'>Invoices</Typography>
+          <Box className="flex">
+            <DescriptionIcon fontSize='medium' color='info' />
+            <Typography variant='h5' align='right' className='ml-2 mb-1 font-extrabold' color='info'>Invoices</Typography>
           </Box>
           <Link href="/registerpatient" >
-            <Button color='primary' variant='contained' startIcon={<AddIcon />} > Register Patient </Button>
+            <Button color='primary' variant='contained' startIcon={<AddIcon />} > Payment Breakdown </Button>
           </Link>
         </Box>
         {/* <Paper> */}

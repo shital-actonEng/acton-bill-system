@@ -9,7 +9,14 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        dropdown: {
+          base: "var(--color-base)",
+          text: "var(--color-text)",
+        },
+      },
+    },
   },
   plugins: [],
 }

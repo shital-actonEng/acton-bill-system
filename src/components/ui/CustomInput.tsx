@@ -38,12 +38,15 @@ const CustomInput: React.FC<CustomInputProps> = ({
       className={`rounded-lg placeholder:text-xs placeholder:opacity-70 min-h-6 ${className}`}
       sx={{
         "& input::placeholder": {
-          fontSize: "0.75rem", // Equivalent to `text-xs`
+          fontSize: "0.85rem", // Equivalent to `text-xs`
           opacity: 0.7,
         },
         "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
           borderWidth: "1px", // Change the border width when focused
-        },   
+        },  
+        "& .MuiOutlinedInput-input": {
+          padding: "6px 8px", // Adjust internal padding to reduce height
+        }, 
          
         ...sx,
       }}

@@ -8,7 +8,7 @@ import theme from '../theme';
 import { dark } from "@mui/material/styles/createPalette";
 import { CssBaseline } from "@mui/material";
 import darkTheme from "../theme";
-
+import Header from "@/components/Header";
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
@@ -41,7 +41,9 @@ export default function RootLayout({
             
           <ThemeProvider theme={darkTheme}>
           <CssBaseline /> 
+          <Header>
             {children}
+          </Header>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>

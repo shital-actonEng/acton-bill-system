@@ -5,6 +5,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --color-base: #37C2CC;
+  --color-text: #ffffff;
 }
 /* bg-[#edf2f9] dark:bg-black */
 
@@ -23,6 +25,8 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    /* --color-base: #111827;
+    --color-text: #ffffff; */
   }
 }
 

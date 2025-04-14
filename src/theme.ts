@@ -28,7 +28,7 @@ const darkTheme = createTheme({
     mode: 'dark',
   },
   typography: {
-    fontFamily: "'Poppins', sans-serif", // Change to your desired font
+    fontFamily: "'', 'Poppins', sans-serif", // Change to your desired font
   },
   components: {
     MuiDrawer: {

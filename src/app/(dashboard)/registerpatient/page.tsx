@@ -8,13 +8,10 @@ const registerpatient = () => {
   return (
     <Container disableGutters>
         <Box className="flex justify-between mb-4">
-          <Box className="flex" color="GrayText">
-            <DriveFileRenameOutlineIcon fontSize='medium' />
-            <Typography variant='h5' align='right' className='ml-2 font-extrabold'>New Patient</Typography>
+          <Box className="flex">
+            <DriveFileRenameOutlineIcon fontSize='medium' color='info' />
+            <Typography variant='h5' align='right' className='ml-2 font-extrabold' color='info'>New Patient</Typography>
           </Box>
-          {/* <Link href="/registerpatient" >
-            <Button color='success' variant='contained' startIcon={<AddIcon />} > Register Patient </Button>
-          </Link> */}
         </Box>
         <Paper>
             <RegisterPatientForm />
