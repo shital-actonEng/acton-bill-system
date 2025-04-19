@@ -1,5 +1,8 @@
 'use client';
 import { createTheme } from '@mui/material/styles';
+import "@fontsource/abeezee"; 
+import "@fontsource/poppins/300.css";
+import "@fontsource/poppins/400.css";
 
 const theme = createTheme({
   palette: {
@@ -9,17 +12,20 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: "'Poppins', sans-serif", // Change to your desired font
+    fontFamily: "'ABeeZee','Poppins', sans-serif", // Change to your desired font
+    fontSize: 14
   },
   components: {
     MuiDrawer: {
       styleOverrides: {
         paper: {
-          background: "#37C2CC"
+          background: "#09becb"
         }
       }
-    }
+    } , 
+
   },
+  
   cssVariables: true,
 });
 
@@ -28,7 +34,8 @@ const darkTheme = createTheme({
     mode: 'dark',
   },
   typography: {
-    fontFamily: "'', 'Poppins', sans-serif", // Change to your desired font
+    fontFamily: "'ABeeZee', 'Poppins', sans-serif", // Change to your desired font
+    fontSize: 14
   },
   components: {
     MuiDrawer: {
@@ -51,7 +58,8 @@ const blueTheme = createTheme({
   },
   
   typography: {
-    fontFamily: "'Poppins', sans-serif", // Change to your desired font
+    fontFamily: "'ABeeZee','Poppins', sans-serif", // Change to your desired font
+    fontSize: 14
   },
   components: {
     MuiDrawer: {
@@ -109,4 +117,4 @@ const blueTheme = createTheme({
   cssVariables: true,
 });
 
-export default theme;
+export  {theme , darkTheme , blueTheme};

@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -162,4 +162,4 @@ const PatientHistoryTable = () => {
   );
 };
 
-export default PatientHistoryTable;
+export default React.memo(PatientHistoryTable);

@@ -1,10 +1,6 @@
-import { Button, Container, Divider, FormControlLabel, Paper, Radio, RadioGroup, TextField, Typography } from '@mui/material'
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { DemoItem } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { Button, Container, Divider, FormControlLabel, InputAdornment, Paper, Radio, RadioGroup, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import SaveIcon from '@mui/icons-material/Save';
-import ClearIcon from '@mui/icons-material/Clear';
+import {Save , Clear , CurrencyRupee} from '@mui/icons-material';
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 
@@ -79,7 +75,6 @@ const AddEditReferral = ({ referralData }: any) => {
             console.warn("Form validation failed:", newErrors);
             return;
         }
-        console.log("Referral data is...", form);
         handleClear();
     }
 
@@ -101,13 +96,11 @@ const AddEditReferral = ({ referralData }: any) => {
                 prn: referralData.prn || ""
             })
         }
-        console.log("referral data ...", form);
     }, [referralData])
 
     return (
         <>
-            <Paper className='w-full md:w-2/3'>
-                <Container className='py-6 md:px-8'>
+            <Paper className='w-full md:w-2/3 py-6 md:px-8'>
                     <Typography className='text-sm font-semibold mb-4' color='textDisabled'>Please fill New Physician information here </Typography>
                     <div className='flex gap-4 justify-between' >
                         <div className='flex flex-col gap-4 w-full'>
@@ -158,12 +151,12 @@ const AddEditReferral = ({ referralData }: any) => {
                             />
 
                             {/* Mobile Number */}
-                            <div className='w-full'>
+                            <div className='w-full dark:bg-transparent'>
                                 <PhoneInput
                                     country={'in'}
                                     value={phone}
                                     onChange={(phone) => handlePhone(phone)}
-                                    inputStyle={{ width: '100%' }}
+                                    inputStyle={{ width: '100%' , backgroundColor: 'transparent' }}
                                     containerStyle={{ width: '100%' }}
                                 />
                             </div>
@@ -171,7 +164,7 @@ const AddEditReferral = ({ referralData }: any) => {
                             {/* Referrial bonus */}
                             <div className='flex flex-wrap gap-4'>
                                 <label className='mt-2 w-full md:w-1/4'>Enter Referrel Bonus</label>
-                                <TextField id="referrelBonusPercentage" label="Bonus%" variant="outlined"
+                                <TextField id="referrelBonusPercentage" label="Bonus(%)" variant="outlined"
                                     size='small' color='primary' autoComplete="off" className='w-1/2 md:w-1/4'
                                     name='referrelBonusPercentage'
                                     value={form.referrelBonusPercentage} onChange={handleChange}
@@ -183,6 +176,15 @@ const AddEditReferral = ({ referralData }: any) => {
                                     name='referrelBonus'
                                     type='number'
                                     value={form.referrelBonus} onChange={handleChange}
+                                    slotProps={{
+                                        input: {
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <CurrencyRupee fontSize='small' />
+                                                </InputAdornment>
+                                            ),
+                                        },
+                                    }}
                                 />
                             </div>
 
@@ -194,16 +196,14 @@ const AddEditReferral = ({ referralData }: any) => {
 
                             <div className='flex gap-4 mt-5'>
                                 <Button color='success' variant='outlined' onClick={handleSubmit}
-                                    startIcon={<SaveIcon />} >Save</Button>
+                                    startIcon={<Save />} >Save</Button>
                                 <Button color='error' variant='outlined' onClick={handleClear}
-                                    startIcon={<ClearIcon />} >Cancel</Button>
+                                    startIcon={<Clear/>} >Cancel</Button>
                             </div>
                         </div>
                     </div>
 
                     <Divider className='my-6' />
-
-                </Container>
             </Paper>
         </>
     )

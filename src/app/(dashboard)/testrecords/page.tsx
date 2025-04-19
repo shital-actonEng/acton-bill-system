@@ -1,10 +1,9 @@
 "use client"
-import { Autocomplete, Box, Button, Container, Divider, FormControl, InputLabel, MenuItem, Paper, Select, TextField, Typography } from '@mui/material'
+import { Autocomplete, Box, Button, Container, Divider, FormControl, InputAdornment, InputLabel, MenuItem, Paper, Select, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import VaccinesIcon from '@mui/icons-material/Vaccines';
+import {Vaccines , Save , Clear} from '@mui/icons-material';
 import jsonData from '../../../../data/testsData.json';
-import SaveIcon from '@mui/icons-material/Save';
-import ClearIcon from '@mui/icons-material/Clear';
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 
 
 const TestRecords = () => {
@@ -178,13 +177,12 @@ const TestRecords = () => {
     <Container disableGutters>
       <Box className="flex justify-between mb-4">
         <Box className="flex">
-          <VaccinesIcon fontSize='medium' color='info' className='mt-1' />
+          <Vaccines fontSize='medium' color='info' className='mt-1' />
           <Typography variant='h5' align='right' className='ml-2 mb-1 font-extrabold' color='info'>Add Tests</Typography>
         </Box>
       </Box>
 
-      <Paper className='md:px-8'>
-        <Container className="py-6 px-4">
+      <Paper className='md:px-8 py-6 px-4'>
           <div className="flex gap-6">
             {/* Select Modality  */}
             <Autocomplete
@@ -210,8 +208,7 @@ const TestRecords = () => {
           </div>
 
           <Divider className="my-6" />
-          <Paper className='w-full md:w-2/3'>
-            <Container className='py-6 md:px-8'>
+          <Paper className='w-full md:w-2/3 py-6 md:px-8'>
               <Typography className='text-sm font-semibold mb-5' color='textDisabled'>Please fill test information here to Add tests </Typography>
               {/* <div className='flex gap-4 justify-between' > */}
               <div className='flex flex-col gap-4  w-full'>
@@ -269,11 +266,20 @@ const TestRecords = () => {
                     value={form.price} onChange={handleChange}
                     error={errors.price.error}
                     helperText={errors.price.helperText}
+                    slotProps={{
+                      input: {
+                          startAdornment: (
+                              <InputAdornment position="start">
+                                  <CurrencyRupeeIcon fontSize='small' />
+                              </InputAdornment>
+                          ),
+                      },
+                  }}
                   />
 
                   {/*  Tax Or GST */}
                   <FormControl  size="small" className='w-full md:w-5/12'>
-                   <InputLabel id="GST">GST%</InputLabel>
+                   <InputLabel id="GST">GST(%)</InputLabel>
                   <Select
                     labelId="GST"
                     id="GST"
@@ -297,7 +303,7 @@ const TestRecords = () => {
                  {/* Referrial bonus */}
                 <div className='flex flex-wrap gap-4'>
                   <label className='mt-2 w-full md:w-1/4'>Enter Referrel Bonus</label>
-                  <TextField id="referrelBonusPercentage" label="Bonus%" variant="outlined"
+                  <TextField id="referrelBonusPercentage" label="Bonus(%)" variant="outlined"
                     size='small' color='primary' autoComplete="off" className='w-1/2 md:w-1/4'
                     name='referrelBonusPercentage'
                     value={form.referrelBonusPercentage} onChange={handleChange}
@@ -309,17 +315,26 @@ const TestRecords = () => {
                     name='referrelBonus'
                     type='number'
                     value={form.referrelBonus} onChange={handleChange}
+                    slotProps={{
+                      input: {
+                          startAdornment: (
+                              <InputAdornment position="start">
+                                  <CurrencyRupeeIcon fontSize='small' />
+                              </InputAdornment>
+                          ),
+                      },
+                  }}
                   />
                 </div>
 
                 <div className='flex flex-wrap gap-4'>
                   <label className='mt-2 w-full md:w-1/4'>Discount Range  </label>
-                  <TextField id="discountMinRange" label="Min Range" variant="outlined"
+                  <TextField id="discountMinRange" label="Min Range(%)" variant="outlined"
                     size='small' color='primary' autoComplete="off" className='w-1/2 md:w-1/4 md:mr-9'
                     name='discountMinRange' type='number'
                     value={form.discountMinRange} onChange={handleChange}
                   />
-                  <TextField id="discountMaxRange" label="Max Range" variant="outlined"
+                  <TextField id="discountMaxRange" label="Max Range(%)" variant="outlined"
                     size='small' color='primary' autoComplete="off" className='w-1/2 md:w-1/4'
                     name='discountMaxRange' type='number'
                     value={form.discountMaxRange} onChange={handleChange}
@@ -328,15 +343,12 @@ const TestRecords = () => {
 
                 <div className='flex gap-4 mt-5'>
                   <Button color='success' variant='outlined' onClick={handleSubmit}
-                    startIcon={<SaveIcon />} >Save</Button>
+                    startIcon={<Save />} >Save</Button>
                   <Button color='error' variant='outlined'
-                    onClick={handleClear} startIcon={<ClearIcon />}  >Cancel</Button>
+                    onClick={handleClear} startIcon={<Clear />}  >Cancel</Button>
                 </div>
               </div>
-            </Container>
           </Paper>
-        </Container>
-
       </Paper>
     </Container>
   )

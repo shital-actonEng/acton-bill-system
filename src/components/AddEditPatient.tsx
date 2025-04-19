@@ -4,11 +4,10 @@ import { DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
 import React, { useEffect, useState } from 'react'
-import SaveIcon from '@mui/icons-material/Save';
-import ClearIcon from '@mui/icons-material/Clear';
+import {Save , Clear} from '@mui/icons-material';
+// import ClearIcon from '@mui/icons-material/Clear';
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
-import { error } from 'console';
 
 const AddEditPatient = ({ patientData }: any) => {
     const [phone, setPhone] = useState("");
@@ -93,7 +92,6 @@ const AddEditPatient = ({ patientData }: any) => {
             ageMonth: months
         });
 
-        console.log("age is...", age);
     }
 
     const isValidEmail = (email: string) => {
@@ -116,16 +114,16 @@ const AddEditPatient = ({ patientData }: any) => {
                 helperText: form.patientName.trim() === "" ? 'Patient Name is required' : "",
             },
             email: {
-                error:!isValidEmail(form.email),
+                error: !isValidEmail(form.email),
                 helperText: !isValidEmail(form.email) ? 'Enter a valid email address' : "",
             },
             ageMonth: {
-               error: !isValidAgeMonth(Number(form.ageMonth)),
-               helperText: !isValidAgeMonth(Number(form.ageMonth)) ? 'Please enter a valid month (0–150).' : "",
+                error: !isValidAgeMonth(Number(form.ageMonth)),
+                helperText: !isValidAgeMonth(Number(form.ageMonth)) ? 'Please enter a valid month (0–150).' : "",
             },
             ageYear: {
-               error : !isValidYear(Number(form.ageYear)),
-               helperText: !isValidYear(Number(form.ageYear)) ? 'Please enter a valid month (0–11).' : "",
+                error: !isValidYear(Number(form.ageYear)),
+                helperText: !isValidYear(Number(form.ageYear)) ? 'Please enter a valid month (0–11).' : "",
             }
         }
         setErrors(newErrors);
@@ -133,7 +131,6 @@ const AddEditPatient = ({ patientData }: any) => {
             console.warn("Form validation failed:", newErrors);
             return;
         }
-        console.log("patient data is...", form);
         handleClear();
     }
 
@@ -153,9 +150,9 @@ const AddEditPatient = ({ patientData }: any) => {
         setPhone("");
     }
 
-    const handlePhone = (phoneNum : any)=>{
+    const handlePhone = (phoneNum: any) => {
         setPhone(phoneNum);
-        setForm({...form , phone : phoneNum})
+        setForm({ ...form, phone: phoneNum })
     }
 
 
@@ -177,10 +174,9 @@ const AddEditPatient = ({ patientData }: any) => {
 
     return (
         <>
-            <Paper className='w-full md:w-2/3'>
-                <Container className='py-6 md:px-8'>
+            <Paper className='w-full md:w-2/3 py-6 md:px-8'>
                     <Typography className='text-sm font-semibold mb-5' color='textDisabled'>Please fill patient information here to Add new Patient </Typography>
-                    {/* <div className='flex gap-4 justify-between' > */}
+                    
                     <div className='flex flex-col gap-4  w-full'>
                         {/* Name */}
                         <TextField id="patientName"
@@ -205,21 +201,13 @@ const AddEditPatient = ({ patientData }: any) => {
                         />
 
                         <div className='flex flex-wrap gap-4'>
-                            {/* Mobile number */}
-                            {/* <TextField id="mobile" label="Mobile Number" variant="outlined"
-                                size='small' color='primary' autoComplete="off" className='w-full md:w-6/12'
-                                name='mobileNum' onChange={handlechange} value={form.mobileNum}
-                                type='tel'
-                                error={errors.mobileNum}
-                                helperText={errors.mobileNum ? "Enter a valid 10-digit mobile number" : ""}
-                            /> */}
-
-                            <div className='w-full'>
+                        
+                            <div className='w-full dark:bg-transparent'>
                                 <PhoneInput
                                     country={'in'}
                                     value={phone}
                                     onChange={(phone) => handlePhone(phone)}
-                                    inputStyle={{ width: '100%' }}
+                                    inputStyle={{ width: '100%' , backgroundColor: 'transparent' }}
                                     containerStyle={{ width: '100%' }}
                                 />
                             </div>
@@ -232,7 +220,6 @@ const AddEditPatient = ({ patientData }: any) => {
                         </div>
 
                         {/* Birth Date */}
-                        {/* <div className='flex flex-wrap gap-4'> */}
                         <div className='w-full'>
                             <LocalizationProvider dateAdapter={AdapterDayjs} >
                                 <DemoItem>
@@ -305,17 +292,18 @@ const AddEditPatient = ({ patientData }: any) => {
                         <div className='flex flex-wrap gap-4 mt-5'>
                             <Button color='success' variant='outlined'
                                 onClick={handleSubmit}
-                                startIcon={<SaveIcon />}  >Save</Button>
+                                startIcon={<Save />}  >Save</Button>
                             <Button color='error' variant='outlined'
-                                onClick={handleClear} startIcon={<ClearIcon />} >Cancel</Button>
+                                onClick={handleClear} startIcon={<Clear />} >Cancel</Button>
                         </div>
+                        <div>
+                        <Button color='primary' variant='outlined'
+                            onClick={handleSubmit} 
+                            startIcon={<Save />} 
+                         > Save & Proceed To Transaction </Button>
+                         </div>
                     </div>
-                    {/* </div> */}
-
                     <Divider className='my-6' />
-
-
-                </Container>
             </Paper>
         </>
     )

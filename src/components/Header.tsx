@@ -1,43 +1,29 @@
 
 "use client"
 import * as React from 'react';
-import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
+import { styled, Theme, CSSObject } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import {Menu ,MenuOpen,AppRegistration , HealthAndSafety ,Vaccines ,History ,PersonAddAlt1} from '@mui/icons-material';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import MenuOpenIcon from '@mui/icons-material/MenuOpen';
-import { Avatar, Button, Collapse, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { Avatar, Button, Collapse, FormControl, FormControlLabel, InputLabel, MenuItem, Select } from '@mui/material';
 import ProfileAvatar from '@/components/ProfileAvatar';
-import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
-import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
-import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
-import VaccinesIcon from '@mui/icons-material/Vaccines';
-import HistoryIcon from '@mui/icons-material/History';
-import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import Image from 'next/image';
 import Link from 'next/link';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import EditNoteIcon from '@mui/icons-material/EditNote';
-import AddIcon from '@mui/icons-material/Add';
-import path from 'path';
-import GroupsIcon from '@mui/icons-material/Groups';
-
+import Switch from '@mui/material/Switch';
+import { useThemeStore } from '@/stores/themeStore';
+import { usePathname } from 'next/navigation';
 
 const drawerWidth = 230;
 
@@ -144,20 +130,67 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
+const MaterialUISwitch = styled(Switch)(({ theme }) => ({
+	width: 62,
+	height: 34,
+	padding: 7,
+	"& .MuiSwitch-switchBase": {
+		margin: 1,
+		padding: 0,
+		transform: "translateX(6px)",
+		"&.Mui-checked": {
+			color: "#fff",
+			transform: "translateX(22px)",
+			"& .MuiSwitch-thumb:before": {
+				backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
+					"#fff"
+				)}" d="M4.2 2.5l-.7 1.8-1.8.7 1.8.7.7 1.8.6-1.8L6.7 5l-1.9-.7-.6-1.8zm15 8.3a6.7 6.7 0 11-6.6-6.6 5.8 5.8 0 006.6 6.6z"/></svg>')`,
+			},
+			"& + .MuiSwitch-track": {
+				opacity: 1,
+				backgroundColor: theme.palette.mode === "dark" ? "#8796A5" : "#aab4be",
+			},
+		},
+	},
+	"& .MuiSwitch-thumb": {
+		backgroundColor: theme.palette.mode === "dark" ? "#003892" : "#001e3c",
+		width: 32,
+		height: 32,
+		"&:before": {
+			content: "''",
+			position: "absolute",
+			width: "100%",
+			height: "100%",
+			left: 0,
+			top: 0,
+			backgroundRepeat: "no-repeat",
+			backgroundPosition: "center",
+			backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
+				"#fff"
+			)}" d="M9.305 1.667V3.75h1.389V1.667h-1.39zm-4.707 1.95l-.982.982L5.09 6.072l.982-.982-1.473-1.473zm10.802 0L13.927 5.09l.982.982 1.473-1.473-.982-.982zM10 5.139a4.872 4.872 0 00-4.862 4.86A4.872 4.872 0 0010 14.862 4.872 4.872 0 0014.86 10 4.872 4.872 0 0010 5.139zm0 1.389A3.462 3.462 0 0113.471 10a3.462 3.462 0 01-3.473 3.472A3.462 3.462 0 016.527 10 3.462 3.462 0 0110 6.528zM1.665 9.305v1.39h2.083v-1.39H1.666zm14.583 0v1.39h2.084v-1.39h-2.084zM5.09 13.928L3.616 15.4l.982.982 1.473-1.473-.982-.982zm9.82 0l-.982.982 1.473 1.473.982-.982-1.473-1.473zM9.305 16.25v2.083h1.389V16.25h-1.39z"/></svg>')`,
+		},
+	},
+	"& .MuiSwitch-track": {
+		opacity: 1,
+		backgroundColor: theme.palette.mode === "dark" ? "#8796A5" : "#aab4be",
+		borderRadius: 20 / 2,
+	},
+}));
+
+
 export default function Header({ children }: { children: React.ReactNode }) {
-    const theme = useTheme();
     const [open, setOpen] = React.useState(true);
     const menuList = [
         {
             id: 1,
             name: "Active Patients",
-            icon: <AppRegistrationIcon />,
+            icon: <AppRegistration />,
             path: "/registeredpatients"
         },
         {
             id: 2,
             name: "Patient Registration",
-            icon: <PersonAddAlt1Icon />,
+            icon: <PersonAddAlt1 />,
             path: "/patientdashboard"
             // nestedItems: [
             //     { id: 3, text: 'Add New Patient', icon: <AddIcon />, path: "/patientdashboard/addpatient" },
@@ -167,7 +200,7 @@ export default function Header({ children }: { children: React.ReactNode }) {
         {
             id: 3,
             name: "Healthcare Referrals",
-            icon: <HealthAndSafetyIcon />,
+            icon: <HealthAndSafety />,
             path: "/referraldashboard"
             // nestedItems: [
             //     { id: 6, text: 'New Referral', icon: <AddIcon />, path: "/referraldashboard/addreferral" },
@@ -177,16 +210,17 @@ export default function Header({ children }: { children: React.ReactNode }) {
         {
             id: 8,
             name: "Test Records",
-            icon: <VaccinesIcon />,
+            icon: <Vaccines />,
             path: "/testrecords"
         },
         {
             id: 9,
             name: "History",
-            icon: <HistoryIcon />,
+            icon: <History />,
             path: "/history"
         }
     ]
+    const [branch , setBranch] = React.useState("");
 
     const [openList, setOpenList] = React.useState<Record<number, boolean>>({});
 
@@ -194,6 +228,9 @@ export default function Header({ children }: { children: React.ReactNode }) {
         setOpenList((prevOpen) => ({ ...prevOpen, [id]: !prevOpen[id] }));
     };
 
+    const toggleTheme = useThemeStore((state) => state.toggleTheme);
+    
+    const pathname = usePathname();
     return (
         <Box sx={{ display: 'flex' }}>
             {/* <CssBaseline /> */}
@@ -211,11 +248,20 @@ export default function Header({ children }: { children: React.ReactNode }) {
 
                         ]}
                     >
-                        {open ? <MenuOpenIcon /> : <MenuIcon />}
+                        {open ? <MenuOpen /> : <Menu />}
                     </IconButton>
-                    <Typography variant="h5" sx={{ flexGrow: 1 }} noWrap component="div" color='success'>
-                        <Image src="/actonlogo.jpeg" alt='Acton logo' width={150} height={150} />
-                    </Typography>
+
+                    <Box  sx={{ flexGrow: 1 }} component="div" color='success'>
+                        <Image src="/actonlogo.jpeg" alt='Acton logo' width={150} height={150} priority />
+                    </Box>
+
+                    <div>
+                        <FormControlLabel
+                            control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked />}
+                            label=""
+                            onClick={toggleTheme} 
+                        />
+                    </div>
 
                     <Typography className='font-medium text-sm mr-2'>Shital Bambare</Typography>
                     {/* <Avatar src="/broken-image.jpg" className='w-8 h-8' />       */}
@@ -227,49 +273,50 @@ export default function Header({ children }: { children: React.ReactNode }) {
 
                 </DrawerHeader>
                 {/* <Divider /> */}
-                <List className='mt-8'>
+                <List className='mt-2'>
                     {/*  Add Branch Selector at the top of the menu */}
                     <ListItem className="px-4 mb-4">
-                        {/* <select    
-                            // value={branch}
-                            // onChange={(e) => setBranch(e.target.value)}
-                            className="w-full p-2 bg-inherit" 
-                        >
-                            <option value="main">Main Branch</option>
-                            <option value="branch1">Branch 1</option>
-                            <option value="branch2">Branch 2</option>
-                        </select> */}
-                        <FormControl sx={{ m: 1, minWidth: 120 }} size="small" variant='standard' className='bg-dropdown-base text-dropdown-text z-50 border-none w-11/12'>
-                            <InputLabel id="demo-select-small-label" className='text-dropdown-text'>Branches</InputLabel>
+                       
+                        <FormControl  size="small" variant='outlined' className=' w-11/12'
+                          sx={{
+                            '& .MuiOutlinedInput-root': {
+                              '& fieldset': {
+                                borderColor: 'white', // 👈 sets the border color
+                              },
+                              '&:hover fieldset': {
+                                borderColor: 'white',
+                              },
+                              '&.Mui-focused fieldset': {
+                                borderColor: 'white',
+                              },
+                            },
+                          }}
+                         >
+                            <InputLabel id="branches" className='text-white'>Branches</InputLabel>
                             <Select
-                                labelId="demo-select-small-label"
-                                id="demo-select-small"
-                                // value={age}
+                                labelId="branches"
+                                id="branches"
+                                value={branch ?? ""}
                                 label="Branches"
-                                // onChange={handleChange}
-                                className='text-dropdown-text'
-                                MenuProps={{
-                                    PaperProps: {
-                                      className: 'bg-dropdown-base z-50', // 👈 Background for the dropdown menu
-                                    },
-                                  }}
+                                 onChange={(e)=> setBranch(e.target.value)}
                             >
-                                <MenuItem value={10} className='bg-dropdown-base text-dropdown-text'>Main Branch</MenuItem>
-                                <MenuItem value={20} className='bg-dropdown-base text-dropdown-text' >Branch 1</MenuItem>
-                                <MenuItem value={30} className='bg-dropdown-base text-dropdown-text'>Branch 2</MenuItem>
+                                <MenuItem value={10} className=''>Main Branch</MenuItem>
+                                <MenuItem value={20} className='' >Branch 1</MenuItem>
+                                <MenuItem value={30} className=''>Branch 2</MenuItem>
                             </Select>
                         </FormControl>
                     </ListItem>
+                    <Divider />
                     {
                         menuList.map((menu, index) =>
                             <ListItem key={index} disablePadding className='block mb-2'>
                                 <Link href={menu.path || "#"} passHref legacyBehavior>
                                     <ListItemButton
+                                        selected = {pathname === menu.path }
                                         onClick={() => menu.nestedItems && handleClick(menu.id)}
                                         sx={[
                                             {
-                                                minHeight: 48,
-                                                px: 2.5,
+                                                px: 2.5
                                             },
                                             open
                                                 ? {
@@ -278,6 +325,7 @@ export default function Header({ children }: { children: React.ReactNode }) {
                                                 : {
                                                     justifyContent: 'center',
                                                 },
+                                            
                                         ]}
                                     >
                                         <ListItemIcon

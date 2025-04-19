@@ -1,10 +1,7 @@
 "use client";
 import { Autocomplete, Box, Button, Container, Divider, InputAdornment, Paper, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
-import Person4Icon from "@mui/icons-material/Person4";
-import CustomInput from "@/components/ui/CustomInput";
-import SearchIcon from "@mui/icons-material/Search";
-import AddIcon from "@mui/icons-material/Add";
+import {Person4 , Search , Add } from "@mui/icons-material";
 import AddEditReferral from "@/components/AddEditReferral";
 
 const ReferralDashboard = () => {
@@ -102,32 +99,19 @@ const ReferralDashboard = () => {
         {/* Header Section */}
         <Box className="flex flex-wrap justify-between mb-4">
           <Box className="flex">
-            <Person4Icon fontSize="medium" color="info" className="mt-1" />
+            <Person4 fontSize="medium" color="info" className="mt-1" />
             <Typography variant="h5" align="right" className="ml-2 mb-1 font-extrabold" color="info">
               Initiate New Referrel
             </Typography>
           </Box>
-          <Button startIcon={<AddIcon />} variant="contained" color="primary" onClick={handleAddReferral}>
+          <Button startIcon={<Add />} variant="contained" color="primary" onClick={handleAddReferral}>
             Add New Physician
           </Button>
         </Box>
 
         {/* Search & Form Section */}
-        <Paper className="md:px-8">
-          <Container className="py-6 px-4">
+        <Paper className="md:px-8 py-6 px-4">
             <div className="flex flex-wrap gap-6">
-              {/* <CustomInput
-                type="search"
-                id="search"
-                placeholder="Search"
-                size="small"
-                color="primary"
-                startIcon={<SearchIcon />}
-                className="w-full md:w-2/4"
-                autoComplete="off"
-                onChange={(e)=> setSearchData(e.target.value) }
-              /> */}
-
               {/* Select Referrel to search its data */}
               <Autocomplete
                 disablePortal
@@ -159,7 +143,7 @@ const ReferralDashboard = () => {
                       ...params.InputProps,
                       startAdornment: (
                         <InputAdornment position="start">
-                          <SearchIcon />
+                          <Search />
                         </InputAdornment>
                       ),
                     }}
@@ -167,7 +151,7 @@ const ReferralDashboard = () => {
                   />
                 )}
               />
-              <Button startIcon={<SearchIcon />} variant="outlined" onClick={handleSearchReferrel}>
+              <Button startIcon={<Search />} variant="outlined" onClick={handleSearchReferrel}>
                 Search Referrel
               </Button>
             </div>
@@ -184,7 +168,6 @@ const ReferralDashboard = () => {
                 Search for a Physician or click   "Add New Physician"   to create a new record.
               </Typography>
             )}
-          </Container>
         </Paper>
       </Container>
     </div>

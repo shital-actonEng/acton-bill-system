@@ -1,12 +1,8 @@
 "use client";
 import { Autocomplete, Box, Button, Container, Divider, InputAdornment, Paper, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
-import Person4Icon from "@mui/icons-material/Person4";
-import CustomInput from "@/components/ui/CustomInput";
-import SearchIcon from "@mui/icons-material/Search";
+import {Person4 , Search , Add} from "@mui/icons-material";
 import AddEditPatient from "@/components/AddEditPatient";
-import AddIcon from "@mui/icons-material/Add";
-
 
 const PatientDashboard = () => {
   // Sample patient data (this should come from API in a real-world app)
@@ -116,12 +112,12 @@ const PatientDashboard = () => {
         {/* Header Section */}
         <Box className="flex flex-wrap justify-between mb-4">
           <Box className="flex  w-full md:w-1/2">
-            <Person4Icon fontSize="medium" color="info" className="mt-1" />
+            <Person4 fontSize="medium" color="info" className="mt-1" />
             <Typography variant="h5" align="right" className="ml-2 mb-1 font-extrabold" color="info">
               Patient Info
             </Typography>
           </Box>
-          <Button startIcon={<AddIcon />} variant="contained" color="primary" onClick={handleAddPatient}>
+          <Button startIcon={<Add />} variant="contained" color="primary" onClick={handleAddPatient}>
             Add New Patient
           </Button>
         </Box>
@@ -130,15 +126,6 @@ const PatientDashboard = () => {
         <Paper className="md:px-8">
           <Container className="py-6 px-4">
             <div className="flex gap-6 flex-wrap">
-              {/* <CustomInput
-              type="search"
-                id="search"
-                placeholder="Search"
-                size="small"
-                color="primary"
-                startIcon={<SearchIcon />}
-                className="w-full md:w-2/4"
-              /> */}
 
               {/* Select Patient to search its data */}
                             <Autocomplete
@@ -171,7 +158,7 @@ const PatientDashboard = () => {
                                     ...params.InputProps,
                                     startAdornment: (
                                       <InputAdornment position="start">
-                                        <SearchIcon />
+                                        <Search />
                                       </InputAdornment>
                                     ),
                                   }}
@@ -180,7 +167,7 @@ const PatientDashboard = () => {
                               )}
                             />
 
-              <Button startIcon={<SearchIcon />} variant="outlined" onClick={handleSearchPatient}>
+              <Button startIcon={<Search />} variant="outlined" onClick={handleSearchPatient}>
                 Search Patient
               </Button>
             </div>

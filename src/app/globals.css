@@ -10,9 +10,9 @@
 }
 /* bg-[#edf2f9] dark:bg-black */
 
-* {
+/* * {
   font-family: 'Poppins', sans-serif !important;
-}
+} */
 
 @theme inline {
   --color-background: var(--background);
@@ -25,8 +25,8 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
-    /* --color-base: #111827;
-    --color-text: #ffffff; */
+    /* --color-base: #111827; */
+    --color-text: #dd2525; 
   }
 }
 

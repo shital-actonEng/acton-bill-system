@@ -1,22 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
-import { Roboto } from 'next/font/google';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import theme from '../theme';
-import { dark } from "@mui/material/styles/createPalette";
 import { CssBaseline } from "@mui/material";
-import darkTheme from "../theme";
 import Header from "@/components/Header";
-
-const roboto = Roboto({
-  weight: ['300', '400', '500', '700'],
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-roboto',
-});
-
+import ThemeWrapper from "@/theme/ThemeWrapper";
 
 export const metadata: Metadata = {
   title: "Acton Healthcare",
@@ -33,18 +20,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-      <link href="https://fonts.googleapis.com/css2?family=ABeeZee&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
       </head>
-      <body className={roboto.variable}>
+      <body>
         <AppRouterCacheProvider
           options={{ key: 'css', prepend: true }}  >
-            
-          <ThemeProvider theme={darkTheme}>
+            <ThemeWrapper>
           <CssBaseline /> 
           <Header>
             {children}
           </Header>
-          </ThemeProvider>
+          </ThemeWrapper>
         </AppRouterCacheProvider>
       </body>
     </html>
