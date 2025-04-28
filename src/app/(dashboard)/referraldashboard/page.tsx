@@ -3,71 +3,30 @@ import { Autocomplete, Box, Button, Container, Divider, InputAdornment, Paper, T
 import React, { useState } from "react";
 import {Person4 , Search , Add } from "@mui/icons-material";
 import AddEditReferral from "@/components/AddEditReferral";
+import { getReferrer } from "@/express-api/referrer/page";
+
+type referrer ={
+  pk : number , 
+  name : string,
+  meta_details : {
+    email: string,
+      medicalDegree: string,
+      referrelBonusPercentage : string,
+      referrelBonus: string,
+      address: string,
+      phone: string,
+      prn: string
+  }
+}
 
 const ReferralDashboard = () => {
   const [selectedReferral, setSelectedReferral] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [searchData, setSearchData] = useState("");
-
-  // Sample referral data (this should come from API in a real-world app)
-  const demoData = [
-    {
-      id: 1,
-      doctorName: "Shital Konduskar",
-      email: "shital@gmail.com",
-      medicalDegree: "M.D",
-      referrelBonusPercentage : "0",
-      referrelBonus: "0",
-      address: "27A sector , Pradhikaran-Akurdi , pune",
-      phone: "1234567898",
-      prn: "ac1235gr"
-    },
-    {
-      id: 2,
-      doctorName: "Tejas Bambare",
-      email: "tejas@gmail.com",
-      medicalDegree: "M.S",
-      referrelBonusPercentage : "0",
-      referrelBonus: "10000",
-      address: "27A sector , Pradhikaran-Akurdi , pune",
-      phone: "1234567898",
-      prn: "ac1235gr"
-    },
-    {
-      id: 3,
-      doctorName: "Nisha Jadhav",
-      email: "nisha@gmail.com",
-      medicalDegree: "M.B.B.S",
-      referrelBonusPercentage : "0",
-      referrelBonus: "0",
-      address: "Kolhapur",
-      phone: "1234567898",
-      prn: "ac1235gr"
-    },
-    {
-      id: 4,
-      doctorName: "Shital Konduskar",
-      email: "doctor@gmail.com",
-      medicalDegree: "B.H.M.S",
-      referrelBonusPercentage : "0",
-      referrelBonus: "0",
-      address: "27A sector , Pradhikaran-Akurdi , pune",
-      phone: "7888134950",
-      prn: "ac1235gr"
-    },
-    {
-      id: 5,
-      doctorName: "Shital Bambare",
-      email: "doctor@gmail.com",
-      medicalDegree: "B.A.M.S",
-      referrelBonusPercentage : "0",
-      referrelBonus: "0",
-      address: "27A sector , Pradhikaran-Akurdi , pune",
-      phone: "1234567898",
-      prn: "ac1235gr"
-    },
-  ];
-
+  const [open , setOpen] = useState(false);
+  const [loading , setLoading] = useState(false);
+  const [demoData , setDemoData] = useState<referrer[]>([]);
+  
   // Handle editing an existing patient
   const handleEditReferral = (referral: any) => {
     setSelectedReferral(referral);
@@ -85,6 +44,21 @@ const ReferralDashboard = () => {
     setSearchData(val);
   }
  
+  const handleLoadData = async()=>{
+    if(demoData.length === 0 && !loading){
+      try {
+        setLoading(true);
+        const data = await getReferrer();
+        setDemoData(data);
+      } catch (error) {
+        console.log("Failed to load referreral data" , error);
+      }
+      finally{
+        setLoading(false);
+      }
+    }
+  }
+
   const handleSearchReferrel = () => {
     if (searchData) {
       handleEditReferral(searchData);
@@ -118,21 +92,30 @@ const ReferralDashboard = () => {
                 id="combo-box-modality"
                 options={demoData}
                 // value={modality}
+                open = {open}
+                loading={loading}
+                onOpen={()=>{
+                  setOpen(true)
+                  handleLoadData()
+                }}
+                onClose={()=>{
+                  setOpen(false)
+                }}
                 onChange={(e, newValue) => handlesearchData(newValue)}
                 size="small"
                 className="w-full md:w-1/2"
-                getOptionLabel={(option) => option.doctorName}
-                isOptionEqualToValue={(option, value) => option.doctorName === value.doctorName}
+                getOptionLabel={(option) => option.name}
+                isOptionEqualToValue={(option, value) => option.name === value.name}
                 renderOption={(props, option) => (
-                  <li {...props} key={option.id}>
-                    {`${option.doctorName} - ${option.medicalDegree}`}
+                  <li {...props} key={option.pk}>
+                    {`${option.name} - ${option.meta_details.medicalDegree}`}
                   </li>
                 )}
                 filterOptions={(options, state) => {
                   const searchInput = state.inputValue.toLowerCase().trim();
                   return options.filter((option) => {
-                    const nameMatch = option.doctorName.toLowerCase().includes(searchInput);
-                    const phoneMatch = option.medicalDegree.includes(searchInput);
+                    const nameMatch = option.name.toLowerCase().includes(searchInput);
+                    const phoneMatch = String(option.meta_details.phone).includes(searchInput);
                     return nameMatch || phoneMatch;
                   });
                 }}
@@ -161,7 +144,7 @@ const ReferralDashboard = () => {
             {/* Conditionally Render Add/Edit Form */}
             {isFormOpen ? (
               <AddEditReferral
-                referralData={selectedReferral ?? { id: null, doctorName: "", email: "", medicalDegree: "", prn: "", mobileNum: "", address: "" }}
+                referralData={selectedReferral}
               />
             ) : (
               <Typography className="font-semibold text-base" align="center">

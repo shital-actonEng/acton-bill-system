@@ -1,312 +1,278 @@
-import { Button, Container, Divider, FormControlLabel, Paper, Radio, RadioGroup, TextField, Typography } from '@mui/material'
+'use client';
+
+import { Button, Divider, FormControlLabel, Paper, Radio, RadioGroup, TextField, Typography } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
-import React, { useEffect, useState } from 'react'
-import {Save , Clear} from '@mui/icons-material';
-// import ClearIcon from '@mui/icons-material/Clear';
-import PhoneInput from 'react-phone-input-2'
-import 'react-phone-input-2/lib/style.css'
+import { useForm, Controller } from 'react-hook-form';
+import { Save, Clear } from '@mui/icons-material';
+import dynamic from 'next/dynamic';
+import { addPatient, updatePatient } from '@/express-api/patient/page';
+import 'react-phone-input-2/lib/style.css';
+import { useEffect } from 'react';
+
+const PhoneInput = dynamic(() => import('react-phone-input-2'), {
+  ssr: false,
+  loading: () => <div>Loading phone input...</div>
+});
+
+type FormValues = {
+  patientName: string;
+  birthDate: Dayjs | null;
+  ageYear: number | null;
+  ageMonth: number | null;
+  email: string;
+  phone: string;
+  gender: string;
+  address: string;
+  abhaId: string;
+};
 
 const AddEditPatient = ({ patientData }: any) => {
-    const [phone, setPhone] = useState("");
+  const { control, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm<FormValues>({
+    defaultValues: {
+      patientName: '',
+      birthDate: null,
+      ageYear: null,
+      ageMonth: null,
+      email: '',
+      phone: '',
+      gender: '',
+      address: '',
+      abhaId: ''
+    }
+  });
 
-    const [form, setForm] = useState<{
-        patientName: string;
-        birthDate: Dayjs | null;
-        ageYear: number | null,
-        ageMonth: number | null,
-        email: string;
-        phone: string;
-        gender: string;
-        address: string;
-        abhaId: string;
-    }>({
-        patientName: "",
+  const calculateAge = (birthDate: Dayjs | null): { years: number, months: number } | null => {
+    if (!birthDate) return null;
+    const today = dayjs();
+    let years = today.year() - birthDate.year();
+    let months = today.month() - birthDate.month();
+    if (today.date() < birthDate.date()) months--;
+    if (months < 0) {
+      years--;
+      months += 12;
+    }
+    return { years, months };
+  };
+
+  const onSubmit = (data: FormValues) => {
+    const payload = {
+      name: data.patientName,
+      mobile: data.phone,
+      meta_details: {
+        birthDate: data.birthDate,
+        ageYear: data.ageYear,
+        ageMonth: data.ageMonth,
+        gender: data.gender,
+        address: data.address,
+        email: data.email,
+        abhaId: data.abhaId
+      }
+    };
+
+    if (patientData?.pk) {
+      updatePatient(patientData.pk, payload);
+    } else {
+      addPatient(payload);
+    }
+    handleClear();
+  };
+
+  useEffect(() => {
+    if (patientData) {
+      const meta = patientData.meta_details || {};
+      reset({
+        patientName: patientData.name || '',
+        birthDate: meta.birthDate ? dayjs(meta.birthDate) : null,
+        ageYear: meta.ageYear || null,
+        ageMonth: meta.ageMonth || null,
+        phone: patientData.mobile || '',
+        gender: meta.gender || '',
+        address: meta.address || '',
+        email: meta.email || '',
+        abhaId: meta.abhaId || ''
+      });
+    }
+    else{
+        reset({
+            patientName: '',
+            birthDate: null,
+            ageYear: null,
+            ageMonth: null,
+            email: '',
+            phone: '',
+            gender: '',
+            address: '',
+            abhaId: ''
+        })
+    }
+  }, [patientData, reset]);
+
+  const handleClear = () =>{
+    reset({
+        patientName: '',
         birthDate: null,
         ageYear: null,
         ageMonth: null,
-        email: "",
-        phone: "",
-        gender: "",
-        address: "",
-        abhaId: ""
-    });
-
-
-    const [errors, setErrors] = useState({
-        patientName: {
-            error: false,
-            helperText: '',
-        },
-        email: {
-            error: false,
-            helperText: '',
-        },
-        ageMonth: {
-            error: false,
-            helperText: '',
-        },
-        ageYear: {
-            error: false,
-            helperText: '',
-        }
+        email: '',
+        phone: '',
+        gender: '',
+        address: '',
+        abhaId: ''
     })
+  }
 
+  return (
+    <Paper className='w-full md:w-2/3 py-6 md:px-8'>
+      <Typography className='text-sm font-semibold mb-5' color='textDisabled'>
+        Please fill patient information here to Add new Patient
+      </Typography>
 
-    const calculateAge = (birthDate: Dayjs | null): string | null => {
-        if (!birthDate) return null;
+      <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4'>
 
-        const today = dayjs();
+        {/* Patient Name */}
+        <Controller
+          name="patientName"
+          control={control}
+          rules={{ required: "Patient Name is required" }}
+          render={({ field }) => (
+            <TextField {...field} label="Patient's Name" size='small' error={!!errors.patientName} helperText={errors.patientName?.message} />
+          )}
+        />
 
-        let years = today.year() - birthDate.year();
-        let months = today.month() - birthDate.month();
+        {/* Email */}
+        <Controller
+          name="email"
+          control={control}
+          rules={{
+            required: "Email is required",
+            pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Enter a valid email address" }
+          }}
+          render={({ field }) => (
+            <TextField {...field} label="Email Address" size='small' error={!!errors.email} helperText={errors.email?.message} />
+          )}
+        />
 
-        if (today.date() < birthDate.date()) {
-            months--; // not a full month yet
-        }
+        {/* Phone */}
+        <Controller
+          name="phone"
+          control={control}
+          render={({ field }) => (
+            <PhoneInput
+              country={'in'}
+              value={field.value || ''}
+              onChange={field.onChange}
+              inputStyle={{ width: '100%', backgroundColor: 'transparent' }}
+              containerStyle={{ width: '100%' }}
+            />
+          )}
+        />
 
-        if (months < 0) {
-            years--;
-            months += 12;
-        }
+        {/* Abha ID */}
+        <Controller
+          name="abhaId"
+          control={control}
+          render={({ field }) => (
+            <TextField {...field} label="Abha ID" size='small' />
+          )}
+        />
 
-        return `${years} year${years !== 1 ? 's' : ''}, ${months} month${months !== 1 ? 's' : ''}`;
-    };
+        {/* Birth Date */}
+        <Controller
+          name="birthDate"
+          control={control}
+          render={({ field }) => (
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoItem>
+                <DatePicker
+                  {...field}
+                  label="Birth Date"
+                  onChange={(newDate) => {
+                    field.onChange(newDate);
+                    const age = calculateAge(newDate);
+                    if (age) {
+                      setValue('ageYear', age.years);
+                      setValue('ageMonth', age.months);
+                    }
+                  }}
+                  slotProps={{ textField: { size: 'small' } }}
+                />
+              </DemoItem>
+            </LocalizationProvider>
+          )}
+        />
 
+        {/* Age */}
+        <div className='flex gap-4'>
+          <label className='w-20'>Age : </label>
 
-    const handlechange = (e: any) => {
-        setForm({ ...form, [e.target.name]: e.target.value })
-    }
+          <Controller
+            name="ageYear"
+            control={control}
+            rules={{
+              min: { value: 0, message: "Year must be positive" },
+              max: { value: 150, message: "Year must be less than 150" }
+            }}
+            render={({ field }) => (
+              <TextField {...field} label="Year" size='small' type="number" error={!!errors.ageYear} helperText={errors.ageYear?.message} className='md:w-2/12' />
+            )}
+          />
 
-    const handleDateChange = (newDate: any) => {
-        const updatedBirthDate = newDate as Dayjs | null;
-        const age = calculateAge(newDate); // "2 years, 3 months"
-        const [years, months] = age.split(',').map(val => parseInt(val));
+          <Controller
+            name="ageMonth"
+            control={control}
+            rules={{
+              min: { value: 0, message: "Month must be positive" },
+              max: { value: 11, message: "Month must be less than 12" }
+            }}
+            render={({ field }) => (
+              <TextField {...field} label="Month" size='small' type="number" error={!!errors.ageMonth} helperText={errors.ageMonth?.message} className='md:w-2/12' />
+            )}
+          />
+        </div>
 
-        setForm({
-            ...form,
-            birthDate: updatedBirthDate,
-            ageYear: years,
-            ageMonth: months
-        });
+        {/* Gender */}
+        <div className='flex gap-4'>
+          <label id="gender" className='pt-1 w-20'>Gender : </label>
+          <Controller
+            name="gender"
+            control={control}
+            render={({ field }) => (
+              <RadioGroup row {...field}>
+                <FormControlLabel value="female" control={<Radio size='small' />} label="Female" />
+                <FormControlLabel value="male" control={<Radio size='small' />} label="Male" />
+                <FormControlLabel value="other" control={<Radio size='small' />} label="Other" />
+              </RadioGroup>
+            )}
+          />
+        </div>
 
-    }
+        {/* Address */}
+        <Controller
+          name="address"
+          control={control}
+          render={({ field }) => (
+            <TextField {...field} label="Address" size='small' multiline rows={2} />
+          )}
+        />
 
-    const isValidEmail = (email: string) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    };
+        {/* Buttons */}
+        <div className='flex gap-4 mt-5'>
+          <Button type="submit" color='success' variant='outlined' startIcon={<Save />}>Save</Button>
+          <Button type="button" onClick={handleClear } color='error' variant='outlined' startIcon={<Clear />}>Cancel</Button>
+        </div>
 
-    const isValidAgeMonth = (ageMonth: number) => {
-        return ageMonth > 11 || ageMonth < 0 ? false : true
-    }
+        <Button type="button" color='primary' variant='outlined' startIcon={<Save />}>
+          Save & Proceed To Transaction
+        </Button>
 
-    const isValidYear = (ageYear: number) => {
-        return ageYear > 150 || ageYear < 0 ? false : true
-    }
+      </form>
 
-    const handleSubmit = () => {
-        const newErrors = {
-            patientName: {
-                error: form.patientName.trim() === "",
-                helperText: form.patientName.trim() === "" ? 'Patient Name is required' : "",
-            },
-            email: {
-                error: !isValidEmail(form.email),
-                helperText: !isValidEmail(form.email) ? 'Enter a valid email address' : "",
-            },
-            ageMonth: {
-                error: !isValidAgeMonth(Number(form.ageMonth)),
-                helperText: !isValidAgeMonth(Number(form.ageMonth)) ? 'Please enter a valid month (0–150).' : "",
-            },
-            ageYear: {
-                error: !isValidYear(Number(form.ageYear)),
-                helperText: !isValidYear(Number(form.ageYear)) ? 'Please enter a valid month (0–11).' : "",
-            }
-        }
-        setErrors(newErrors);
-        if (Object.values(newErrors).some(Boolean)) {
-            console.warn("Form validation failed:", newErrors);
-            return;
-        }
-        handleClear();
-    }
+      <Divider className='my-6' />
+    </Paper>
+  );
+};
 
-    const handleClear = () => {
-        setForm({
-            patientName: "",
-            birthDate: null as dayjs.Dayjs | null,
-            ageYear: null,
-            ageMonth: null,
-            phone: "",
-            gender: "",
-            address: "",
-            email: "",
-            abhaId: ""
-        })
-
-        setPhone("");
-    }
-
-    const handlePhone = (phoneNum: any) => {
-        setPhone(phoneNum);
-        setForm({ ...form, phone: phoneNum })
-    }
-
-
-    useEffect(() => {
-        if (patientData) {
-            setForm({
-                patientName: patientData.patientName || "",
-                birthDate: patientData.birthDate ? dayjs(patientData.birthDate) : null,
-                ageYear: patientData.ageYear || "",
-                ageMonth: patientData.ageMonth || "",
-                phone: patientData.phone || "",
-                gender: patientData.gender || "",
-                address: patientData.address || "",
-                email: patientData.email || "",
-                abhaId: patientData.abhaId || ""
-            })
-        }
-    }, [patientData])
-
-    return (
-        <>
-            <Paper className='w-full md:w-2/3 py-6 md:px-8'>
-                    <Typography className='text-sm font-semibold mb-5' color='textDisabled'>Please fill patient information here to Add new Patient </Typography>
-                    
-                    <div className='flex flex-col gap-4  w-full'>
-                        {/* Name */}
-                        <TextField id="patientName"
-                            label="Patient's Name"
-                            name='patientName'
-                            value={form.patientName}
-                            size='small'
-                            color='primary'
-                            className='w-full'
-                            onChange={handlechange}
-                            required
-                            error={errors.patientName.error}
-                            helperText={errors.patientName.helperText} />
-
-                        {/* Email Address */}
-                        <TextField id="email" label="Email Address" variant="outlined"
-                            size='small' color='primary' autoComplete="off" className='w-full'
-                            name='email' onChange={handlechange} value={form.email}
-                            error={errors.email.error}
-                            helperText={
-                                errors.email.helperText}
-                        />
-
-                        <div className='flex flex-wrap gap-4'>
-                        
-                            <div className='w-full dark:bg-transparent'>
-                                <PhoneInput
-                                    country={'in'}
-                                    value={phone}
-                                    onChange={(phone) => handlePhone(phone)}
-                                    inputStyle={{ width: '100%' , backgroundColor: 'transparent' }}
-                                    containerStyle={{ width: '100%' }}
-                                />
-                            </div>
-
-                            {/*  Abha ID */}
-                            <TextField id="abhaId" label="Abha ID" variant="outlined"
-                                size='small' color='primary' autoComplete="off" className='w-full'
-                                name='abhaId' onChange={handlechange} value={form.abhaId}
-                            />
-                        </div>
-
-                        {/* Birth Date */}
-                        <div className='w-full'>
-                            <LocalizationProvider dateAdapter={AdapterDayjs} >
-                                <DemoItem>
-                                    <DatePicker
-                                        className='w-full'
-                                        label="Birth Date"
-                                        name='birthDate'
-                                        onChange={handleDateChange}
-                                        value={form.birthDate}
-                                        slotProps={{
-                                            textField: {
-                                                size: 'small', // or 'medium'
-                                            },
-                                        }}
-                                    //    value={birthDate}
-                                    //    onChange={(newDate) => handleBirthdate(newDate)}
-                                    />
-                                </DemoItem>
-                            </LocalizationProvider>
-                        </div>
-
-                        {/* Age */}
-                        <div className='w-full flex gap-4 md:px-5'>
-                            <label>Age : </label>
-                            <TextField id="year" label="Year"
-                                className='md:w-2/12' size='small'
-                                color='primary' autoComplete="off"
-                                type='number'
-                                name='ageYear'
-                                onChange={handlechange}
-                                error={errors.ageYear.error}
-                                helperText={errors.ageYear.helperText}
-                                value={form.ageYear !== null && form.ageYear !== undefined ? form.ageYear : ""}
-                            />
-                            <TextField id="month" label="Month"
-                                className='md:w-2/12' size='small'
-                                color='primary' autoComplete="off"
-                                type='number'
-                                name='ageMonth'
-                                onChange={handlechange}
-                                error={errors.ageMonth.error}
-                                helperText={errors.ageMonth.helperText}
-                                value={form.ageMonth !== null && form.ageMonth !== undefined ? form.ageMonth : ""}
-                            />
-                        </div>
-                        {/* </div> */}
-
-                        {/* Gender */}
-                        <div className='flex gap-4 justify-start'>
-                            <label id="gender" className='pt-1 md:px-5'>Gender : </label>
-                            <RadioGroup
-                                row
-                                aria-labelledby="gender"
-                                name="gender"
-                                value={form.gender}
-                                onChange={handlechange}
-                            >
-                                <FormControlLabel value="female" control={<Radio size='small' />} label="Female" />
-                                <FormControlLabel value="male" control={<Radio size='small' />} label="Male" />
-                                <FormControlLabel value="other" control={<Radio size='small' />} label="Other" />
-                            </RadioGroup>
-                        </div>
-
-                        {/* Address */}
-                        <TextField id="address" label="Address" variant="outlined"
-                            size='small' color='primary' autoComplete="off" className='w-full'
-                            multiline rows={2} name='address' value={form.address}
-                            onChange={handlechange}
-                        />
-                        <div className='flex flex-wrap gap-4 mt-5'>
-                            <Button color='success' variant='outlined'
-                                onClick={handleSubmit}
-                                startIcon={<Save />}  >Save</Button>
-                            <Button color='error' variant='outlined'
-                                onClick={handleClear} startIcon={<Clear />} >Cancel</Button>
-                        </div>
-                        <div>
-                        <Button color='primary' variant='outlined'
-                            onClick={handleSubmit} 
-                            startIcon={<Save />} 
-                         > Save & Proceed To Transaction </Button>
-                         </div>
-                    </div>
-                    <Divider className='my-6' />
-            </Paper>
-        </>
-    )
-}
-
-export default AddEditPatient
+export default AddEditPatient;

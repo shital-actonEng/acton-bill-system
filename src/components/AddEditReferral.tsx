@@ -1,52 +1,15 @@
+'use client'
 import { Button, Container, Divider, FormControlLabel, InputAdornment, Paper, Radio, RadioGroup, TextField, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
-import {Save , Clear , CurrencyRupee} from '@mui/icons-material';
+import React, { useEffect } from 'react'
+import { Save, Clear, CurrencyRupee } from '@mui/icons-material';
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
+import { useForm, Controller } from 'react-hook-form'
+import { addReferrer } from '@/express-api/referrer/page';
 
 const AddEditReferral = ({ referralData }: any) => {
-    const [phone, setPhone] = useState("");
-
-    const [form, setForm] = useState({
-        doctorName: "",
-        email: "",
-        medicalDegree: "",
-        referrelBonusPercentage: "",
-        referrelBonus: "",
-        address: "",
-        phone: "",
-        prn: ""
-    })
-
-    const [errors, setErrors] = useState({
-        doctorName: {
-            error: false,
-            helperText: ''
-        },
-        email: {
-            error: false,
-            helperText: ''
-        },
-    })
-
-    const isValidEmail = (email: string) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    };
-
-    const handleChange = (e: any) => {
-        const { name, value } = e.target;
-
-        const updatedForm = {
-            ...form,
-            [name]: value
-        };
-
-        setForm(updatedForm);
-    }
-
-    const handleClear = () => {
-        setForm({
+    const { control, handleSubmit, reset, formState: { errors } } = useForm({
+        defaultValues: {
             doctorName: "",
             email: "",
             medicalDegree: "",
@@ -55,158 +18,244 @@ const AddEditReferral = ({ referralData }: any) => {
             address: "",
             phone: "",
             prn: ""
-        })
-        setPhone("");
-    }
+        }
+    });
 
-    const handleSubmit = () => {
-        const newErrors = {
-            doctorName: {
-                error: form.doctorName.trim() === "",
-                helperText: form.doctorName.trim() === "" ? "Enter doctor name" : ''
-            },
-            email: {
-                error: !isValidEmail(form.email),
-                helperText: !isValidEmail(form.email) ? "Enter valid mail id" : ""
-            },
+    const onSubmit = (formData: any) => {
+        const data = {
+            name: formData.doctorName,
+            meta_details: {
+                mobile: formData.phone,
+                email: formData.email,
+                medicalDegree: formData.medicalDegree,
+                prn: formData.prn,
+                bonusInPercentage: formData.referrelBonusPercentage,
+                bonus: formData.referrelBonus,
+                address: formData.address
+            }
         }
-        setErrors(newErrors);
-        if (Object.values(newErrors).some(Boolean)) {
-            console.warn("Form validation failed:", newErrors);
-            return;
-        }
+        addReferrer(data);
         handleClear();
-    }
+    };
 
-    const handlePhone = (phoneNum: any) => {
-        setPhone(phoneNum);
-        setForm({ ...form, phone: phoneNum })
+    const handleClear = () => {
+        reset({
+            doctorName: "",
+            email: "",
+            medicalDegree: "",
+            referrelBonusPercentage: "",
+            referrelBonus: "",
+            address: "",
+            phone: "",
+            prn: ""
+          });
     }
 
     useEffect(() => {
-        if (referralData) {
-            setForm({
-                doctorName: referralData.doctorName || "",
-                email: referralData.email || "",
-                medicalDegree: referralData.medicalDegree || "",
-                referrelBonusPercentage: referralData.referrelBonusPercentage || "",
-                referrelBonus: referralData.referrelBonus || "",
-                address: referralData.address || "",
-                phone: referralData.phone || "",
-                prn: referralData.prn || ""
-            })
-        }
-    }, [referralData])
-
+        if(referralData){        
+        const meta = referralData?.meta_details;
+        if (meta) {
+            reset({
+                doctorName: referralData.name || "",
+                email: meta.email || "",
+                medicalDegree: meta.medicalDegree || "",
+                referrelBonusPercentage: meta.bonusInPercentage || "",
+                referrelBonus: meta.bonus || "",
+                address: meta.address || "",
+                phone: meta.mobile || "",
+                prn: meta.prn || ""
+            });
+        }      
+    }
+    else{
+        reset({
+            doctorName: "",
+            email: "",
+            medicalDegree: "",
+            referrelBonusPercentage: "",
+            referrelBonus: "",
+            address: "",
+            phone: "",
+            prn: ""
+          });
+    }
+    }, [referralData, reset]);
+    
     return (
         <>
             <Paper className='w-full md:w-2/3 py-6 md:px-8'>
-                    <Typography className='text-sm font-semibold mb-4' color='textDisabled'>Please fill New Physician information here </Typography>
-                    <div className='flex gap-4 justify-between' >
-                        <div className='flex flex-col gap-4 w-full'>
-                            {/* Doctor Name */}
-                            <TextField id="doctorName"
-                                label="Doctor's Name"
-                                name='doctorName'
-                                value={form.doctorName}
-                                onChange={handleChange}
-                                size='small'
-                                color='primary'
-                                className='w-full'
-                                autoComplete='off'
-                                required
-                                error={errors.doctorName.error}
-                                helperText={errors.doctorName.helperText} />
+                <Typography className='text-sm font-semibold mb-4' color='textDisabled'>
+                    Please fill New Physician information here
+                </Typography>
 
-                            {/* Email */}
-                            <TextField id="email"
-                                label="Email address"
-                                size='small'
-                                color='primary'
-                                className='w-full'
-                                name='email'
-                                autoComplete='off'
-                                value={form.email}
-                                onChange={handleChange}
-                                error={errors.email.error}
-                                helperText={
-                                    errors.email.helperText
-                                } />
+                <form onSubmit={handleSubmit(onSubmit)} className='flex gap-4 justify-between'>
+                    <div className='flex flex-col gap-4 w-full'>
 
-                            {/* Medical Degree */}
-                            <TextField id="degree"
-                                label="Medical Degree"
-                                size='small'
-                                color='primary'
-                                className='w-full'
-                                name='medicalDegree'
-                                autoComplete='off'
-                                value={form.medicalDegree}
-                                onChange={handleChange} />
+                        {/* Doctor Name */}
+                        <Controller
+                            name="doctorName"
+                            control={control}
+                            rules={{ required: "Doctor Name is required" }}
+                            render={({ field }) => (
+                                <TextField {...field}
+                                    label="Doctor's Name"
+                                    size='small'
+                                    color='primary'
+                                    className='w-full'
+                                    autoComplete='off'
+                                    error={!!errors.doctorName}
+                                    helperText={errors.doctorName?.message}
+                                />
+                            )}
+                        />
 
-                            {/* Physician Registration Number (PRN)*/}
-                            <TextField id="prn" label="Physician Registration Number (PRN)" variant="outlined"
-                                size='small' color='primary' autoComplete="off" className='w-full'
-                                name='prn' value={form.prn} onChange={handleChange}
-                            />
+                        {/* Email */}
+                        <Controller
+                            name="email"
+                            control={control}
+                            rules={{
+                                required: "Email is required",
+                                pattern: {
+                                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                    message: "Enter a valid email address"
+                                }
+                            }}
+                            render={({ field }) => (
+                                <TextField {...field}
+                                    label="Email address"
+                                    size='small'
+                                    color='primary'
+                                    className='w-full'
+                                    autoComplete='off'
+                                    error={!!errors.email}
+                                    helperText={errors.email?.message}
+                                />
+                            )}
+                        />
 
-                            {/* Mobile Number */}
-                            <div className='w-full dark:bg-transparent'>
+                        {/* Medical Degree */}
+                        <Controller
+                            name="medicalDegree"
+                            control={control}
+                            render={({ field }) => (
+                                <TextField {...field}
+                                    label="Medical Degree"
+                                    size='small'
+                                    color='primary'
+                                    className='w-full'
+                                    autoComplete='off'
+                                />
+                            )}
+                        />
+
+                        {/* Physician Registration Number (PRN) */}
+                        <Controller
+                            name="prn"
+                            control={control}
+                            render={({ field }) => (
+                                <TextField {...field}
+                                    label="Physician Registration Number (PRN)"
+                                    size='small'
+                                    color='primary'
+                                    autoComplete='off'
+                                    className='w-full'
+                                />
+                            )}
+                        />
+
+                        {/* Mobile Number */}
+                        <Controller
+                            name="phone"
+                            control={control}
+                            render={({ field }) => (
                                 <PhoneInput
                                     country={'in'}
-                                    value={phone}
-                                    onChange={(phone) => handlePhone(phone)}
-                                    inputStyle={{ width: '100%' , backgroundColor: 'transparent' }}
+                                    value={field.value}
+                                    onChange={(phone) => field.onChange(phone)}
+                                    inputStyle={{ width: '100%', backgroundColor: 'transparent' }}
                                     containerStyle={{ width: '100%' }}
                                 />
-                            </div>
+                            )}
+                        />
 
-                            {/* Referrial bonus */}
-                            <div className='flex flex-wrap gap-4'>
-                                <label className='mt-2 w-full md:w-1/4'>Enter Referrel Bonus</label>
-                                <TextField id="referrelBonusPercentage" label="Bonus(%)" variant="outlined"
-                                    size='small' color='primary' autoComplete="off" className='w-1/2 md:w-1/4'
-                                    name='referrelBonusPercentage'
-                                    value={form.referrelBonusPercentage} onChange={handleChange}
-                                    type='number'
-                                />
-                                <span className='mt-2'>OR</span>
-                                <TextField id="referrelBonus" label="Bonus" variant="outlined"
-                                    size='small' color='primary' autoComplete="off" className='w-1/2 md:w-1/4'
-                                    name='referrelBonus'
-                                    type='number'
-                                    value={form.referrelBonus} onChange={handleChange}
-                                    slotProps={{
-                                        input: {
+                        {/* Referral Bonus */}
+                        <div className='flex flex-wrap gap-4'>
+                            <label className='mt-2 w-full md:w-1/4'>Enter Referral Bonus</label>
+                            <Controller
+                                name="referrelBonusPercentage"
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField {...field}
+                                        label="Bonus(%)"
+                                        size='small'
+                                        color='primary'
+                                        className='w-1/2 md:w-1/4'
+                                        autoComplete='off'
+                                        type='number'
+                                    />
+                                )}
+                            />
+
+                            <span className='mt-2'>OR</span>
+
+                            <Controller
+                                name="referrelBonus"
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField {...field}
+                                        label="Bonus"
+                                        size='small'
+                                        color='primary'
+                                        className='w-1/2 md:w-1/4'
+                                        autoComplete='off'
+                                        type='number'
+                                        InputProps={{
                                             startAdornment: (
                                                 <InputAdornment position="start">
                                                     <CurrencyRupee fontSize='small' />
                                                 </InputAdornment>
                                             ),
-                                        },
-                                    }}
-                                />
-                            </div>
-
-                            {/* Communication Address */}
-                            <TextField id="address" label="Address" variant="outlined"
-                                size='small' color='primary' autoComplete="off" className='w-full'
-                                multiline rows={2} name='address' value={form.address} onChange={handleChange}
+                                        }}
+                                    />
+                                )}
                             />
-
-                            <div className='flex gap-4 mt-5'>
-                                <Button color='success' variant='outlined' onClick={handleSubmit}
-                                    startIcon={<Save />} >Save</Button>
-                                <Button color='error' variant='outlined' onClick={handleClear}
-                                    startIcon={<Clear/>} >Cancel</Button>
-                            </div>
                         </div>
-                    </div>
 
-                    <Divider className='my-6' />
+                        {/* Address */}
+                        <Controller
+                            name="address"
+                            control={control}
+                            render={({ field }) => (
+                                <TextField {...field}
+                                    label="Address"
+                                    variant="outlined"
+                                    size='small'
+                                    color='primary'
+                                    autoComplete='off'
+                                    className='w-full'
+                                    multiline
+                                    rows={2}
+                                />
+                            )}
+                        />
+
+                        {/* Buttons */}
+                        <div className='flex gap-4 mt-5'>
+                            <Button color='success' variant='outlined' type='submit'
+                                startIcon={<Save />}>Save</Button>
+                            <Button color='error' variant='outlined' type='button' onClick={handleClear}
+                                startIcon={<Clear />}>Cancel</Button>
+                        </div>
+
+                    </div>
+                </form>
+
+                <Divider className='my-6' />
             </Paper>
         </>
     )
 }
 
 export default AddEditReferral
+
+
