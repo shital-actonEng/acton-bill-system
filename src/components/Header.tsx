@@ -10,7 +10,7 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import {Menu ,MenuOpen,AppRegistration , HealthAndSafety ,Vaccines ,History ,PersonAddAlt1} from '@mui/icons-material';
+import { Menu, MenuOpen, AppRegistration, HealthAndSafety, Vaccines, History, PersonAddAlt1 } from '@mui/icons-material';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -24,6 +24,9 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import Switch from '@mui/material/Switch';
 import { useThemeStore } from '@/stores/themeStore';
 import { usePathname } from 'next/navigation';
+import { getDiagnosticCenter } from '@/express-api/diagnosticCenter/page';
+import { useBranchStore } from '@/stores/branchStore';
+
 
 const drawerWidth = 230;
 
@@ -131,50 +134,50 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
-	width: 62,
-	height: 34,
-	padding: 7,
-	"& .MuiSwitch-switchBase": {
-		margin: 1,
-		padding: 0,
-		transform: "translateX(6px)",
-		"&.Mui-checked": {
-			color: "#fff",
-			transform: "translateX(22px)",
-			"& .MuiSwitch-thumb:before": {
-				backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
-					"#fff"
-				)}" d="M4.2 2.5l-.7 1.8-1.8.7 1.8.7.7 1.8.6-1.8L6.7 5l-1.9-.7-.6-1.8zm15 8.3a6.7 6.7 0 11-6.6-6.6 5.8 5.8 0 006.6 6.6z"/></svg>')`,
-			},
-			"& + .MuiSwitch-track": {
-				opacity: 1,
-				backgroundColor: theme.palette.mode === "dark" ? "#8796A5" : "#aab4be",
-			},
-		},
-	},
-	"& .MuiSwitch-thumb": {
-		backgroundColor: theme.palette.mode === "dark" ? "#003892" : "#001e3c",
-		width: 32,
-		height: 32,
-		"&:before": {
-			content: "''",
-			position: "absolute",
-			width: "100%",
-			height: "100%",
-			left: 0,
-			top: 0,
-			backgroundRepeat: "no-repeat",
-			backgroundPosition: "center",
-			backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
-				"#fff"
-			)}" d="M9.305 1.667V3.75h1.389V1.667h-1.39zm-4.707 1.95l-.982.982L5.09 6.072l.982-.982-1.473-1.473zm10.802 0L13.927 5.09l.982.982 1.473-1.473-.982-.982zM10 5.139a4.872 4.872 0 00-4.862 4.86A4.872 4.872 0 0010 14.862 4.872 4.872 0 0014.86 10 4.872 4.872 0 0010 5.139zm0 1.389A3.462 3.462 0 0113.471 10a3.462 3.462 0 01-3.473 3.472A3.462 3.462 0 016.527 10 3.462 3.462 0 0110 6.528zM1.665 9.305v1.39h2.083v-1.39H1.666zm14.583 0v1.39h2.084v-1.39h-2.084zM5.09 13.928L3.616 15.4l.982.982 1.473-1.473-.982-.982zm9.82 0l-.982.982 1.473 1.473.982-.982-1.473-1.473zM9.305 16.25v2.083h1.389V16.25h-1.39z"/></svg>')`,
-		},
-	},
-	"& .MuiSwitch-track": {
-		opacity: 1,
-		backgroundColor: theme.palette.mode === "dark" ? "#8796A5" : "#aab4be",
-		borderRadius: 20 / 2,
-	},
+    width: 62,
+    height: 34,
+    padding: 7,
+    "& .MuiSwitch-switchBase": {
+        margin: 1,
+        padding: 0,
+        transform: "translateX(6px)",
+        "&.Mui-checked": {
+            color: "#fff",
+            transform: "translateX(22px)",
+            "& .MuiSwitch-thumb:before": {
+                backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
+                    "#fff"
+                )}" d="M4.2 2.5l-.7 1.8-1.8.7 1.8.7.7 1.8.6-1.8L6.7 5l-1.9-.7-.6-1.8zm15 8.3a6.7 6.7 0 11-6.6-6.6 5.8 5.8 0 006.6 6.6z"/></svg>')`,
+            },
+            "& + .MuiSwitch-track": {
+                opacity: 1,
+                backgroundColor: theme.palette.mode === "dark" ? "#8796A5" : "#aab4be",
+            },
+        },
+    },
+    "& .MuiSwitch-thumb": {
+        backgroundColor: theme.palette.mode === "dark" ? "#003892" : "#001e3c",
+        width: 32,
+        height: 32,
+        "&:before": {
+            content: "''",
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            left: 0,
+            top: 0,
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+            backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
+                "#fff"
+            )}" d="M9.305 1.667V3.75h1.389V1.667h-1.39zm-4.707 1.95l-.982.982L5.09 6.072l.982-.982-1.473-1.473zm10.802 0L13.927 5.09l.982.982 1.473-1.473-.982-.982zM10 5.139a4.872 4.872 0 00-4.862 4.86A4.872 4.872 0 0010 14.862 4.872 4.872 0 0014.86 10 4.872 4.872 0 0010 5.139zm0 1.389A3.462 3.462 0 0113.471 10a3.462 3.462 0 01-3.473 3.472A3.462 3.462 0 016.527 10 3.462 3.462 0 0110 6.528zM1.665 9.305v1.39h2.083v-1.39H1.666zm14.583 0v1.39h2.084v-1.39h-2.084zM5.09 13.928L3.616 15.4l.982.982 1.473-1.473-.982-.982zm9.82 0l-.982.982 1.473 1.473.982-.982-1.473-1.473zM9.305 16.25v2.083h1.389V16.25h-1.39z"/></svg>')`,
+        },
+    },
+    "& .MuiSwitch-track": {
+        opacity: 1,
+        backgroundColor: theme.palette.mode === "dark" ? "#8796A5" : "#aab4be",
+        borderRadius: 20 / 2,
+    },
 }));
 
 
@@ -220,16 +223,36 @@ export default function Header({ children }: { children: React.ReactNode }) {
             path: "/history"
         }
     ]
-    const [branch , setBranch] = React.useState("");
-
+    const [branchOption, setBranchOption] = React.useState<{ pk: number; name: string; ae_title: string }[]>([])
+    const [loading, setLoading] = React.useState(false);
     const [openList, setOpenList] = React.useState<Record<number, boolean>>({});
+    const branch = useBranchStore((state) => state.selectedBranch);
+    const setBranch = useBranchStore((state) => state.setSelectedBranch);
 
     const handleClick = (id: any) => {
         setOpenList((prevOpen) => ({ ...prevOpen, [id]: !prevOpen[id] }));
     };
 
     const toggleTheme = useThemeStore((state) => state.toggleTheme);
-    
+
+    const loadBranches = async () => {
+        try {
+            setLoading(true);
+            const result = await getDiagnosticCenter();
+            setBranchOption(result);
+        } catch (error) {
+            console.log("Failed to load referrer", error);
+        }
+        finally {
+            setLoading(false);
+        }
+    }
+
+    const handleBranch = (e: any) => {
+        const selected = branchOption.find(b => b.name === e.target.value);
+        if (selected) setBranch(selected);
+    }
+
     const pathname = usePathname();
     return (
         <Box sx={{ display: 'flex' }}>
@@ -251,7 +274,7 @@ export default function Header({ children }: { children: React.ReactNode }) {
                         {open ? <MenuOpen /> : <Menu />}
                     </IconButton>
 
-                    <Box  sx={{ flexGrow: 1 }} component="div" color='success'>
+                    <Box sx={{ flexGrow: 1 }} component="div" color='success'>
                         <Image src="/actonlogo.jpeg" alt='Acton logo' width={150} height={150} priority />
                     </Box>
 
@@ -259,7 +282,7 @@ export default function Header({ children }: { children: React.ReactNode }) {
                         <FormControlLabel
                             control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked />}
                             label=""
-                            onClick={toggleTheme} 
+                            onClick={toggleTheme}
                         />
                     </div>
 
@@ -276,33 +299,43 @@ export default function Header({ children }: { children: React.ReactNode }) {
                 <List className='mt-2'>
                     {/*  Add Branch Selector at the top of the menu */}
                     <ListItem className="px-4 mb-4">
-                       
-                        <FormControl  size="small" variant='outlined' className=' w-11/12'
-                          sx={{
-                            '& .MuiOutlinedInput-root': {
-                              '& fieldset': {
-                                borderColor: 'white', // 👈 sets the border color
-                              },
-                              '&:hover fieldset': {
-                                borderColor: 'white',
-                              },
-                              '&.Mui-focused fieldset': {
-                                borderColor: 'white',
-                              },
-                            },
-                          }}
-                         >
+
+                        <FormControl size="small" variant='outlined' className=' w-11/12'
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderColor: 'white', // 👈 sets the border color
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: 'white',
+                                    },
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: 'white',
+                                    },
+                                },
+                            }}
+                        >
                             <InputLabel id="branches" className='text-white'>Branches</InputLabel>
                             <Select
                                 labelId="branches"
                                 id="branches"
-                                value={branch ?? ""}
+                                value={branch?.name ?? ""}
                                 label="Branches"
-                                 onChange={(e)=> setBranch(e.target.value)}
+                                // onChange={(e) => setBranch(e.target.value)}
+                                onChange={handleBranch}
+                                onOpen={loadBranches}
                             >
-                                <MenuItem value={10} className=''>Main Branch</MenuItem>
-                                <MenuItem value={20} className='' >Branch 1</MenuItem>
-                                <MenuItem value={30} className=''>Branch 2</MenuItem>
+                                {loading ? (
+                                    <MenuItem disabled>
+                                        <span style={{ marginLeft: 10 }}>Loading...</span>
+                                    </MenuItem>
+                                ) : (
+                                    branchOption.map((data, index) => (
+                                        <MenuItem value={data.name} key={index}>
+                                            {data.name}
+                                        </MenuItem>
+                                    ))
+                                )}
                             </Select>
                         </FormControl>
                     </ListItem>
@@ -312,7 +345,7 @@ export default function Header({ children }: { children: React.ReactNode }) {
                             <ListItem key={index} disablePadding className='block mb-2'>
                                 <Link href={menu.path || "#"} passHref legacyBehavior>
                                     <ListItemButton
-                                        selected = {pathname === menu.path }
+                                        selected={pathname === menu.path}
                                         onClick={() => menu.nestedItems && handleClick(menu.id)}
                                         sx={[
                                             {
@@ -325,7 +358,7 @@ export default function Header({ children }: { children: React.ReactNode }) {
                                                 : {
                                                     justifyContent: 'center',
                                                 },
-                                            
+
                                         ]}
                                     >
                                         <ListItemIcon

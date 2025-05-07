@@ -1,8 +1,21 @@
 import { FormControl, IconButton, InputAdornment, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { CurrencyRupee, AddCircle, DeleteOutline } from '@mui/icons-material'
 
-const AdditionalChargeTable = () => {
+type TableType = {
+    id: number;
+    additionalCharges: string;
+    gst: number;
+    description: string;
+    subtTotalCharges: number
+}
+
+type AdditionalChargeTableProps = {
+    onTotalChange: (total: number) => void;
+    onTableChange : (tableType: TableType[]) => void;
+};
+
+const AdditionalChargeTable: React.FC<AdditionalChargeTableProps> = ({ onTotalChange , onTableChange }) => {
     const [additionalCharges, setAdditionalCharges] = useState(0);
     const [gstTaxAdditional, setGstTaxAdditional] = useState(0);
     const [description, setDescription] = useState("");
@@ -29,7 +42,11 @@ const AdditionalChargeTable = () => {
             return [...prev, newEntry]
         })
 
-        setTotalAdditionalCharges((prev) => prev + total);
+        setTotalAdditionalCharges((prev) => {
+            const totalCharge = prev + total;
+            // onTotalChange(totalCharge);
+            return totalCharge;
+        })
         clearCharges();
     }
 
@@ -41,13 +58,25 @@ const AdditionalChargeTable = () => {
 
     const deleteCharges = (data: any) => {
         const total = additionalCharges - (additionalCharges * gstTaxAdditional / 100)
-        setTotalAdditionalCharges((prev) => prev - Number(data.subtTotalCharges));
+        // setTotalAdditionalCharges((prev) => prev - Number(data.subtTotalCharges));
+        setTotalAdditionalCharges((prev) => {
+            const totalCharge = prev - Number(data.subtTotalCharges);
+            return totalCharge;
+        })
         setAdditionalChargeTable((items) => items.filter((item) => item.id !== data.id))
     }
 
     function ccyFormat(num: number) {
         return `${num.toFixed(2)}`;
     }
+
+    useEffect(()=>{
+        onTableChange(additionalChargeTable);
+    },[additionalChargeTable])
+
+    useEffect(()=>{
+        onTotalChange(totalAdditionalCharges);
+    },[totalAdditionalCharges])
 
 
     return (
@@ -56,7 +85,7 @@ const AdditionalChargeTable = () => {
                 <TextField
                     id="additionalCharges"
                     label="Additional Charges"
-                    type='number'
+                    // type='number'
                     autoComplete='off'
                     size='small'
                     placeholder='Additional Charges (if any)'

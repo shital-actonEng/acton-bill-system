@@ -2,8 +2,11 @@ import { Alert, Autocomplete, FormControl, IconButton, MenuItem, Popover, Select
 import Link from 'next/link';
 import React, { useEffect, useMemo, useState } from 'react'
 import jsonData from '../../data/testsData.json';
-import { AddCircle, DeleteOutline, CurrencyRupee, Money, QrCodeScanner, AccountBalance, LocalAtm, AddComment } from '@mui/icons-material';
+import { AddCircle, DeleteOutline, CurrencyRupee } from '@mui/icons-material';
 import { getReferrer } from '@/express-api/referrer/page';
+import { getTest } from '@/express-api/testRecord/page';
+import { useBranchStore } from '@/stores/branchStore';
+
 
 // Utility function
 const getUniqueOptions = (data: any[], key: string) => {
@@ -29,94 +32,159 @@ interface TestData {
     gst: number;
     comment: string;
     aggregateDue: number;
-  }
+    discountMin: string,
+    discountMax: string
+}
 
-  interface TestRowProps {
+interface TestRowProps {
     data: TestData;
-    handlePopoverOpen: (event: React.MouseEvent<HTMLElement>, testName: string) => void;
+    handlePopoverOpen: (event: React.MouseEvent<HTMLElement>, consessionUpto: any) => void;
     handlePopoverClose: () => void;
     handleConsessionChange: (id: number, event: React.ChangeEvent<HTMLInputElement>) => void;
     handleGstChange: (id: number, event: React.ChangeEvent<HTMLInputElement>) => void;
     handleCommentChange: (id: number, event: React.ChangeEvent<HTMLInputElement>) => void;
     deleteTest: (data: TestData) => void;
-  }
+}
 
-  const TestRow: React.FC<TestRowProps> = React.memo(
+const TestRow: React.FC<TestRowProps> = React.memo(
     ({ data, handlePopoverOpen, handlePopoverClose, handleConsessionChange, handleGstChange, handleCommentChange, deleteTest }) => {
-      return (
-        <TableRow>
-          <TableCell className='py-0'>{data.name}</TableCell>
-          <TableCell
-            align="right"
-            className='py-0'
-            onMouseEnter={(e) => handlePopoverOpen(e, data.name)}
-            onMouseLeave={handlePopoverClose}
-          >
-            {data.price}
-          </TableCell>
-          <TableCell align="center" className='py-0'>
-            <TextField
-              id={`consession-${data.id}`}
-              label="Consession%"
-              variant="standard"
-              type="number"
-              size="small"
-              value={data.consession || ""}
-              onChange={(e) => handleConsessionChange(data.id, e)}
-              InputLabelProps={{ style: { fontSize: '0.75rem' } }}
-            />
-          </TableCell>
-          <TableCell align="center" className='py-0'>
-            <TextField
-              id={`gst-${data.id}`}
-              label="GST%"
-              variant="standard"
-              type="number"
-              size="small"
-              value={data.gst || ""}
-              onChange={(e) => handleGstChange(data.id, e)}
-              InputLabelProps={{ style: { fontSize: '0.75rem' } }}
-            />
-          </TableCell>
-          <TableCell align="center" className='py-0'>
-            <TextField
-              id={`comment-${data.id}`}
-              label="Comment"
-              variant="standard"
-              type="text"
-              size="small"
-              value={data.comment || ""}
-              onChange={(e) => handleCommentChange(data.id, e)}
-              inputProps={{ className: "text-sm" }}
-              className=" [&_label]:text-xs"
-            />
-          </TableCell>
-          <TableCell className='py-0'>{data.aggregateDue}</TableCell>
-          <TableCell className='py-0'>
-            <IconButton aria-label="delete" onClick={() => deleteTest(data)}>
-              <DeleteOutline color='error' />
-            </IconButton>
-          </TableCell>
-        </TableRow>
-      );
+        const consessionUpto = {
+            name: data.name,
+            discountMin: data.discountMin,
+            discountMax: data.discountMax
+        }
+        return (
+            <TableRow>
+                <TableCell className='py-0'>{data.name}</TableCell>
+                <TableCell
+                    align="right"
+                    className='py-0'
+                    onMouseEnter={(e) => handlePopoverOpen(e, consessionUpto)}
+                    onMouseLeave={handlePopoverClose}
+                >
+                    {data.price}
+                </TableCell>
+                <TableCell align="center" className='py-0'>
+                    <TextField
+                        id={`consession-${data.id}`}
+                        label="Consession%"
+                        variant="standard"
+                        // type="number"
+                        size="small"
+                        value={data.consession || ""}
+                        onChange={(e) => handleConsessionChange(data.id, e)}
+                        InputLabelProps={{ style: { fontSize: '0.75rem' } }}
+                    />
+                </TableCell>
+                <TableCell align="center" className='py-0'>
+                    <TextField
+                        id={`gst-${data.id}`}
+                        label="GST%"
+                        variant="standard"
+                        // type="number"
+                        size="small"
+                        value={data.gst || ""}
+                        onChange={(e) => handleGstChange(data.id, e)}
+                        InputLabelProps={{ style: { fontSize: '0.75rem' } }}
+                    />
+                </TableCell>
+                <TableCell align="center" className='py-0'>
+                    <TextField
+                        id={`comment-${data.id}`}
+                        label="Comment"
+                        variant="standard"
+                        type="text"
+                        size="small"
+                        value={data.comment || ""}
+                        onChange={(e) => handleCommentChange(data.id, e)}
+                        inputProps={{ className: "text-sm" }}
+                        className=" [&_label]:text-xs"
+                    />
+                </TableCell>
+                <TableCell className='py-0'>{data.aggregateDue}</TableCell>
+                <TableCell className='py-0'>
+                    <IconButton aria-label="delete" onClick={() => deleteTest(data)}>
+                        <DeleteOutline color='error' />
+                    </IconButton>
+                </TableCell>
+            </TableRow>
+        );
     }
-  );
-  
+);
 
+type Test = {
+    pk: number;
+    modality: string;
+    body_part: string;
+    protocol: string;
+    price: string;
+    diagnostic_centre_fk: string;
+    meta_details: {
+        gst: string;
+        discount_min_range: string;
+        discount_max_range: string;
+        referrel_bonus: string;
+        referrel_bonus_percentage: string;
+    };
+};
 
-const TestPriceTable = () => {
-    const [referredDoctor, setReferredDoctor] = useState('');
+type TestTable = {
+    id: number;
+    name: string; price: number;
+    consession: number; gst: number;
+    comment: string; aggregateDue: number;
+    discountMin: string; discountMax: string
+}
+
+type TestChargeTableProps = {
+    onTotalTestChange: (total: number) => void;
+    onTestChange: (testTable: TestTable[]) => void;
+    onReferrerChange : ({}) => void;
+};
+
+const TestPriceTable: React.FC<TestChargeTableProps> = ({ onTotalTestChange, onTestChange, onReferrerChange }) => {
+    const [referredDoctor, setReferredDoctor] = useState({});
     const [loading, setLoading] = useState(false);
     const [selectReferreing, setSelectReferreing] = useState([]);
-    // const [uniqueModality, setUniqueModality] = useState<{ id: number, label: string }[]>([]);
-    const [uniqueBodyParts, setUniqueBodyParts] = useState<{ id: number, label: string }[]>([]);
-    const [selectedTest, setSelectedTest] = useState<{ modality: string; body_part: string; protocol: string; price: string; diagnostic_centre_fk: string; }[]>([]);
-    const [testData, setTestData] = useState<{ modality: string; body_part: string; protocol: string; price: string; diagnostic_centre_fk: string; }[]>([]);
-    const [testTableData, setTestTableData] = useState<{ id: number; name: string; price: number; consession: number; gst: number; comment: string; aggregateDue: number }[]>([]);
-    const [testName, setTestName] = useState("");
+    const [uniqueBodyParts, setUniqueBodyParts] = useState<{
+        modality: string; body_part: string; protocol: string; price: string; diagnostic_centre_fk: string; meta_details: {
+            gst: string;
+            discount_min_range: string;
+            discount_max_range: string;
+            referrel_bonus: string;
+            referrel_bonus_percentage: string
+        }
+    }[]>([]);
+
+    // const [selectedTest, setSelectedTest] = useState<{
+    //     modality: string; body_part: string; protocol: string; price: string; diagnostic_centre_fk: string;
+    //     meta_details: {
+    //         gst: string;
+    //         discount_min_range: string;
+    //         discount_max_range: string;
+    //         referrel_bonus: string;
+    //         referrel_bonus_percentage: string
+    //     }
+    // }[]>([]);
+    const [selectedTest, setSelectedTest] = useState<Test[]>([]);
+    // const [testData, setTestData] = useState<{
+    //     pk : number ;
+    //     modality: string; body_part: string; protocol: string; price: string; diagnostic_centre_fk: string; meta_details: {
+    //         gst: string;
+    //         discount_min_range: string;
+    //         discount_max_range: string;
+    //         referrel_bonus: string;
+    //         referrel_bonus_percentage: string
+    //     }
+    // }[]>([]);
+    const [testData, setTestData] = useState<Test[]>([]);
+    // const [testTableData, setTestTableData] = useState<{ id: number; name: string; price: number; consession: number; gst: number; comment: string; aggregateDue: number; discountMin: string; discountMax: string }[]>([]);
+    const [testTableData, setTestTableData] = useState<TestTable[]>([]);
+    const [consessionUpto, setConsessionUpto] = useState<{ discountMin: string; discountMax: string; name: string } | undefined>();
     const [subTotalPrice, setSubTotalPrice] = useState(0);
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const open = Boolean(anchorEl);
+    const branch = useBranchStore((state) => state.selectedBranch);
 
     const loadReferral = async () => {
         try {
@@ -135,18 +203,30 @@ const TestPriceTable = () => {
         return result;
     }, [jsonData]);
 
-    const uniqueBodyPart = useMemo(() => {
-        const result = getUniqueOptions(jsonData, "body_part");
-        return result;
-    }, [jsonData]);
+    // const uniqueBodyPart = useMemo(() => {
+    //     if (!jsonData) return [];
+    //     const result = getUniqueOptions(jsonData, "body_part");
+    //     return result;    
+    // }, [jsonData]);
 
     useEffect(() => {
-        setTestData(jsonData);
-        // setUniqueModality(uniqueModalities)
-        // setUniqueBodyParts(uniqueBodyPart)
-        //Tests 
-        setSelectedTest(jsonData);
-    }, [jsonData, uniqueModalities, uniqueBodyPart])
+        const fetchData = async () => {
+            try {
+                const result = await getTest();
+                // console.log("test data in record gettest", result);
+                if (!branch) return;
+                const filteredResult = result.filter((item) => item.diagnostic_centre_fk === branch.pk);
+                // console.log("test filtered data in record gettest", filteredResult);
+                setTestData(filteredResult);
+                setSelectedTest(filteredResult);
+                const resultBodyParts = getUniqueOptions(result, "modality");
+                setUniqueBodyParts(result);
+            } catch (error) {
+                console.error("Error fetching test data:", error);
+            }
+        };
+        fetchData();
+    }, [branch])
 
     const handleModality = (selectmodality: any) => {
         const modalities = testData.filter((test) =>
@@ -156,11 +236,7 @@ const TestPriceTable = () => {
         const uniqueBodyParts = modalities
             .filter((item, index, self) =>
                 index === self.findIndex((t) => t.body_part === item.body_part)
-            )
-            .map((item, index) => ({
-                id: index,
-                label: item.body_part,
-            }));
+            );
         setUniqueBodyParts(uniqueBodyParts);
     }
 
@@ -173,8 +249,6 @@ const TestPriceTable = () => {
 
     const handleTestTable = (test: any) => {
         if (test === null) {
-            // Clear the selected modality and filtered data when the input is cleared
-            // setSelectedTest('');
             return;
         }
         // const items = test.label;
@@ -183,17 +257,16 @@ const TestPriceTable = () => {
             console.log("Item not found...")
             return;
         }
+        const gstCal = Number(item.price) * Number(item.meta_details.gst) / 100
+        const aggregateDueVal = Number(item.price) + gstCal;
         setTestTableData((prevData) => {
-            const newId = prevData.length > 0 ? prevData[prevData.length - 1].id + 1 : 1;
+            const newId = item.pk;
             const newName = item.protocol;
             const newPrice = item.price;
-            const aggregateDueVal = Number(item.price);
-            return [...prevData, { id: newId, name: newName, price: newPrice, aggregateDue: aggregateDueVal }]
+            const gst = item.meta_details.gst;
+            return [...prevData, { id: newId, name: newName, price: newPrice, gst: gst, aggregateDue: aggregateDueVal, discountMin: item.meta_details.discount_min_range, discountMax: item.meta_details.discount_max_range }]
         }
         );
-        // setSelectedTest(test.name);
-        // setSubTotalPrice((prevTotal) => prevTotal + Number(item.price));
-        // setTotalBill(subTotalPrice + subTotalAmount + totalTax);
     }
 
     useEffect(() => {
@@ -202,37 +275,28 @@ const TestPriceTable = () => {
             0
         );
         setSubTotalPrice(newTotal);
+        onTotalTestChange(newTotal);
+        onTestChange(testTableData);
         // setTotalBill(newTotal + subTotalAmount + totalTax);
         // setTotalBillingAmount(newTotal + totalAdditionalCharges);
         //setBalanceRemaining(newTotal + totalAdditionalCharges);
 
-        const marks = performance.getEntriesByName("table-render-start");
-        if (marks.length > 0) {
-            performance.mark("table-render-end");
-            performance.measure("table-render-time", "table-render-start", "table-render-end");
-
-            const measure = performance.getEntriesByName("table-render-time")[0];
-            console.log(`Table render time: ${measure.duration.toFixed(2)}ms`);
-
-            // Clean up
-            performance.clearMarks();
-            performance.clearMeasures();
-        }
     }, [testTableData]);
 
     const deleteTest = (deletedData: any) => {
         const gst = deletedData.gst * deletedData.price / 100
         setTestTableData((data) => data.filter((item) => item.id !== deletedData.id))
         setSubTotalPrice((prevTotal) => prevTotal - deletedData.price - gst);
+        onTotalTestChange(subTotalPrice);
     }
 
     function ccyFormat(num: number) {
         return `${num.toFixed(2)}`;
     }
 
-    const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>, testName: string) => {
+    const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>, consessionUpto: any) => {
         setAnchorEl(event.currentTarget);
-        setTestName(testName);
+        setConsessionUpto(consessionUpto);
     };
 
     const handlePopoverClose = () => {
@@ -241,10 +305,19 @@ const TestPriceTable = () => {
 
     const handleConsessionChange = (id: number, e: any) => {
         const value = e.target.value;
-
         setTestTableData((prevData) =>
-            prevData.map((item) =>
-                item.id === id ? { ...item, consession: Number(value), aggregateDue: (item.price - (item.price * Number(value) / 100)) } : item // Update only the matching row
+            prevData.map((item) => {
+                if (item.id === id) {
+                    const aggregateDue = (item.price - (item.price * Number(value) / 100))
+                    const gstAmount = item.gst * aggregateDue / 100
+                    return {
+                        ...item,
+                        consession: Number(value),
+                        aggregateDue: aggregateDue + gstAmount
+                    }
+                }
+                return item
+            } // Update only the matching row
             )
         );
     };
@@ -260,19 +333,26 @@ const TestPriceTable = () => {
         setTestTableData(updatedData);
     };
 
+    const handleReferrer = (e : any) =>{
+        setReferredDoctor(e.target.value)
+        onReferrerChange(e.target.value);
+        // console.log("referrer is..." , e.target.value);
+    }
+
     return (
         <>
             {/* Refrred Doctor */}
             <div className='flex flex-wrap gap-4  w-full md:w-2/3'>
-                <Typography className='text-sm font-semibold mt-4' color='textDisabled'>Please fill Bill information here. </Typography>
+                {/* <Typography className='text-sm font-semibold mt-4' color='textDisabled'>Please fill Bill information here. </Typography> */}
                 <div className='flex flex-wrap gap-4 w-full'>
                     <FormControl size="small" className='w-11/12'>
                         <Select
                             labelId="referred_doctor"
                             id="referred_doctor"
-                            value={referredDoctor ?? ""}
+                            value={referredDoctor.name ?? ""}
                             // label="Referred Doctor"
-                            onChange={(e) => setReferredDoctor(e.target.value)}
+                            // onChange={(e) => setReferredDoctor(e.target.value)}
+                            onChange={handleReferrer}
                             onOpen={loadReferral}
                             displayEmpty
                             renderValue={(selected) => {
@@ -288,7 +368,7 @@ const TestPriceTable = () => {
                                 </MenuItem>
                             ) : (
                                 selectReferreing.map((data, index) => (
-                                    <MenuItem value={data.name} key={index}>
+                                    <MenuItem value={data} key={index}>
                                         {data.name}
                                     </MenuItem>
                                 ))
@@ -335,7 +415,7 @@ const TestPriceTable = () => {
                     disablePortal
                     id="combo-box-demo"
                     // Map testData to include an id (using index if no unique id exists)
-                    options={uniqueBodyParts.map((t, index) => ({ id: index, label: t.label }))}
+                    options={uniqueBodyParts.map((t, index) => ({ id: index, label: t.body_part }))}
                     onChange={(e, newValue) => handleBodyParts(newValue)}
                     size="small"
                     className="w-full md:w-[45%]"
@@ -371,9 +451,6 @@ const TestPriceTable = () => {
                         <TextField {...params} label="Select Tests" variant="outlined" />
                     )}
                 />
-
-                <Alert severity="info" className='w-11/12'>You can give upto 10% of consession for {testName || "this Test"}.</Alert>
-
             </div>
 
             {/* Alert for tests discount or consession */}
@@ -393,7 +470,7 @@ const TestPriceTable = () => {
                 onClose={handlePopoverClose}
                 disableRestoreFocus
             >
-                <Alert severity="info">You can give upto 10% of consession for {testName || "this Test"}.</Alert>
+                <Alert severity="error" className='text-sm'>You can give  {consessionUpto?.discountMin}   to   {consessionUpto?.discountMax}% of consession for {consessionUpto?.name || "this Test"}.</Alert>
             </Popover>
 
             {/* Tests and price tabe */}
@@ -411,75 +488,6 @@ const TestPriceTable = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {/* {testTableData.map((data, index) => (
-                            <TableRow key={data.id}>
-                                <TableCell className='py-0'>{data.name}</TableCell>
-                                <TableCell align="right" className='py-0'
-                                    aria-owns={open ? 'mouse-over-popover' : undefined}
-                                    aria-haspopup="true"
-                                    onMouseEnter={(e) => handlePopoverOpen(e, data.name)}
-                                    onMouseLeave={handlePopoverClose}
-                                >{data.price}</TableCell>
-                                <TableCell align="center" className='py-0'>
-                                    <TextField
-                                        id={`consession-${data.id}`}
-                                        label="Consession%"
-                                        variant="standard"
-                                        type="number"
-                                        size="small"
-                                        color="primary"
-                                        autoComplete="off"
-                                        value={data.consession || ""}
-                                        InputLabelProps={{
-                                            style: { fontSize: '0.75rem' }, // adjust font size here
-                                        }}
-                                        onChange={(e) => handleConsessionChange(data.id, e)}
-                                    />
-                                </TableCell>
-                                <TableCell align="center" className='py-0'>
-                                    <TextField
-                                        id={`gst-${data.id}`}
-                                        label="GST%"
-                                        variant="standard"
-                                        type="number"
-                                        size="small"
-                                        color="primary"
-                                        autoComplete="off"
-                                        value={data.gst || ""}
-                                        InputLabelProps={{
-                                            style: { fontSize: '0.75rem' }, // adjust font size here
-                                        }}
-                                        onChange={(e) => handleGstChange(data.id, e)}
-                                    />
-                                </TableCell>
-                                <TableCell align="center" className='py-0'>
-                                    <TextField
-                                        id={`comment-${data.id}`}
-                                        label="Comment"
-                                        variant="standard"
-                                        type="text"
-                                        size="small"
-                                        color="primary"
-                                        autoComplete="off"
-                                        value={data.comment || ""}
-                                        inputProps={{
-                                            className: "text-sm", // Tailwind class for input text size
-                                        }}
-                                        FormHelperTextProps={{
-                                            className: "text-xs", // optional: for helper text
-                                        }}
-                                        className=" [&_label]:text-xs"
-                                        onChange={(e) => handleCommentChange(data.id, e)}
-                                    />
-                                </TableCell>
-                                <TableCell className='py-0'>{data.aggregateDue}</TableCell>
-                                <TableCell className='py-0'>
-                                    <IconButton aria-label="delete" onClick={() => deleteTest(data)}>
-                                        <DeleteOutline color='error' />
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
-                        ))} */}
                         {testTableData.map((data) => (
                             <TestRow
                                 key={data.id}

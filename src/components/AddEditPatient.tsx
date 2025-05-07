@@ -11,6 +11,8 @@ import dynamic from 'next/dynamic';
 import { addPatient, updatePatient } from '@/express-api/patient/page';
 import 'react-phone-input-2/lib/style.css';
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
 
 const PhoneInput = dynamic(() => import('react-phone-input-2'), {
   ssr: false,
@@ -20,8 +22,8 @@ const PhoneInput = dynamic(() => import('react-phone-input-2'), {
 type FormValues = {
   patientName: string;
   birthDate: Dayjs | null;
-  ageYear: number | null;
-  ageMonth: number | null;
+  ageYear: string;
+  ageMonth: string;
   email: string;
   phone: string;
   gender: string;
@@ -30,12 +32,13 @@ type FormValues = {
 };
 
 const AddEditPatient = ({ patientData }: any) => {
+  const router = useRouter();
   const { control, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm<FormValues>({
     defaultValues: {
       patientName: '',
       birthDate: null,
-      ageYear: null,
-      ageMonth: null,
+      ageYear: '',
+      ageMonth: '',
       email: '',
       phone: '',
       gender: '',
@@ -57,7 +60,7 @@ const AddEditPatient = ({ patientData }: any) => {
     return { years, months };
   };
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = (data: FormValues , proceed : boolean = false) => {
     const payload = {
       name: data.patientName,
       mobile: data.phone,
@@ -78,6 +81,10 @@ const AddEditPatient = ({ patientData }: any) => {
       addPatient(payload);
     }
     handleClear();
+
+    if(proceed){
+      router.push('/registerpatient');
+    }
   };
 
   useEffect(() => {
@@ -86,8 +93,8 @@ const AddEditPatient = ({ patientData }: any) => {
       reset({
         patientName: patientData.name || '',
         birthDate: meta.birthDate ? dayjs(meta.birthDate) : null,
-        ageYear: meta.ageYear || null,
-        ageMonth: meta.ageMonth || null,
+        ageYear: meta.ageYear || '',
+        ageMonth: meta.ageMonth || '',
         phone: patientData.mobile || '',
         gender: meta.gender || '',
         address: meta.address || '',
@@ -95,32 +102,32 @@ const AddEditPatient = ({ patientData }: any) => {
         abhaId: meta.abhaId || ''
       });
     }
-    else{
-        reset({
-            patientName: '',
-            birthDate: null,
-            ageYear: null,
-            ageMonth: null,
-            email: '',
-            phone: '',
-            gender: '',
-            address: '',
-            abhaId: ''
-        })
-    }
-  }, [patientData, reset]);
-
-  const handleClear = () =>{
-    reset({
+    else {
+      reset({
         patientName: '',
         birthDate: null,
-        ageYear: null,
-        ageMonth: null,
+        ageYear: '',
+        ageMonth: '',
         email: '',
         phone: '',
         gender: '',
         address: '',
         abhaId: ''
+      })
+    }
+  }, [patientData, reset]);
+
+  const handleClear = () => {
+    reset({
+      patientName: '',
+      birthDate: null,
+      ageYear: '',
+      ageMonth: '',
+      email: '',
+      phone: '',
+      gender: '',
+      address: '',
+      abhaId: ''
     })
   }
 
@@ -130,7 +137,7 @@ const AddEditPatient = ({ patientData }: any) => {
         Please fill patient information here to Add new Patient
       </Typography>
 
-      <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4'>
+      <form onSubmit={handleSubmit((data) => onSubmit(data, false))} className='flex flex-col gap-4'>
 
         {/* Patient Name */}
         <Controller
@@ -175,7 +182,7 @@ const AddEditPatient = ({ patientData }: any) => {
           name="abhaId"
           control={control}
           render={({ field }) => (
-            <TextField {...field} label="Abha ID" size='small' />
+            <TextField {...field} label="Abha ID" size='small'  value={field.value || ''} />
           )}
         />
 
@@ -189,12 +196,13 @@ const AddEditPatient = ({ patientData }: any) => {
                 <DatePicker
                   {...field}
                   label="Birth Date"
+                  value={field.value || null}
                   onChange={(newDate) => {
                     field.onChange(newDate);
                     const age = calculateAge(newDate);
                     if (age) {
-                      setValue('ageYear', age.years);
-                      setValue('ageMonth', age.months);
+                      setValue('ageYear', age.years.toString());
+                      setValue('ageMonth', age.months.toString());
                     }
                   }}
                   slotProps={{ textField: { size: 'small' } }}
@@ -216,7 +224,8 @@ const AddEditPatient = ({ patientData }: any) => {
               max: { value: 150, message: "Year must be less than 150" }
             }}
             render={({ field }) => (
-              <TextField {...field} label="Year" size='small' type="number" error={!!errors.ageYear} helperText={errors.ageYear?.message} className='md:w-2/12' />
+              <TextField {...field} label="Year" size='small'  error={!!errors.ageYear} helperText={errors.ageYear?.message} className='md:w-2/12'
+              value={field.value || ''} />
             )}
           />
 
@@ -228,7 +237,8 @@ const AddEditPatient = ({ patientData }: any) => {
               max: { value: 11, message: "Month must be less than 12" }
             }}
             render={({ field }) => (
-              <TextField {...field} label="Month" size='small' type="number" error={!!errors.ageMonth} helperText={errors.ageMonth?.message} className='md:w-2/12' />
+              <TextField {...field} label="Month" size='small'  error={!!errors.ageMonth} helperText={errors.ageMonth?.message} className='md:w-2/12'
+              value={field.value || ''} />
             )}
           />
         </div>
@@ -254,22 +264,24 @@ const AddEditPatient = ({ patientData }: any) => {
           name="address"
           control={control}
           render={({ field }) => (
-            <TextField {...field} label="Address" size='small' multiline rows={2} />
+            <TextField {...field} label="Address" size='small' multiline rows={2} 
+            value={field.value || ''} />
           )}
         />
 
         {/* Buttons */}
-        <div className='flex gap-4 mt-5'>
-          <Button type="submit" color='success' variant='outlined' startIcon={<Save />}>Save</Button>
-          <Button type="button" onClick={handleClear } color='error' variant='outlined' startIcon={<Clear />}>Cancel</Button>
+        <div className='flex gap-4 mt-5 w-2/3'>
+          <Button type="submit" color='success' variant='outlined' startIcon={<Save />} className='w-[30%]'>Save</Button>
+          <Button type="button" onClick={handleClear} color='error' variant='outlined' startIcon={<Clear />} className='w-[30%]'>Cancel</Button>
         </div>
 
-        <Button type="button" color='primary' variant='outlined' startIcon={<Save />}>
-          Save & Proceed To Transaction
-        </Button>
-
+        <div className='w-2/3'>
+          <Button type="button" color='primary' variant='outlined' startIcon={<Save />}
+          onClick={handleSubmit((data) => onSubmit(data, true))} >
+            Save & Proceed To Transaction
+          </Button>
+        </div>
       </form>
-
       <Divider className='my-6' />
     </Paper>
   );

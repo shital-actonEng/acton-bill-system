@@ -5,10 +5,6 @@ import {Description , Add ,} from '@mui/icons-material';
 import Link from 'next/link';
 import Billingtable from '@/components/Billingtable';
 
-
-const paginationModel = { page: 0, pageSize: 5 };
-
-
 const billingmodule = () => {
 
   return (
@@ -23,9 +19,9 @@ const billingmodule = () => {
             <Button color='primary' variant='contained' startIcon={<Add />} > Payment Breakdown </Button>
           </Link>
         </Box>
-        <Paper>  
-          <Billingtable />
-        </Paper>
+        {/* <Paper className='bg-white'>   */}
+          <Billingtable  />
+        {/* </Paper> */}
       </Container>
     </div>
   )
