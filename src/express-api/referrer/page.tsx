@@ -35,4 +35,45 @@ const getReferrer = async () =>{
     }
 }
 
-export {addReferrer , getReferrer}
+// const updateReferrer = async (data : any) => {
+//     console.log("update data is.. ", data)
+//     try {
+//         const responce = await fetch("/api/referrer" , {
+//             method : "PUT",
+//             headers : {
+//                  "Content-Type": "application/json"
+//             },
+//             body : JSON.stringify(data)
+//         })
+//         if(!responce.ok)
+//         {
+//             throw new Error(`HTTP Error ! status : ${responce.status}`);
+//         }
+//     } catch (error) {
+//         console.error("Error Editing referrer:", error);
+//          throw error; 
+//     }
+// }
+
+const updateReferrer = async (data : any) => {
+  try {
+    console.log("before inside update in express...", data);
+      const responce = await fetch("/api/referrer/" , {
+          method : "PUT",
+          headers : {
+               "Content-Type": "application/json"
+          },
+          body : JSON.stringify(data)
+      })
+      if(!responce.ok)
+      {
+          throw new Error(`HTTP Error ! status : ${responce.status}`);
+      }
+        console.log("after inside update in express...", await responce.json());
+  } catch (error) {
+      console.error("Error update referrer:", error);
+       throw error; 
+  }
+}
+
+export {addReferrer , getReferrer , updateReferrer}

@@ -5,7 +5,7 @@ import { Save, Clear, CurrencyRupee } from '@mui/icons-material';
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import { useForm, Controller } from 'react-hook-form'
-import { addReferrer } from '@/express-api/referrer/page';
+import { addReferrer, updateReferrer } from '@/express-api/referrer/page';
 
 const AddEditReferral = ({ referralData }: any) => {
     const { control, handleSubmit, reset, formState: { errors } } = useForm({
@@ -34,7 +34,21 @@ const AddEditReferral = ({ referralData }: any) => {
                 address: formData.address
             }
         }
-        addReferrer(data);
+        // addReferrer(data);
+
+        if (referralData?.pk) {
+            console.log("referrel pk is there...", referralData?.pk);
+            const pk = referralData?.pk
+            const dataWithPk = {
+                ...data,
+                pk: pk,
+            };
+
+            updateReferrer(dataWithPk);
+        } else {
+            addReferrer(data);
+        }
+
         handleClear();
     };
 
@@ -48,39 +62,39 @@ const AddEditReferral = ({ referralData }: any) => {
             address: "",
             phone: "",
             prn: ""
-          });
+        });
     }
 
     useEffect(() => {
-        if(referralData){        
-        const meta = referralData?.meta_details;
-        if (meta) {
+        if (referralData) {
+            const meta = referralData?.meta_details;
+            if (meta) {
+                reset({
+                    doctorName: referralData.name || "",
+                    email: meta.email || "",
+                    medicalDegree: meta.medicalDegree || "",
+                    referrelBonusPercentage: meta.bonusInPercentage || "",
+                    referrelBonus: meta.bonus || "",
+                    address: meta.address || "",
+                    phone: meta.mobile || "",
+                    prn: meta.prn || ""
+                });
+            }
+        }
+        else {
             reset({
-                doctorName: referralData.name || "",
-                email: meta.email || "",
-                medicalDegree: meta.medicalDegree || "",
-                referrelBonusPercentage: meta.bonusInPercentage || "",
-                referrelBonus: meta.bonus || "",
-                address: meta.address || "",
-                phone: meta.mobile || "",
-                prn: meta.prn || ""
+                doctorName: "",
+                email: "",
+                medicalDegree: "",
+                referrelBonusPercentage: "",
+                referrelBonus: "",
+                address: "",
+                phone: "",
+                prn: ""
             });
-        }      
-    }
-    else{
-        reset({
-            doctorName: "",
-            email: "",
-            medicalDegree: "",
-            referrelBonusPercentage: "",
-            referrelBonus: "",
-            address: "",
-            phone: "",
-            prn: ""
-          });
-    }
+        }
     }, [referralData, reset]);
-    
+
     return (
         <>
             <Paper className='w-full md:w-2/3 py-6 md:px-8'>

@@ -2,9 +2,27 @@ import { NextRequest , NextResponse } from "next/server";
 
 const url = `http://localhost:3000/api/invoice`;
 
+// export async function GET(req:NextRequest) {
+//     try {
+//         const status = req.nextUrl.searchParams.get('status');
+//         const res = await fetch(url , {
+//             method : 'GET',
+//             headers : {
+//                 'Content-Type' :'application/json' 
+//             }
+//         })
+//         const data = await res.json();
+//         return NextResponse.json(data);
+//     } catch (error) {
+//         return NextResponse.json({message : 'Failed to fetch Invoice detailed'} , {status : 500})
+//     }
+// }
+
 export async function GET(req:NextRequest) {
     try {
-        const res = await fetch(url , {
+        const status = req.nextUrl.searchParams.get('status');
+        const finalURL = status ? `${url}?status=${status}` : url
+        const res = await fetch(finalURL , {
             method : 'GET',
             headers : {
                 'Content-Type' :'application/json' 
@@ -15,7 +33,6 @@ export async function GET(req:NextRequest) {
     } catch (error) {
         return NextResponse.json({message : 'Failed to fetch Invoice detailed'} , {status : 500})
     }
-    
 }
 
 export async function POST(req:NextRequest) {

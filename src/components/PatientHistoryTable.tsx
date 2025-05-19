@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -7,9 +7,7 @@ import {
 } from "material-react-table";
 import {
   Box,
-  Paper,
-  TextField,
-  Typography,
+  Chip,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -18,110 +16,187 @@ import dayjs, { Dayjs } from "dayjs";
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import { MRT_Localization_EN } from 'material-react-table/locales/en';
+import { getInvoice } from "@/express-api/invoices/page";
 
 // Extend dayjs with plugins
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
 // Sample data type
-type Person = {
-  name: {
-    firstName: string;
-    lastName: string;
-  };
-  address: string;
-  city: string;
-  state: string;
-  visitDate: string; // ISO format date
-};
+type PatientInfo = {
+  pk: number,
+  name: string,
+  mobile: string,
+  meta_details: {
+    abhaId: string,
+    address: string,
+    ageMonth: number,
+    ageYear: number,
+    birthDate: Date,
+    email: string,
+    gender: string
+  }
+}
 
-// Sample data with visitDate
-const data: Person[] = [
-  {
-    name: { firstName: "John", lastName: "Doe" },
-    address: "261 Erdman Ford",
-    city: "East Daphne",
-    state: "Kentucky",
-    visitDate: "2024-04-01",
-  },
-  {
-    name: { firstName: "Jane", lastName: "Doe" },
-    address: "769 Dominic Grove",
-    city: "Columbus",
-    state: "Ohio",
-    visitDate: "2024-04-05",
-  },
-  {
-    name: { firstName: "Joe", lastName: "Doe" },
-    address: "566 Brakus Inlet",
-    city: "South Linda",
-    state: "West Virginia",
-    visitDate: "2025-09-6",
-  },
-  {
-    name: { firstName: "John", lastName: "Doe" },
-    address: "261 Erdman Ford",
-    city: "East Daphne",
-    state: "Kentucky",
-    visitDate: "2025-03-01",
-  },
-  {
-    name: { firstName: "John", lastName: "Doe" },
-    address: "261 Erdman Ford",
-    city: "East Daphne",
-    state: "Kentucky",
-    visitDate: "2024-04-01",
-  },
-  {
-    name: { firstName: "John", lastName: "Doe" },
-    address: "261 Erdman Ford",
-    city: "East Daphne",
-    state: "Kentucky",
-    visitDate: "2024-04-01",
-  },
-];
+type Patient = {
+  invoiceId: number,
+  date: Date,
+  name: string,
+  // age: string,
+  // sex: string,
+  mobile: number,
+  // tests : [],
+  referredBy: string,
+  totalGST : number,
+  totalDiscount : number,
+  totalPrice : number
+  balance: number,
+  status: string,
+  // patientInfo: PatientInfo
+  // Actions : HTMLInputElement
+}
 
 const PatientHistoryTable = () => {
   const [fromDate, setFromDate] = useState<Dayjs | null>(null);
   const [toDate, setToDate] = useState<Dayjs | null>(null);
+  const [data, setData] = useState<Patient[]>([]);
+
+  const fetchInvoiceData = async () => {
+    const invoiceData = await getInvoice("ACTIVE");
+    return invoiceData;
+  };
+
+  useEffect(() => {
+    (
+      async () => {
+        const invoiceData = await fetchInvoiceData();
+        const newData = invoiceData.map((invoice: any) => {
+           let balance = 0
+            invoice.amb_invoice_trans.forEach((amountIn: any) => {
+              balance = balance + amountIn.amount
+            })
+          
+            let patientDetails = invoice.amb_patient;
+            let referredDetails = invoice.amb_referrer;
+            let transactions = invoice.amb_invoice_trans;
+            let totalGST = 0;
+            let totalDiscount = 0;
+            let totalPrice = 0 ;
+            console.log("data transaction in history table..." , transactions);
+            transactions.forEach((ele : any) => {
+              if(ele.comments.includes("GST")){
+                   totalGST = totalGST + ele.amount;
+              }
+               if(ele.comments.includes("Discount")){
+                   totalDiscount = totalDiscount + (- ele.amount);
+              }
+              if(ele.comments.includes("Price")){
+                   totalPrice = totalPrice + ele.amount;
+              }
+              console.log("total gst is..." , totalGST);
+            });
+            return {
+              invoiceId: invoice.pk,
+              date: dayjs(invoice.updatedAt).toISOString(),
+              name: patientDetails?.name,
+              // age: `${patientDetails?.meta_details?.ageYear} Y, ${patientDetails?.meta_details?.ageMonth} M`,
+              // sex: patientDetails?.meta_details.gender,
+              mobile: patientDetails.mobile,
+              // tests : [],
+              referredBy: referredDetails?.name,
+              totalGST : totalGST,
+              totalDiscount : totalDiscount,
+              totalPrice : totalPrice,
+              balance: balance,
+              status: invoice?.status,
+              patientInfo: patientDetails,
+              // Actions : HTMLInputElement
+            }
+          
+          return null;
+        }).filter(Boolean)
+
+        setData(newData);
+      })()
+  }, [])
+
 
   const filteredData = useMemo(() => {
     return data.filter((row) => {
-      const visit = dayjs(row.visitDate);
+      const visit = dayjs(row.date);
       return (
-        (!fromDate || dayjs(row.visitDate).isSameOrAfter(fromDate, "day")) &&
-        (!toDate || dayjs(row.visitDate).isSameOrBefore(toDate, "day"))
+        (!fromDate || dayjs(row.date).isSameOrAfter(fromDate, "day")) &&
+        (!toDate || dayjs(row.date).isSameOrBefore(toDate, "day"))
       );
     });
-  }, [fromDate, toDate]);
+  }, [data, fromDate, toDate]);
 
-  const columns = useMemo<MRT_ColumnDef<Person>[]>(
+  const columns = useMemo<MRT_ColumnDef<Patient>[]>(
     () => [
       {
-        accessorKey: "name.firstName",
-        header: "First Name",
+        accessorKey: 'invoiceId', //access nested data with dot notation
+        header: 'Invoice Id',
+        size: 150,
       },
       {
-        accessorKey: "name.lastName",
-        header: "Last Name",
+        accessorKey: 'date',
+        header: 'Date',
+        size: 150,
+        Cell: ({ cell }) => dayjs(cell.getValue<string>()).format("DD/MM/YYYY"),
       },
       {
-        accessorKey: "address",
-        header: "Address",
+        accessorKey: 'name', //normal accessorKey
+        header: 'Name',
+        size: 200,
+      },
+      // {
+      //   accessorKey: 'age',
+      //   header: 'Age',
+      //   size: 150,
+      // },
+      // {
+      //   accessorKey: 'sex',
+      //   header: 'Gender',
+      //   size: 150,
+      // },
+      {
+        accessorKey: 'mobile',
+        header: 'Mobile',
+        size: 150,
       },
       {
-        accessorKey: "city",
-        header: "City",
+        accessorKey: 'referredBy',
+        header: 'Referred By',
+        size: 150,
       },
-      {
-        accessorKey: "state",
-        header: "State",
+       {
+        accessorKey: 'totalGST',
+        header:  'GST',
+        size: 100,
       },
-      {
-        accessorKey: "visitDate",
-        header: "Visit Date",
-        Cell: ({ cell }) => dayjs(cell.getValue<string>()).format("YYYY-MM-DD"),
+       {
+        accessorKey: 'totalDiscount',
+        header: 'Discount',
+        size: 100,
       },
+       {
+        accessorKey: 'totalPrice',
+        header: 'Total Price',
+        size: 150,
+      },
+      // {
+      //   accessorKey: 'balance',
+      //   header: 'Balance',
+      //   size: 150,
+      // },
+      // {
+      //   accessorKey: 'status',
+      //   header: 'Status',
+      //   size: 150,
+      //   Cell: () => (
+      //     <Chip label="Active" color="success" size="small" />
+      //   )
+      // },
     ],
     [fromDate, toDate]
   );
@@ -133,7 +208,7 @@ const PatientHistoryTable = () => {
     ...MRT_Localization_EN,
     muiTopToolbarProps: {
       sx: {
-       my: 2
+        my: 2
       },
     },
     renderTopToolbarCustomActions: () => (
@@ -157,7 +232,7 @@ const PatientHistoryTable = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <MaterialReactTable table={table} />
-  </LocalizationProvider>
+    </LocalizationProvider>
 
   );
 };

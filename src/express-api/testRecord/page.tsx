@@ -28,7 +28,7 @@ const getTest = async () =>{
             throw new Error(`HTTP Error ! status : ${responce.status}`);
         }
         const result = await responce.json();
-        console.log("result of test is...",result);
+        // console.log("result of test is...",result);
         return await result;
     } catch (error) {
         console.error("Error adding Test:", error);

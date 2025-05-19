@@ -1,27 +1,31 @@
 import { FormControl, IconButton, InputAdornment, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { CurrencyRupee, AddCircle, DeleteOutline } from '@mui/icons-material'
+import { useBillingStore } from '@/stores/billingStore';
 
-type TableType = {
-    id: number;
-    additionalCharges: string;
-    gst: number;
-    description: string;
-    subtTotalCharges: number
-}
+// type TableType = {
+//     id: number;
+//     additionalCharges: number;
+//     gst: number;
+//     description: string;
+//     subtTotalCharges: number
+// }
 
-type AdditionalChargeTableProps = {
-    onTotalChange: (total: number) => void;
-    onTableChange : (tableType: TableType[]) => void;
-};
+// type AdditionalChargeTableProps = {
+//     onTotalChange: (total: number) => void;
+//     // onTableChange : (tableType: TableType[]) => void;
+// };
 
-const AdditionalChargeTable: React.FC<AdditionalChargeTableProps> = ({ onTotalChange , onTableChange }) => {
+const AdditionalChargeTable = () => {
     const [additionalCharges, setAdditionalCharges] = useState(0);
     const [gstTaxAdditional, setGstTaxAdditional] = useState(0);
     const [description, setDescription] = useState("");
     const gstItem = [0, 5, 12, 18, 28]
-    const [additionalChargeTable, setAdditionalChargeTable] = useState<{ id: number; additionalCharges: string; gst: number; description: string; subtTotalCharges: number }[]>([]);
-    const [totalAdditionalCharges, setTotalAdditionalCharges] = useState(0);
+    // const [additionalChargeTable, setAdditionalChargeTable] = useState<{ id: number; additionalCharges: string; gst: number; description: string; subtTotalCharges: number }[]>([]);
+    // const [totalAdditionalCharges, setTotalAdditionalCharges] = useState(0);
+     const {isDisabled , updateState } = useBillingStore();
+     const additionalChargeTable = useBillingStore((state) => state.additionalChargeTable);
+     const totalAdditionalCharges = useBillingStore((state) => state.totalAdditionalCharges);
 
     const handleAdditionalCharges = (e: any) => {
         const charges = Number(e.target.value);
@@ -30,8 +34,8 @@ const AdditionalChargeTable: React.FC<AdditionalChargeTableProps> = ({ onTotalCh
 
     const addChargesToTable = () => {
         const total = additionalCharges + (additionalCharges * gstTaxAdditional / 100)
-        setAdditionalChargeTable((prev) => {
-            const nextId = prev.length > 0 ? prev[prev.length - 1].id + 1 : 1
+        
+        const nextId = additionalChargeTable.length > 0 ? additionalChargeTable[additionalChargeTable.length - 1].id + 1 : 1
             const newEntry = {
                 id: nextId,
                 additionalCharges: additionalCharges,
@@ -39,14 +43,10 @@ const AdditionalChargeTable: React.FC<AdditionalChargeTableProps> = ({ onTotalCh
                 description: description,
                 subtTotalCharges: total
             };
-            return [...prev, newEntry]
-        })
-
-        setTotalAdditionalCharges((prev) => {
-            const totalCharge = prev + total;
-            // onTotalChange(totalCharge);
-            return totalCharge;
-        })
+        
+        updateState({additionalChargeTable : [...additionalChargeTable , newEntry] })
+        updateState({totalAdditionalCharges : totalAdditionalCharges + total })
+        
         clearCharges();
     }
 
@@ -59,24 +59,27 @@ const AdditionalChargeTable: React.FC<AdditionalChargeTableProps> = ({ onTotalCh
     const deleteCharges = (data: any) => {
         const total = additionalCharges - (additionalCharges * gstTaxAdditional / 100)
         // setTotalAdditionalCharges((prev) => prev - Number(data.subtTotalCharges));
-        setTotalAdditionalCharges((prev) => {
-            const totalCharge = prev - Number(data.subtTotalCharges);
-            return totalCharge;
-        })
-        setAdditionalChargeTable((items) => items.filter((item) => item.id !== data.id))
+        // setTotalAdditionalCharges((prev) => {
+        //     const totalCharge = prev - Number(data.subtTotalCharges);
+        //     return totalCharge;
+        // })
+        updateState({totalAdditionalCharges : totalAdditionalCharges - Number(data?.subtTotalCharges)})
+        // setAdditionalChargeTable((items) => items.filter((item) => item.id !== data.id))
+        const updateData = additionalChargeTable.filter((item) => item.id !== data.id )
+        updateState({ additionalChargeTable : updateData });
     }
 
     function ccyFormat(num: number) {
         return `${num.toFixed(2)}`;
     }
 
-    useEffect(()=>{
-        onTableChange(additionalChargeTable);
-    },[additionalChargeTable])
+    // useEffect(()=>{
+    //     onTableChange(additionalChargeTable);
+    // },[additionalChargeTable])
 
-    useEffect(()=>{
-        onTotalChange(totalAdditionalCharges);
-    },[totalAdditionalCharges])
+    // useEffect(()=>{
+    //     onTotalChange(totalAdditionalCharges);
+    // },[totalAdditionalCharges])
 
 
     return (
@@ -86,6 +89,7 @@ const AdditionalChargeTable: React.FC<AdditionalChargeTableProps> = ({ onTotalCh
                     id="additionalCharges"
                     label="Additional Charges"
                     // type='number'
+                    disabled = {isDisabled}
                     autoComplete='off'
                     size='small'
                     placeholder='Additional Charges (if any)'
@@ -110,6 +114,7 @@ const AdditionalChargeTable: React.FC<AdditionalChargeTableProps> = ({ onTotalCh
                     <Select
                         labelId="GST"
                         id="GST"
+                        disabled = {isDisabled}
                         value={gstTaxAdditional}
                         label="GST"
                         name='gst'
@@ -131,6 +136,7 @@ const AdditionalChargeTable: React.FC<AdditionalChargeTableProps> = ({ onTotalCh
                     size='small' color='primary' autoComplete="off" className='w-11/12'
                     name='descriptionAdditinalCharges'
                     value={description}
+                    disabled = {isDisabled}
                     onChange={(e) => setDescription(e.target.value)}
                 />
                 <Tooltip title="Add Data To Table" placement="right" arrow>

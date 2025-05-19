@@ -13,7 +13,6 @@ import 'react-phone-input-2/lib/style.css';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-
 const PhoneInput = dynamic(() => import('react-phone-input-2'), {
   ssr: false,
   loading: () => <div>Loading phone input...</div>
@@ -60,7 +59,7 @@ const AddEditPatient = ({ patientData }: any) => {
     return { years, months };
   };
 
-  const onSubmit = (data: FormValues , proceed : boolean = false) => {
+  const onSubmit = (data: FormValues, proceed: boolean = false) => {
     const payload = {
       name: data.patientName,
       mobile: data.phone,
@@ -76,13 +75,21 @@ const AddEditPatient = ({ patientData }: any) => {
     };
 
     if (patientData?.pk) {
-      updatePatient(patientData.pk, payload);
+      console.log("patient pk is there...", patientData?.pk);
+      const pk = patientData.pk
+      const payloadWithPk = {
+        ...payload,
+        pk: pk,
+      };
+
+      // updatePatientDetails(pk, payload);
+      updatePatient(payloadWithPk);
     } else {
       addPatient(payload);
     }
     handleClear();
 
-    if(proceed){
+    if (proceed) {
       router.push('/registerpatient');
     }
   };
@@ -182,7 +189,7 @@ const AddEditPatient = ({ patientData }: any) => {
           name="abhaId"
           control={control}
           render={({ field }) => (
-            <TextField {...field} label="Abha ID" size='small'  value={field.value || ''} />
+            <TextField {...field} label="Abha ID" size='small' value={field.value || ''} />
           )}
         />
 
@@ -224,8 +231,8 @@ const AddEditPatient = ({ patientData }: any) => {
               max: { value: 150, message: "Year must be less than 150" }
             }}
             render={({ field }) => (
-              <TextField {...field} label="Year" size='small'  error={!!errors.ageYear} helperText={errors.ageYear?.message} className='md:w-2/12'
-              value={field.value || ''} />
+              <TextField {...field} label="Year" size='small' error={!!errors.ageYear} helperText={errors.ageYear?.message} className='md:w-2/12'
+                value={field.value || ''} />
             )}
           />
 
@@ -237,8 +244,8 @@ const AddEditPatient = ({ patientData }: any) => {
               max: { value: 11, message: "Month must be less than 12" }
             }}
             render={({ field }) => (
-              <TextField {...field} label="Month" size='small'  error={!!errors.ageMonth} helperText={errors.ageMonth?.message} className='md:w-2/12'
-              value={field.value || ''} />
+              <TextField {...field} label="Month" size='small' error={!!errors.ageMonth} helperText={errors.ageMonth?.message} className='md:w-2/12'
+                value={field.value || ''} />
             )}
           />
         </div>
@@ -264,8 +271,8 @@ const AddEditPatient = ({ patientData }: any) => {
           name="address"
           control={control}
           render={({ field }) => (
-            <TextField {...field} label="Address" size='small' multiline rows={2} 
-            value={field.value || ''} />
+            <TextField {...field} label="Address" size='small' multiline rows={2}
+              value={field.value || ''} />
           )}
         />
 
@@ -277,7 +284,7 @@ const AddEditPatient = ({ patientData }: any) => {
 
         <div className='w-2/3'>
           <Button type="button" color='primary' variant='outlined' startIcon={<Save />}
-          onClick={handleSubmit((data) => onSubmit(data, true))} >
+            onClick={handleSubmit((data) => onSubmit(data, true))} >
             Save & Proceed To Transaction
           </Button>
         </div>

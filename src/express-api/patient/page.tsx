@@ -3,7 +3,7 @@
 
 const addPatient = async (data : any) => {
     try {
-        const responce = await fetch("/api/patient" , {
+        const responce = await fetch(url , {
             method : "POST",
             headers : {
                  "Content-Type": "application/json"
@@ -20,26 +20,23 @@ const addPatient = async (data : any) => {
     }
 }
 
-const updatePatient = async(pk:number, data : any) =>{
+const updatePatient = async (data : any) => {
+    console.log("update data is.. ", data)
     try {
-        const response = await fetch(`/api/patient/${pk}` , {
+        const responce = await fetch(url , {
             method : "PUT",
             headers : {
-                 "Content-Type": "application/json",
+                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(data)
+            body : JSON.stringify(data)
         })
-        const text = await response.text();
-
-        if (!response.ok) {
-            const errorData = text ? JSON.parse(text) : { message: "Unknown error" };
-            throw new Error(errorData.message || `Failed to update patient, status ${response.status}`);
+        if(!responce.ok)
+        {
+            throw new Error(`HTTP Error ! status : ${responce.status}`);
         }
-
-        return text ? JSON.parse(text) : {};
     } catch (error) {
-        console.error("Error adding patient:", error);
-        throw error; 
+        console.error("Error Editing patient:", error);
+         throw error; 
     }
 }
 

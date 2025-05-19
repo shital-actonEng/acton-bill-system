@@ -8,6 +8,7 @@ import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import { useForm, Controller } from 'react-hook-form';
 import { addTest } from '@/express-api/testRecord/page';
 import { useBranchStore } from '@/stores/branchStore';
+import { useGetApiStore } from '@/stores/getApiStore';
 
 
 const TestRecords = () => {
@@ -31,6 +32,9 @@ const TestRecords = () => {
   const [uniqueModality, setUniqueModality] = useState<{ id: number, label: string }[]>([]);
   const [bodyPartValue, setBodyPartValue] = useState("");
   const branch = useBranchStore((state) => state.selectedBranch);
+  // const {modalitiesData , fetchModalitiesData} = useGetApiStore()
+  const modalitiesData = useGetApiStore((state) => state.modalitiesData);
+const fetchModalitiesData = useGetApiStore((state) => state.fetchModalitiesData);
 
   const gstItem = [0, 5, 12, 18, 28];
 
@@ -45,8 +49,13 @@ const TestRecords = () => {
         label: item.modality,
       }));
     setUniqueModality(uniqueModalities);
-    console.log("branch in test is...", branch)
+    fetchModalitiesData();
+    // console.log("modalities in test is...", modalitiesData)
   }, []);
+
+    useEffect(() => {
+    console.log("modalities in test is...", modalitiesData);
+  }, [modalitiesData]);
 
   const handleModality = (selectmodality: any) => {
     console.log("new value is...", selectmodality);

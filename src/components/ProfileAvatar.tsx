@@ -8,9 +8,10 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
-import Logout from '@mui/icons-material/Logout';
+// import PersonAdd from '@mui/icons-material/PersonAdd';
+// import Settings from '@mui/icons-material/Settings';
+import {Logout , Settings , PersonAdd , PersonPin}  from '@mui/icons-material';
+// import PersonPinIcon from '@mui/icons-material/PersonPin';
 
 export default function AccountMenu() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -45,12 +46,13 @@ export default function AccountMenu() {
                 <IconButton
                     onClick={handleClick}
                     size="small"
-                    sx={{ ml: 2 }}
+                    // sx={{ ml: 2 }}
                     aria-controls={open ? 'account-menu' : undefined}
                     aria-haspopup="true"
                     aria-expanded={open ? 'true' : undefined}
                 >
-                    <Avatar src="/broken-image.jpg" className='w-8 h-8' />
+                    {/* <Avatar src="/broken-image.jpg" className='w-8 h-8' /> */}
+                    <PersonPin fontSize='large' />
                 </IconButton>
             </Tooltip>
             <Menu
