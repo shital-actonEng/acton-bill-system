@@ -37,7 +37,6 @@ const AddEditReferral = ({ referralData }: any) => {
         // addReferrer(data);
 
         if (referralData?.pk) {
-            console.log("referrel pk is there...", referralData?.pk);
             const pk = referralData?.pk
             const dataWithPk = {
                 ...data,

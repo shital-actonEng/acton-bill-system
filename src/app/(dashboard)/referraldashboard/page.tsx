@@ -40,7 +40,6 @@ const ReferralDashboard = () => {
   };
 
   const handlesearchData = (val: any) => {
-    console.log("search data is...", val);
     setSearchData(val);
   }
  

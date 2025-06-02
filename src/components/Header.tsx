@@ -186,7 +186,7 @@ export default function Header({ children }: { children: React.ReactNode }) {
     const menuList = [
         {
             id: 1,
-            name: "Active Patients",
+            name: "Active Invoices",
             icon: <AppRegistration />,
             path: "/registeredpatients"
         },
@@ -228,6 +228,11 @@ export default function Header({ children }: { children: React.ReactNode }) {
     const [openList, setOpenList] = React.useState<Record<number, boolean>>({});
     const branch = useBranchStore((state) => state.selectedBranch);
     const setBranch = useBranchStore((state) => state.setSelectedBranch);
+    const [hasHydrated, setHasHydrated] = React.useState(false);
+
+    React.useEffect(() => {
+        setHasHydrated(true);
+    }, []);
 
     const handleClick = (id: any) => {
         setOpenList((prevOpen) => ({ ...prevOpen, [id]: !prevOpen[id] }));
@@ -248,8 +253,12 @@ export default function Header({ children }: { children: React.ReactNode }) {
         }
     }
 
+    React.useEffect(()=>{
+        loadBranches();
+    } , [])
+
     const handleBranch = (e: any) => {
-        const selected = branchOption.find(b => b.name === e.target.value);
+        const selected = branchOption.find(b => b.pk === e.target.value);
         if (selected) setBranch(selected);
     }
 
@@ -316,14 +325,15 @@ export default function Header({ children }: { children: React.ReactNode }) {
                             }}
                         >
                             <InputLabel id="branches" className='text-white'>Branches</InputLabel>
+                            {hasHydrated && (
                             <Select
                                 labelId="branches"
                                 id="branches"
-                                value={branch?.name ?? ""}
+                                value={branch?.pk ?? ""}
                                 label="Branches"
                                 // onChange={(e) => setBranch(e.target.value)}
                                 onChange={handleBranch}
-                                onOpen={loadBranches}
+                                // onOpen={loadBranches}
                             >
                                 {loading ? (
                                     <MenuItem disabled>
@@ -331,12 +341,13 @@ export default function Header({ children }: { children: React.ReactNode }) {
                                     </MenuItem>
                                 ) : (
                                     branchOption.map((data, index) => (
-                                        <MenuItem value={data.name} key={index}>
+                                        <MenuItem value={data.pk} key={index}>
                                             {data.name}
                                         </MenuItem>
                                     ))
                                 )}
                             </Select>
+                            )}
                         </FormControl>
                     </ListItem>
                     <Divider />

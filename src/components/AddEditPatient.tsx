@@ -75,7 +75,6 @@ const AddEditPatient = ({ patientData }: any) => {
     };
 
     if (patientData?.pk) {
-      console.log("patient pk is there...", patientData?.pk);
       const pk = patientData.pk
       const payloadWithPk = {
         ...payload,

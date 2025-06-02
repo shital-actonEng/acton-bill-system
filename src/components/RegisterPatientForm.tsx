@@ -1,5 +1,5 @@
 "use client"
-import { Autocomplete, Box, Button, Card, Chip, Container, InputAdornment, ListItemIcon, ListItemText, MenuItem, Paper, Tab, Tabs, TextField, Typography } from '@mui/material'
+import { Autocomplete, Box, Button, Container, InputAdornment, ListItemIcon, ListItemText, MenuItem, Paper, Tab, Tabs, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { Search, HowToReg, Payment, CurrencyRupee, Money, QrCodeScanner, AccountBalance, LocalAtm } from '@mui/icons-material';
 import Divider from '@mui/material/Divider';
@@ -8,11 +8,12 @@ import { useRef } from 'react';
 import { getPatients } from '@/express-api/patient/page';
 import TestPriceTable from './TestPriceTable';
 import AdditionalChargeTable from './AdditionalChargeTable';
-import { addInvoice, appendTransations, getInvoice } from '@/express-api/invoices/page';
+import { addInvoice, addPrintInvoice, appendTransations, getInvoice } from '@/express-api/invoices/page';
 import { useRouter } from 'next/navigation';
 import { useBillingStore } from '@/stores/billingStore';
 import { getTest } from '@/express-api/testRecord/page';
-
+import TransactionTable from './TransactionTable';
+import { useBranchStore } from '@/stores/branchStore';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -47,7 +48,7 @@ function a11yProps(index: number) {
 const paymentMode = [
     {
         id: 1,
-        PaymentMode: "Payment Mode(Default: Cash)",
+        PaymentMode: "Cash",
         icon: <Money />,
     },
     {
@@ -92,7 +93,7 @@ const RegisterPatientForm = () => {
     const [tabValue, setTabValue] = useState(0);
     const [balanceRemaining, setBalanceRemaining] = useState(0);
     const [initialBalance, setInitialBalance] = useState(0);
-    const [selectPaymentMode, setSelectPaymentMode] = useState("");
+    const [selectPaymentMode, setSelectPaymentMode] = useState("Cash");
     const [loading, setLoading] = useState(false);
     const [openPatient, setOpenPatient] = useState(false);
     const [patientData, setPatientData] = useState<patient[]>([]);
@@ -101,8 +102,9 @@ const RegisterPatientForm = () => {
     const transactiondetailsRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
 
-     const { subTotalPrice, testTableData, referredDoctor, patientSelected, additionalChargeTable, totalAdditionalCharges, invoicePk, totalBillingAmount, updateState } =useBillingStore();
+    const { subTotalPrice, testTableData, referredDoctor, patientSelected, additionalChargeTable, totalAdditionalCharges, invoicePk, totalBillingAmount, transactionTableData, updateState } = useBillingStore();
     const [allTests, setAllTests] = useState<any[]>([]);
+    const {selectedBranch} = useBranchStore();
     let fullTransaction: { amount: number; trans_type: string; payment_type: string; comments: string }[] = [];
 
     function ccyFormat(num: number) {
@@ -148,12 +150,15 @@ const RegisterPatientForm = () => {
         fetchPatientData(val);
     }
 
+
     const fetchPatientData = async (patient: any) => {
         const invoiceData = await fetchInvoiceData();
         const matchedInvoice = invoiceData.find((invoice: any) => invoice.patient_fk === patient?.pk);
         if (matchedInvoice) {
             const transDetails = matchedInvoice.amb_invoice_trans;
+            console.log("transaction is...", transDetails);
             fullTransaction.push(...transDetails);
+            updateState({ transactionTableData: transDetails });
             setIsInvoice(true);
             updateState({ isDisabled: true, invoicePk: matchedInvoice?.pk })
             const ambInvoiceItems = matchedInvoice.amb_invoice_items
@@ -229,6 +234,7 @@ const RegisterPatientForm = () => {
                 testTableData: [],
                 additionalChargeTable: [],
                 referredDoctor: [],
+                transactionTableData: [],
                 isDisabled: false,
                 totalAdditionalCharges: 0,
                 totalBillingAmount: 0,
@@ -249,7 +255,9 @@ const RegisterPatientForm = () => {
     const handleConfirmBill = async () => {
         let login = "Shital"
         let compositeInvoice = {}
+        let printInvoiceId = 0;
         if (isInvoice) {
+            printInvoiceId = invoicePk;
             if (Number(amountPaidRef.current?.value) !== 0) {
                 // base amount paid
                 fullTransaction.push({
@@ -357,7 +365,6 @@ const RegisterPatientForm = () => {
 
             if (Number(amountPaidRef.current?.value) !== 0) {
                 // base amount paid
-                console.log("amount paid....", amountPaidRef.current?.value)
                 fullTransaction.push({
                     trans_type: "Credit",
                     amount: -(Number(amountPaidRef.current?.value)),
@@ -368,6 +375,7 @@ const RegisterPatientForm = () => {
 
             let patientid = patientSelected?.pk ? patientSelected.pk : "";
             let referrerId = referredDoctor ? referredDoctor.pk : "";
+            let diagnosticcentre = selectedBranch ? selectedBranch.pk : "";
 
             let newitemFks = [];
             if (testTableData.length > 0) {
@@ -402,22 +410,125 @@ const RegisterPatientForm = () => {
             }
 
             compositeInvoice = {
-                invoice: { patient_fk: patientid, referrer_fk: referrerId },
+                invoice: { patient_fk: patientid, referrer_fk: referrerId , diagnostic_centre_fk: diagnosticcentre },
                 items: newitemFks,
                 trans: fullTransaction
             }
-            const data = addInvoice(login, compositeInvoice);
+            console.log("composite invoice...", compositeInvoice);
+
+            printInvoiceId = await handleAddInvoice(login, compositeInvoice)          
         }
-        updateState({
+       
+        router.push('/registeredpatients');
+
+        const imageUrl = `${window.location.origin}/medicalInvoiceLogo.avif`;
+        const htmlContent = `
+        <html>
+            <head>
+                <style>
+                table {
+                border-collapse: collapse;
+                width: 100%;
+                }
+
+                td, th {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+                }
+
+                tr:nth-child(even) {
+                background-color: #dddddd;
+                }
+                </style>
+            </head>
+            <body>
+                <div margin: 0px 0px 0px 0px;">
+                     <div style="display:flex; align-items: center; "> 
+                     <div style="width:25%;">
+                        <img src="${imageUrl}" style="width:90%;" />
+                     </div>
+                     <div> <h2 style="color:#dddddd; margin: 0;"> ${selectedBranch?.name} </h2> </div>
+                     </div> 
+                                <div style="display:flex; justify-content: space-between;"> 
+                                    <div style="width:25%">  
+                                        <b>Patient</b> : ${patientSelected?.name} <br/>
+                                        <b>Age/Sex</b> :  ${patientSelected?.meta_details.ageYear}/${patientSelected?.meta_details.gender} <br/>
+                                        <b>Address</b> : ${patientSelected?.meta_details?.address} <br/>
+                                        <b>mobile</b> : ${patientSelected?.mobile} <br/>
+                                    </div>
+                                    <div>  
+                                        <b>DATE</b> :  <br/>
+                                        <b>Invoice ID</b> : ${printInvoiceId} <br/>
+                                        <b>Patient ID</b> : ${patientSelected?.pk} <br/>
+                                    </div>
+                                </div>
+                            </div>
+                             <hr style="margin-top: 10px; margin-bottom: 10px;"><br/>
+
+                            <table>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Charges</th>
+                                         <th>GST</th>
+                                        <th>Discount</th>
+                                        <th>SubTotal</th>
+                                    </tr>
+                                    ${testTableData.map(test => `
+                                            <tr>
+                                            <td>${test.name}</td>
+                                            <td>${test.price}</td>
+                                            <td>${test.gst}%</td>
+                                            <td>${test.consession}%</td>
+                                            <td>${test.aggregateDue}</td>
+                                            </tr>
+                                        `).join('')
+                                     }
+                                       ${additionalChargeTable.map(charge => `
+                                                <tr>
+                                                  <td>${`Additional Charges`}</td>
+                                                    <td>${charge.additionalCharges}</td>
+                                                    <td>${charge.gst}</td>
+                                                    <td>${`0`}</td>
+                                                    <td>${charge.subtTotalCharges}</td>
+                                                </tr>
+                                            `).join('')
+                                        }
+                                         <tr>
+                                            <td colspan="4" style="text-align:right">Total</td>
+                                            <td>${totalBillingAmount}</td>
+                                        </tr>                                    
+                                    </table>
+                               <br/>
+                                  <b>Total Bill Amount</b> : ${totalBillingAmount} <br/> <br />
+                                  <b>Balance Remaining</b> : ${balanceRemaining} <br/> <br/>
+                                 <hr/><br/>
+                            </body>
+                            </html>
+                    `;
+        const printData = {
+            html: htmlContent,
+            invoiceId: printInvoiceId
+        }
+        addPrintInvoice(printData)
+
+         updateState({
             testTableData: [],
             patientSelected: null,
             additionalChargeTable: [],
             totalAdditionalCharges: 0,
             isDisabled: false,
             referredDoctor: [],
+            transactionTableData: [],
             totalBillingAmount: 0
         });
-        router.push('/registeredpatients');
+    }
+
+    const handleAddInvoice = async (login: any, compositeInvoice: any) => {
+        const data = await addInvoice(login, compositeInvoice);
+        console.log("data for invoice...", data);
+        // updateState({invoicePk : data.pk})
+        return data.pk;
     }
 
     useEffect(() => {
@@ -436,6 +547,7 @@ const RegisterPatientForm = () => {
                 testTableData: [],
                 patientSelected: null,
                 additionalChargeTable: [],
+                transactionTableData: [],
                 totalAdditionalCharges: 0,
                 isDisabled: false,
                 referredDoctor: [],
@@ -567,11 +679,11 @@ const RegisterPatientForm = () => {
                         <Typography className='text-sm text-gray-600 font-semibold mb-4'> Patient : {patientSelected?.name} </Typography>
                     </div>
 
-                    <Paper className='w-full md:w-2/3 mt-5 py-6 md:px-8'>
-                        <div className='flex  flex-col  gap-4'>
-                            <Typography color='' className='text-base' > <span > Test Charges : </span> <CurrencyRupee fontSize='small' /> {ccyFormat(subTotalPrice)}  </Typography>
-                            <Typography color='' className='text-base'> Additional Charges : <CurrencyRupee fontSize='small' /> {ccyFormat(totalAdditionalCharges)} </Typography>
-                            <Typography color='' className='text-base'> Billing Amount : <CurrencyRupee fontSize='small' /> {ccyFormat(totalBillingAmount)} </Typography>
+                    <Paper className='w-full mt-5 py-6 md:px-8'>
+                        <div className='flex  flex-col  gap-4 md:w-2/3'>
+                            <Typography className='text-base' > <span > Test Charges : </span> <CurrencyRupee fontSize='small' /> {ccyFormat(subTotalPrice)}  </Typography>
+                            <Typography className='text-base'> Additional Charges : <CurrencyRupee fontSize='small' /> {ccyFormat(totalAdditionalCharges)} </Typography>
+                            <Typography className='text-base'> Billing Amount : <CurrencyRupee fontSize='small' /> {ccyFormat(totalBillingAmount)} </Typography>
 
                             {/* Amount paid */}
                             {/* <label className='mt-2 w-full md:w-1/4'>Amount paid</label> */}
@@ -627,8 +739,10 @@ const RegisterPatientForm = () => {
                                     size='small' color='primary' autoComplete="off" className='w-full md:w-5/12'
                                     inputRef={transactiondetailsRef}
                                 />
+
                             </div>
                         </div>
+                        <TransactionTable />
                     </Paper>
 
                     <Divider className='mt-5' />

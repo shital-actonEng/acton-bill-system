@@ -50,15 +50,14 @@ const fetchModalitiesData = useGetApiStore((state) => state.fetchModalitiesData)
       }));
     setUniqueModality(uniqueModalities);
     fetchModalitiesData();
-    // console.log("modalities in test is...", modalitiesData)
   }, []);
 
     useEffect(() => {
-    console.log("modalities in test is...", modalitiesData);
+    // console.log("modalities in test is...", modalitiesData);
   }, [modalitiesData]);
 
   const handleModality = (selectmodality: any) => {
-    console.log("new value is...", selectmodality);
+    // console.log("new value is...", selectmodality);
     setModality(selectmodality);
     if (selectmodality === null) {
       return;
@@ -124,7 +123,7 @@ const fetchModalitiesData = useGetApiStore((state) => state.fetchModalitiesData)
       console.warn("Form validation failed");
       return;
     }
-    console.log("Test data is...", data);
+    // console.log("Test data is...", data);
     if(data){
       const payload = {
         modality : data.modality,

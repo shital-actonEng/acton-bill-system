@@ -7,7 +7,6 @@ import {
 } from "material-react-table";
 import {
   Box,
-  Chip,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -17,6 +16,7 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import { MRT_Localization_EN } from 'material-react-table/locales/en';
 import { getInvoice } from "@/express-api/invoices/page";
+import { useBranchStore } from "@/stores/branchStore";
 
 // Extend dayjs with plugins
 dayjs.extend(isSameOrAfter);
@@ -42,8 +42,6 @@ type Patient = {
   invoiceId: number,
   date: Date,
   name: string,
-  // age: string,
-  // sex: string,
   mobile: number,
   // tests : [],
   referredBy: string,
@@ -52,20 +50,21 @@ type Patient = {
   totalPrice : number
   balance: number,
   status: string,
-  // patientInfo: PatientInfo
-  // Actions : HTMLInputElement
 }
 
 const PatientHistoryTable = () => {
   const [fromDate, setFromDate] = useState<Dayjs | null>(null);
   const [toDate, setToDate] = useState<Dayjs | null>(null);
   const [data, setData] = useState<Patient[]>([]);
+   const branch = useBranchStore((state) => state.selectedBranch);
 
   const fetchInvoiceData = async () => {
-    const invoiceData = await getInvoice("ACTIVE");
+     const diagnosticCentreId = branch?.pk;
+    const invoiceData = await getInvoice(diagnosticCentreId , "A");
+    // const invoiceData = await getInvoice("A");
     return invoiceData;
   };
-
+ 
   useEffect(() => {
     (
       async () => {
@@ -99,8 +98,6 @@ const PatientHistoryTable = () => {
               invoiceId: invoice.pk,
               date: dayjs(invoice.updatedAt).toISOString(),
               name: patientDetails?.name,
-              // age: `${patientDetails?.meta_details?.ageYear} Y, ${patientDetails?.meta_details?.ageMonth} M`,
-              // sex: patientDetails?.meta_details.gender,
               mobile: patientDetails.mobile,
               // tests : [],
               referredBy: referredDetails?.name,
@@ -113,7 +110,6 @@ const PatientHistoryTable = () => {
               // Actions : HTMLInputElement
             }
           
-          return null;
         }).filter(Boolean)
 
         setData(newData);
@@ -122,6 +118,7 @@ const PatientHistoryTable = () => {
 
 
   const filteredData = useMemo(() => {
+    console.log("from date is..." , fromDate);
     return data.filter((row) => {
       const visit = dayjs(row.date);
       return (
@@ -149,16 +146,6 @@ const PatientHistoryTable = () => {
         header: 'Name',
         size: 200,
       },
-      // {
-      //   accessorKey: 'age',
-      //   header: 'Age',
-      //   size: 150,
-      // },
-      // {
-      //   accessorKey: 'sex',
-      //   header: 'Gender',
-      //   size: 150,
-      // },
       {
         accessorKey: 'mobile',
         header: 'Mobile',
@@ -184,19 +171,7 @@ const PatientHistoryTable = () => {
         header: 'Total Price',
         size: 150,
       },
-      // {
-      //   accessorKey: 'balance',
-      //   header: 'Balance',
-      //   size: 150,
-      // },
-      // {
-      //   accessorKey: 'status',
-      //   header: 'Status',
-      //   size: 150,
-      //   Cell: () => (
-      //     <Chip label="Active" color="success" size="small" />
-      //   )
-      // },
+     
     ],
     [fromDate, toDate]
   );
@@ -204,6 +179,7 @@ const PatientHistoryTable = () => {
   const table = useMaterialReactTable({
     columns,
     data: filteredData,
+     initialState: { pagination: { pageSize: 5, pageIndex: 0, } },
     enableColumnFilters: true,
     ...MRT_Localization_EN,
     muiTopToolbarProps: {

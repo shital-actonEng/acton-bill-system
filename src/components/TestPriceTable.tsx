@@ -265,14 +265,6 @@ const TestPriceTable: React.FC<TestChargeTableProps> = () => {
         }
 
         updateState({ testTableData : [...testTableData , newTest] })
-        // setTestTableData((prevData) => {
-        //     const newId = item.pk;
-        //     const newName = item.protocol;
-        //     const newPrice = item.price;
-        //     const gst = item.meta_details.gst;
-        //     return [...prevData, { id: newId, name: newName, price: newPrice, gst: gst, aggregateDue: aggregateDueVal, discountMin: item.meta_details.discount_min_range, discountMax: item.meta_details.discount_max_range }]
-        // }
-        // );
     }
 
     useEffect(() => {
@@ -281,22 +273,14 @@ const TestPriceTable: React.FC<TestChargeTableProps> = () => {
             0
         );
         updateState({ subTotalPrice: newTotal })
-        // onTotalTestChange(newTotal);
-        // onTestChange(testTableData);
-        // setTotalBill(newTotal + subTotalAmount + totalTax);
-        // setTotalBillingAmount(newTotal + totalAdditionalCharges);
-        //setBalanceRemaining(newTotal + totalAdditionalCharges);
 
     }, [testTableData]);
 
     const deleteTest = (deletedData: any) => {
         const gst = deletedData.gst * deletedData.price / 100
         const updateTableData = testTableData.filter((item) => item.id !== deletedData.id);
-        // setTestTableData((data) => data.filter((item) => item.id !== deletedData.id))
-        // setSubTotalPrice((prevTotal) => prevTotal - deletedData.price - gst);
         updateState({ testTableData: updateTableData });
         updateState({ subTotalPrice: subTotalPrice - deletedData.price - gst });
-        // onTotalTestChange(subTotalPrice);
     }
 
     function ccyFormat(num: number) {

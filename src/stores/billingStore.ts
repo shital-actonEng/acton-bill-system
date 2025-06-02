@@ -45,6 +45,16 @@ type AdditionalChargeTable = {
     subtTotalCharges: number
 }
 
+type transactionTableData = {
+    pk : number;
+    amount : number;
+    comments : string;
+    createdAt : string;
+    updatedAt : string;
+    payment_type : string;
+    trans_type : string
+}
+
 interface BillingState {
     subTotalPrice: number;
     balanceRemaining: number;
@@ -55,6 +65,7 @@ interface BillingState {
     referredDoctor: ReferrenceType[];
     testTableData: TestTable[];
     additionalChargeTable : AdditionalChargeTable[];
+    transactionTableData : transactionTableData[];
     invoicePk : number;
 
     updateState: (partial: Partial<BillingState>) => void;
@@ -70,6 +81,7 @@ export const useBillingStore = create<BillingState>((set) => ({
     referredDoctor: [],
     testTableData: [],
     additionalChargeTable : [],
+    transactionTableData : [],
     invoicePk : 0,
 
     updateState: (partial) => set(partial),

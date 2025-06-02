@@ -21,8 +21,10 @@ const url = `http://localhost:3000/api/invoice`;
 export async function GET(req:NextRequest) {
     try {
         const status = req.nextUrl.searchParams.get('status');
-        const finalURL = status ? `${url}?status=${status}` : url
-        const res = await fetch(finalURL , {
+        const diagnosticCentreId = req.nextUrl.searchParams.get('diagnosticCentreId');
+        const statusURL = status ? `${url}?status=${status}` : url
+        const diagnosticCentreIdURL = diagnosticCentreId ? `${url}?diagnosticCentreId=${diagnosticCentreId}&status=${status}` : statusURL
+        const res = await fetch(diagnosticCentreIdURL , {
             method : 'GET',
             headers : {
                 'Content-Type' :'application/json' 
@@ -37,7 +39,6 @@ export async function GET(req:NextRequest) {
 
 export async function POST(req:NextRequest) {
     const data = await req.json();
-    console.log("data inside post ", data);
     try {
         const res = await fetch(url , {
             method : 'POST',

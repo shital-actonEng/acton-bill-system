@@ -6,26 +6,27 @@ import {
   type MRT_ColumnDef,
   type MRT_Cell
 } from 'material-react-table';
-import { getInvoice, updateStatus } from '@/express-api/invoices/page';
-import { Chip, IconButton, Pagination, Tooltip } from '@mui/material';
+import { getInvoice, getPrintinvoice, updateStatus } from '@/express-api/invoices/page';
+import { Alert, Chip, IconButton, Pagination, Snackbar, SnackbarCloseReason, Tooltip } from '@mui/material';
 import { Edit, Print, CheckCircle } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
 import { useBillingStore } from '@/stores/billingStore';
-import dayjs, { Dayjs } from "dayjs";
+import { useBranchStore } from '@/stores/branchStore';
+import dayjs from "dayjs";
 
 type PatientInfo = {
-    pk: number,
-    name: string,
-    mobile: string,
-    meta_details: {
-        abhaId: string,
-        address: string,
-        ageMonth: number,
-        ageYear: number,
-        birthDate: Date,
-        email: string,
-        gender: string
-    }
+  pk: number,
+  name: string,
+  mobile: string,
+  meta_details: {
+    abhaId: string,
+    address: string,
+    ageMonth: number,
+    ageYear: number,
+    birthDate: Date,
+    email: string,
+    gender: string
+  }
 }
 
 type Patient = {
@@ -39,7 +40,7 @@ type Patient = {
   referredBy: string,
   balance: number,
   status: string,
-  patientInfo : PatientInfo
+  patientInfo: PatientInfo
   // Actions : HTMLInputElement
 }
 
@@ -47,43 +48,63 @@ const BillingTable = () => {
 
   const [data, setData] = useState<Patient[]>([]);
   const router = useRouter();
-  const updateState = useBillingStore((state) => state.updateState );
+  const updateState = useBillingStore((state) => state.updateState);
+  const [isDispatch, setIsDispatch] = useState(false);
+  const branch = useBranchStore((state) => state.selectedBranch);
 
-  const fetchInvoiceData = async () => {
-    const invoiceData = await getInvoice();
+  const fetchInvoiceData = async () => {  
+    const diagnosticCentreId = branch?.pk;
+    const invoiceData = await getInvoice(diagnosticCentreId , "PENDING");
+    // const invoiceData = await getInvoice();
     return invoiceData;
   };
 
-  const handleEditPatient = (rowData : any) => {
-    console.log("edit row is...", rowData.patientInfo);
-    updateState({ patientSelected : rowData.patientInfo });
+  const handleEditPatient = (rowData: any) => {
+    updateState({ patientSelected: rowData.patientInfo });
     router.push('/registerpatient')
   }
 
-  const handleDispatch = async(rowData : any) => {
-    console.log("dispatch row is...", rowData);
+  const handleDispatch = async (rowData: any) => {
     const invoicePk = rowData.invoiceId;
-    const data = await updateStatus(invoicePk , "ACTIVE");
-    console.log("data is here for active status...", data);
-    router.push('/history')
+    const data = await updateStatus(invoicePk, "A");
+    // router.push('/history')
+    setIsDispatch(true);
+  }
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason,
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setIsDispatch(false);
+  };
+
+
+  const handleReport = async (rowData: any) => {
+    console.log("data for report...", rowData);
+    const url = await getPrintinvoice(rowData.invoiceId);
+    console.log("url is...", url);
+    window.open(url , '_blank'); 
   }
 
   const rowActions = [
     {
       icon: <Edit fontSize="small" />,
       tooltip: 'Edit',
-      getOnClick: (row : any) => () => handleEditPatient(row.original),
+      getOnClick: (row: any) => () => handleEditPatient(row.original),
     },
     {
       icon: <Print fontSize="small" />,
       tooltip: 'Print',
-      getOnClick: (row : any) => () => console.log('Print', row.original),
+      getOnClick: (row: any) => () => handleReport(row.original),
     },
     {
-      icon: <CheckCircle fontSize="small"  />,
+      icon: <CheckCircle fontSize="small" />,
       tooltip: 'Dispatch',
-      getOnClick: (row : any) => () => handleDispatch(row.original),
-       disabled: (row: any) => row.original.disableDispatch,
+      getOnClick: (row: any) => () => handleDispatch(row.original),
+      disabled: (row: any) => row.original.disableDispatch,
     },
   ];
 
@@ -91,14 +112,11 @@ const BillingTable = () => {
     (
       async () => {
         const invoiceData = await fetchInvoiceData();
-        console.log("invoice data is from table...", invoiceData);
-        
+        console.log("branch id...", branch?.name)
         const newData = invoiceData.map((invoice: any) => {
           let patientDetails = invoice.amb_patient;
           let referredDetails = invoice.amb_referrer;
           const date = new Date(invoice.createdAt);
-          // const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short', year: 'numeric' };
-          // const formattedDate = date.toLocaleDateString('en-GB', options);
           let balance = 0
           invoice.amb_invoice_trans.forEach((amountIn: any) => {
             balance = balance + amountIn.amount
@@ -106,7 +124,8 @@ const BillingTable = () => {
           const disableDispatch = balance !== 0;
           return {
             invoiceId: invoice.pk,
-            date: invoice.createdAt,
+            // date: invoice.createdAt,
+            date : date ,
             name: patientDetails?.name,
             age: `${patientDetails?.meta_details?.ageYear} Y, ${patientDetails?.meta_details?.ageMonth} M`,
             sex: patientDetails?.meta_details.gender,
@@ -115,7 +134,7 @@ const BillingTable = () => {
             referredBy: referredDetails?.name,
             balance: balance,
             status: invoice?.status,
-            patientInfo : patientDetails,
+            patientInfo: patientDetails,
             disableDispatch: disableDispatch,
             // Actions : HTMLInputElement
           }
@@ -136,7 +155,7 @@ const BillingTable = () => {
         accessorKey: 'date',
         header: 'Date',
         size: 150,
-         Cell: ({ cell }) => dayjs(cell.getValue<string>()).format("DD/MM/YYYY"),
+        Cell: ({ cell }) => dayjs(cell.getValue<Date>()).format("DD/MM/YYYY hh:mm A"),
       },
       {
         accessorKey: 'name', //normal accessorKey
@@ -183,12 +202,12 @@ const BillingTable = () => {
         Cell: ({ row }) => (
           <div className="flex space-x-2">
             {
-              rowActions.map((item , index) =>
+              rowActions.map((item, index) =>
                 <Tooltip title={item.tooltip} placement='top' arrow key={index} >
                   <IconButton
                     color='primary' onClick={item.getOnClick(row)}
-                    size='small' 
-                     disabled={item.disabled ? item.disabled(row) : false}
+                    size='small'
+                    disabled={item.disabled ? item.disabled(row) : false}
                   >
                     {item.icon}
                   </IconButton>
@@ -205,11 +224,25 @@ const BillingTable = () => {
 
   const table = useMaterialReactTable({
     columns,
-    data, 
-    initialState: { pagination: { pageSize: 5 , pageIndex: 0,} },
+    data,
+    initialState: { pagination: { pageSize: 5, pageIndex: 0, } },
   });
 
-  return <MaterialReactTable table={table} />;
+  return (
+    <>
+      <MaterialReactTable table={table} />
+      <Snackbar open={isDispatch} autoHideDuration={3000} onClose={handleClose}>
+        <Alert
+          onClose={handleClose}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          Patient Dispatch successfully!
+        </Alert>
+      </Snackbar>
+    </>
+  );
 };
 
 export default React.memo(BillingTable);
