@@ -232,27 +232,21 @@ const TestRecords = () => {
   const watchReferrelBonus = watch('referrelBonus');
   const watchPrice = watch('price');
 
-  useEffect(() => {
-    // If referrelBonusPercentage is set, update referrelBonus
-    if (watchReferrelBonusPercentage && watchPrice) {
-      const price = Number(watchPrice);
-      const bonusPercentage = parseFloat(watchReferrelBonusPercentage);
+  const calculateBonusInAmount = () =>{
+    const price = Number(watchPrice);
+      const bonusPercentage = Number(watchReferrelBonusPercentage);
       const referrelBonusAmount = (price * bonusPercentage) / 100;
       setValue('referrelBonus', referrelBonusAmount.toString());
-    }
-  }, [watchReferrelBonusPercentage, watchPrice, setValue]);
+  }
 
-  useEffect(() => {
-    // If referrelBonus is set, update referrelBonusPercentage
-    if (watchReferrelBonus && watchPrice) {
-      const price = Number(watchPrice);
-      const referrelBonusAmount = parseFloat(watchReferrelBonus);
+  const calculateBonusInPercentage = () =>{
+     const price = Number(watchPrice);
+      const referrelBonusAmount = Number(watchReferrelBonus);
       if (price !== 0) {
         const bonusPercentage = (referrelBonusAmount * 100) / price;
-        setValue('referrelBonusPercentage', bonusPercentage.toFixed(2));
+        setValue('referrelBonusPercentage', bonusPercentage.toString());
       }
-    }
-  }, [watchReferrelBonus, watchPrice, setValue]);
+  }
 
   return (
     <Container disableGutters>
@@ -302,7 +296,7 @@ const TestRecords = () => {
               value={bodyPartValue || null}
               onChange={(e, newValue) => handleBodyParts(newValue)}
               size="small"
-              className="w-full"
+              className="w-full md:w-11/12"
               renderOption={(props, option, { index }) => (
                 <li {...props} key={`${option.label}-${index}`}>
                   {option.label}
@@ -313,11 +307,13 @@ const TestRecords = () => {
               )}
             />
 
+              {/* Select Test */}
             <Autocomplete
               freeSolo
               disablePortal
               options={testOptions.map((test) => test.protocol)}
               value={selectedTest?.protocol}
+                className="w-full md:w-11/12"
               onChange={(e, newValue, source) => handleTest(e, newValue, 'change')}
               onInputChange={(e, newValue, source) => handleTest(e, newValue, 'input')}
               renderInput={(params) => (
@@ -342,7 +338,7 @@ const TestRecords = () => {
                     variant="outlined"
                     size="small"
                     type="number"
-                    className="w-full md:w-6/12"
+                    className="w-full md:w-[45%]"
                     error={!!errors.price}
                     helperText={errors.price ? 'Enter a valid price' : ''}
                     InputProps={{
@@ -361,7 +357,7 @@ const TestRecords = () => {
                 name="gst"
                 control={control}
                 render={({ field }) => (
-                  <FormControl size="small" className="w-full md:w-5/12">
+                  <FormControl size="small" className="w-full md:w-[45%]">
                     <InputLabel id="GST">GST(%)</InputLabel>
                     <Select
                       {...field}
@@ -392,7 +388,7 @@ const TestRecords = () => {
                     variant="outlined"
                     size="small"
                     className="w-1/2 md:w-1/4"
-                    type="number"
+                    onBlur={calculateBonusInAmount}
                   />
                 )}
               />
@@ -407,7 +403,7 @@ const TestRecords = () => {
                     variant="outlined"
                     size="small"
                     className="w-1/2 md:w-1/4"
-                    type="number"
+                    onBlur={calculateBonusInPercentage}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
