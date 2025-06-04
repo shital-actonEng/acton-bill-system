@@ -1,9 +1,12 @@
-// app/api/proxy/invoice/[invoiceId]/trans/route.ts
+
 import { NextRequest, NextResponse } from 'next/server'
+
+const apiUrl = process.env.NEXT_PUBLIC_BACKEND_LOCAL_API_URL;
+const URL = `${apiUrl}/invoice`
 
 export async function POST(req: NextRequest, { params }: { params: { invoiceId: string } }) {
   const { invoiceId } = params
-  const backendUrl = `http://localhost:3000/api/invoice/${invoiceId}/trans`
+  const backendUrl = `${URL}/${invoiceId}/trans`
   const body = await req.json()
 
   try {

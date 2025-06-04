@@ -1,8 +1,12 @@
 import { NextRequest , NextResponse } from "next/server";
 
-const URL = `${"http://localhost:3000/api/diagnosticCentre"}`;
+// const URL = `${"http://localhost:3000/api/diagnosticCentre"}`;
+const apiUrl = process.env.NEXT_PUBLIC_BACKEND_LOCAL_API_URL;
+const URL = `${apiUrl}/diagnosticCentre`
 
 export async function GET(req : NextRequest){
+     console.log("api url in branch...", apiUrl);
+    console.log("url in branch...", URL);
     try {
         const res = await fetch(URL , {
             method : 'GET',

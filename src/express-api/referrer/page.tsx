@@ -57,7 +57,6 @@ const getReferrer = async () =>{
 
 const updateReferrer = async (data : any) => {
   try {
-    console.log("before inside update in express...", data);
       const responce = await fetch("/api/referrer/" , {
           method : "PUT",
           headers : {

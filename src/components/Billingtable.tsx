@@ -54,7 +54,7 @@ const BillingTable = () => {
 
   const fetchInvoiceData = async () => {  
     const diagnosticCentreId = branch?.pk;
-    const invoiceData = await getInvoice(diagnosticCentreId , "PENDING");
+    const invoiceData = await getInvoice(diagnosticCentreId , undefined , undefined , "P");
     // const invoiceData = await getInvoice();
     return invoiceData;
   };
@@ -112,7 +112,6 @@ const BillingTable = () => {
     (
       async () => {
         const invoiceData = await fetchInvoiceData();
-        console.log("branch id...", branch?.name)
         const newData = invoiceData.map((invoice: any) => {
           let patientDetails = invoice.amb_patient;
           let referredDetails = invoice.amb_referrer;
@@ -141,7 +140,7 @@ const BillingTable = () => {
         })
         setData(newData);
       })()
-  }, [])
+  }, [branch?.pk])
 
   //should be memoized or stable
   const columns = useMemo<MRT_ColumnDef<Patient>[]>(

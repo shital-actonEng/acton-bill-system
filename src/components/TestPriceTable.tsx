@@ -209,7 +209,9 @@ const TestPriceTable: React.FC<TestChargeTableProps> = () => {
             try {
                 const result = await getTest();
                 if (!branch) return;
-                const filteredResult = result.filter((item) => item.diagnostic_centre_fk === branch.pk);
+                const filteredResult = result.filter((item : any) =>
+                     item.diagnostic_centre_fk === branch.pk && item.deleted == null
+            );
                 setTestData(filteredResult);
                 setSelectedTest(filteredResult);
                 const resultBodyParts = getUniqueOptions(result, "modality");

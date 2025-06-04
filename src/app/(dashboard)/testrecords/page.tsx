@@ -2,17 +2,34 @@
 "use client";
 import { Autocomplete, Box, Button, Container, Divider, FormControl, InputAdornment, InputLabel, MenuItem, Paper, Select, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { Vaccines, Save, Clear } from '@mui/icons-material';
+import { Vaccines, Save, Clear, DeleteOutline } from '@mui/icons-material';
 import jsonData from '../../../../data/testsData.json';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import { useForm, Controller } from 'react-hook-form';
-import { addTest } from '@/express-api/testRecord/page';
+import { addTest, getTest, updateTest } from '@/express-api/testRecord/page';
 import { useBranchStore } from '@/stores/branchStore';
 import { useGetApiStore } from '@/stores/getApiStore';
 
+type Test = {
+  pk: number;
+  modality: string;
+  body_part: string;
+  protocol: string;
+  price: string;
+  diagnostic_centre_fk: string;
+  meta_details: {
+    gst: string;
+    discount_min_range: string;
+    discount_max_range: string;
+    referrel_bonus: string;
+    referrel_bonus_percentage: string;
+  };
+  deleted: string;
+};
+
 
 const TestRecords = () => {
-  const { control, handleSubmit, reset, watch, setValue,  formState: { errors } } = useForm({
+  const { control, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm({
     defaultValues: {
       modality: '',
       bodyPart: '',
@@ -31,10 +48,14 @@ const TestRecords = () => {
   const [filteredModality, setFilteredModality] = useState<{ id: number, label: string }[]>([]);
   const [uniqueModality, setUniqueModality] = useState<{ id: number, label: string }[]>([]);
   const [bodyPartValue, setBodyPartValue] = useState("");
+  const [selectedTest, setSelectedTest] = useState<Test>()
   const branch = useBranchStore((state) => state.selectedBranch);
   // const {modalitiesData , fetchModalitiesData} = useGetApiStore()
   const modalitiesData = useGetApiStore((state) => state.modalitiesData);
-const fetchModalitiesData = useGetApiStore((state) => state.fetchModalitiesData);
+  const fetchModalitiesData = useGetApiStore((state) => state.fetchModalitiesData);
+  let [testOptions, setTestOptions] = useState<Test[]>([]);
+  const [isTestCheck, setIsTestCheck] = useState(false);
+  let foundTest: Test | undefined;
 
   const gstItem = [0, 5, 12, 18, 28];
 
@@ -50,11 +71,27 @@ const fetchModalitiesData = useGetApiStore((state) => state.fetchModalitiesData)
       }));
     setUniqueModality(uniqueModalities);
     fetchModalitiesData();
+
   }, []);
 
-    useEffect(() => {
-    // console.log("modalities in test is...", modalitiesData);
-  }, [modalitiesData]);
+  // set test option by fetching all Tests 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await getTest();
+        if (!branch) return;
+        const filteredResult = result.filter((item: any) => 
+          item.diagnostic_centre_fk === branch.pk && item.deleted === null
+      );
+        setTestOptions(filteredResult);
+        console.log("tests are...", testOptions);
+      } catch (error) {
+        console.error("Error fetching test data:", error);
+      }
+    };
+    fetchData();
+  }, [branch])
+
 
   const handleModality = (selectmodality: any) => {
     // console.log("new value is...", selectmodality);
@@ -64,10 +101,11 @@ const fetchModalitiesData = useGetApiStore((state) => state.fetchModalitiesData)
     }
     reset((prev) => ({
       ...prev,
-      modality: selectmodality.label
+      // modality: selectmodality.label
+      modality: selectmodality
     }));
     const modalities = testData.filter((test) =>
-      test.modality.toLowerCase().includes(selectmodality.label.toLowerCase())
+      test.modality.toLowerCase().includes(selectmodality.toLowerCase())
     );
     const uniqueBodyParts = modalities
       .filter((item, index, self) =>
@@ -96,6 +134,38 @@ const fetchModalitiesData = useGetApiStore((state) => state.fetchModalitiesData)
     }));
   };
 
+  const handleTest = (e: any, test: any, source: any) => {
+    setSelectedTest(test);
+    foundTest = testOptions.find((t) => t.protocol == test)
+    console.log("finded test is...", foundTest);
+
+    if (foundTest) {
+      setSelectedTest(foundTest);
+      // Set values in form from found test
+      setValue('test', foundTest.protocol);
+      setValue('modality', foundTest.modality);
+      setValue('bodyPart', foundTest.body_part);
+      setValue('price', foundTest.price);
+      setValue('gst', foundTest.meta_details.gst);
+      setValue('referrelBonus', foundTest.meta_details.referrel_bonus);
+      setValue('referrelBonusPercentage', foundTest.meta_details.referrel_bonus_percentage);
+      setValue('discountMinRange', foundTest.meta_details.discount_min_range);
+      setValue('discountMaxRange', foundTest.meta_details.discount_max_range);
+
+      // Update Modality & Body Part UI selections
+      setModality(foundTest.modality);
+      setBodyPartValue(foundTest.body_part);
+
+      setIsTestCheck(true)
+    } else {
+      // If user types a new test not in options
+      setSelectedTest({ protocol: test } as Test);
+      setValue('test', test);
+      setIsTestCheck(false)
+    }
+
+  }
+
   const handleClear = () => {
     reset({
       modality: '',
@@ -110,6 +180,7 @@ const fetchModalitiesData = useGetApiStore((state) => state.fetchModalitiesData)
     });
     setBodyPartValue("");
     setModality("");
+
   };
 
   const isValidPrice = (price: number) => {
@@ -124,25 +195,38 @@ const fetchModalitiesData = useGetApiStore((state) => state.fetchModalitiesData)
       return;
     }
     // console.log("Test data is...", data);
-    if(data){
+    if (data) { 
       const payload = {
-        modality : data.modality,
-        body_part : data.bodyPart,
-        protocol : data.test,
-        price : data.price,
-        meta_details : {
-          gst : data.gst,
-          discount_min_range : data.discountMinRange,
-          discount_max_range : data.discountMaxRange,
-          referrel_bonus : data.referrelBonus,
-          referrel_bonus_percentage : data.referrelBonusPercentage
-        } ,
-        diagnostic_centre_fk : branch?.pk
+        modality: data.modality,
+        body_part: data.bodyPart,
+        protocol: data.test,
+        price: data.price,
+        meta_details: {
+          gst: data.gst,
+          discount_min_range: data.discountMinRange,
+          discount_max_range: data.discountMaxRange,
+          referrel_bonus: data.referrelBonus,
+          referrel_bonus_percentage: data.referrelBonusPercentage
+        },
+        diagnostic_centre_fk: branch?.pk
       }
       addTest(payload);
-    } 
+    }
     handleClear();
   };
+
+  const handleDelete = () => {
+    if (!selectedTest) return;
+
+    const updatedTest: Test = {
+      ...selectedTest,
+      deleted: "yes", 
+    };
+    console.log("found delete test is...", updatedTest);
+    updateTest(updatedTest);
+    handleClear();
+    setIsTestCheck(false);
+  }
 
   const watchReferrelBonusPercentage = watch('referrelBonusPercentage');
   const watchReferrelBonus = watch('referrelBonus');
@@ -185,17 +269,19 @@ const fetchModalitiesData = useGetApiStore((state) => state.fetchModalitiesData)
           <Autocomplete
             disablePortal
             id="combo-box-modality"
-            options={uniqueModality}
+            options={uniqueModality.map((m) => m.label)}
             onChange={(e, newValue) => handleModality(newValue)}
             size="small"
             className="w-full md:w-1/2"
-            getOptionLabel={(option) => option.label}
-            isOptionEqualToValue={(option, value) => option.label === value.label}
-            renderOption={(props, option, { index }) => (
-              <li {...props} key={`${option.label}-${index}`}>
-                {option.label}
-              </li>
-            )}
+            // getOptionLabel={(option) => option.label}
+            value={modality || null}
+            getOptionLabel={(option) => typeof option === 'string' ? option : option}
+            // isOptionEqualToValue={(option, value) => option.label === value.label}
+            // renderOption={(props, option, { index }) => (
+            //   <li {...props} key={`${option.label}-${index}`}>
+            //     {option.label}
+            //   </li>
+            // )}
             renderInput={(params) => (
               <TextField {...params} label="Select Modality" variant="outlined" required />
             )}
@@ -213,7 +299,7 @@ const fetchModalitiesData = useGetApiStore((state) => state.fetchModalitiesData)
               freeSolo
               id="combo-box-body-parts"
               options={filteredModality}
-              value={bodyPartValue}
+              value={bodyPartValue || null}
               onChange={(e, newValue) => handleBodyParts(newValue)}
               size="small"
               className="w-full"
@@ -227,17 +313,19 @@ const fetchModalitiesData = useGetApiStore((state) => state.fetchModalitiesData)
               )}
             />
 
-            <Controller
-              name="test"
-              control={control}
-              render={({ field }) => (
+            <Autocomplete
+              freeSolo
+              disablePortal
+              options={testOptions.map((test) => test.protocol)}
+              value={selectedTest?.protocol}
+              onChange={(e, newValue, source) => handleTest(e, newValue, 'change')}
+              onInputChange={(e, newValue, source) => handleTest(e, newValue, 'input')}
+              renderInput={(params) => (
                 <TextField
-                  {...field}
-                  label="Enter Tests"
+                  {...params}
+                  label="Enter Test"
+                  variant="outlined"
                   size="small"
-                  color="primary"
-                  className="w-full"
-                  autoComplete="off"
                 />
               )}
             />
@@ -366,7 +454,12 @@ const fetchModalitiesData = useGetApiStore((state) => state.fetchModalitiesData)
             </div>
 
             <div className='flex gap-4 mt-5'>
-              <Button color='success' variant='outlined' type="submit" startIcon={<Save />}>Save</Button>
+              {
+                isTestCheck ?
+                  <Button color='error' variant='outlined' type="button" onClick={handleDelete} startIcon={<DeleteOutline />}>Delete Current Test</Button>
+                  : <Button color='success' variant='outlined' type="submit" startIcon={<Save />}>Save</Button>
+
+              }
               <Button color='error' variant='outlined' onClick={handleClear} startIcon={<Clear />}>Cancel</Button>
             </div>
           </form>

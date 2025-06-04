@@ -1,6 +1,9 @@
 import { NextRequest , NextResponse } from "next/server";
 
-const URL = `${"http://localhost:3000/api/patient"}`;
+// const URL = `${"https://localhost:3000/api/patient"}`;
+
+const apiUrl = process.env.NEXT_PUBLIC_BACKEND_LOCAL_API_URL;
+const URL = `${apiUrl}/patient`
 
 export async function GET(req : NextRequest){
     try {
@@ -8,7 +11,7 @@ export async function GET(req : NextRequest){
             method : 'GET',
             headers : {
                 'Content-Type' :'application/json' 
-            }
+            },
         })
         const data = await res.json();
         return NextResponse.json(data);
@@ -36,7 +39,6 @@ export async function POST(req:NextRequest) {
 
 export async function PUT(req:NextRequest) {
     const data = await req.json();
-    console.log("inside route update ...", req.json());
     try {
         const res = await fetch(URL , {
             method : 'PUT',

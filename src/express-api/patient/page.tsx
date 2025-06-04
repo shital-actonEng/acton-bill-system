@@ -21,7 +21,6 @@ const addPatient = async (data : any) => {
 }
 
 const updatePatient = async (data : any) => {
-    console.log("update data is.. ", data)
     try {
         const responce = await fetch(url , {
             method : "PUT",

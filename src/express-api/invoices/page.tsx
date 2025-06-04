@@ -47,11 +47,18 @@ function appendCreds(login: any, compositeInvoice: any) {
     return newCompositeInvoice
 }
 
-const getInvoice = async (diagnosticCentreId?: number, status?: string) => {
+const getInvoice = async (diagnosticCentreId?: number, fromDate?: string, toDate?: string, status?: string) => {
     try {
-        const queryStatusURL = status ? `${url}?status=${status}` : url
-        const queryDiagnosticCentreIdURL = diagnosticCentreId ? `${url}?diagnosticCentreId=${diagnosticCentreId}&status=${status}` : queryStatusURL
-        const responce = await fetch(queryDiagnosticCentreIdURL);
+         let URL = url
+         URL = status ? `${url}?status=${status}` : url
+         URL = diagnosticCentreId ? `${url}?diagnosticCentreId=${diagnosticCentreId}&status=${status}` : URL
+         if(fromDate || toDate){
+            URL = `${url}?diagnosticCentreId=${diagnosticCentreId}&fromDate=${fromDate}&toDate=${toDate}&status=${status}` 
+         }
+         console.log("date form url...", URL);
+        // const queryStatusURL = status ? `${url}?status=${status}` : url
+        // const queryDiagnosticCentreIdURL = diagnosticCentreId ? `${url}?diagnosticCentreId=${diagnosticCentreId}&status=${status}` : queryStatusURL
+        const responce = await fetch(URL);
         if (!responce.ok) {
             throw new Error(`HTTP Error ! status : ${responce.status}`);
         }

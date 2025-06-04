@@ -1,6 +1,8 @@
 import { NextRequest , NextResponse } from "next/server";
 
-const URL = "http://localhost:3000/api/referrer";
+// const URL = "http://localhost:3000/api/referrer";
+const apiUrl = process.env.NEXT_PUBLIC_BACKEND_LOCAL_API_URL;
+const URL = `${apiUrl}/referrer`
 
 export async function GET(req : NextRequest){
     try {
@@ -34,29 +36,11 @@ export async function POST(req:NextRequest) {
     }
 }
 
-// export async function PUT(req:NextRequest) {
-//     const data = await req.json();
-//     console.log("inside route update referrel");
-//     try {
-//         const res = await fetch(URL , {
-//             method : 'PUT',
-//             headers : {
-//                 'Content-Type' : 'application/json',
-//             },
-//             body : JSON.stringify(data)
-//         })
-//         const result = await res.json();
-//         return NextResponse.json(result);
-//     } catch (error) {
-//         return NextResponse.json({message : "Failed to update Referrer details"} , {status : 500})
-//     }
-// }
 
 export async function PUT(req:NextRequest) {
     const data = await req.json();
-    console.log("indise route update...",data);
     try {
-        const res = await fetch("http://localhost:3000/api/referrer" , {
+        const res = await fetch(URL , {
             method : 'PUT',
             headers : {
                 'Content-Type' : 'application/json',

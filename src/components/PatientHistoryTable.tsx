@@ -7,6 +7,7 @@ import {
 } from "material-react-table";
 import {
   Box,
+  Button,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -17,6 +18,7 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import { MRT_Localization_EN } from 'material-react-table/locales/en';
 import { getInvoice } from "@/express-api/invoices/page";
 import { useBranchStore } from "@/stores/branchStore";
+import { Search} from "@mui/icons-material";
 
 // Extend dayjs with plugins
 dayjs.extend(isSameOrAfter);
@@ -45,9 +47,9 @@ type Patient = {
   mobile: number,
   // tests : [],
   referredBy: string,
-  totalGST : number,
-  totalDiscount : number,
-  totalPrice : number
+  totalGST: number,
+  totalDiscount: number,
+  totalPrice: number
   balance: number,
   status: string,
 }
@@ -56,77 +58,72 @@ const PatientHistoryTable = () => {
   const [fromDate, setFromDate] = useState<Dayjs | null>(null);
   const [toDate, setToDate] = useState<Dayjs | null>(null);
   const [data, setData] = useState<Patient[]>([]);
-   const branch = useBranchStore((state) => state.selectedBranch);
+  const branch = useBranchStore((state) => state.selectedBranch);
 
   const fetchInvoiceData = async () => {
-     const diagnosticCentreId = branch?.pk;
-    const invoiceData = await getInvoice(diagnosticCentreId , "A");
+    const diagnosticCentreId = branch?.pk;
+    // const invoiceData = await getInvoice(diagnosticCentreId, "A");
+    const today = dayjs(new Date()).format('YYYY-MM-DD');
+     let invoiceData ;
     // const invoiceData = await getInvoice("A");
-    return invoiceData;
-  };
- 
-  useEffect(() => {
-    (
-      async () => {
-        const invoiceData = await fetchInvoiceData();
-        const newData = invoiceData.map((invoice: any) => {
-           let balance = 0
-            invoice.amb_invoice_trans.forEach((amountIn: any) => {
-              balance = balance + amountIn.amount
-            })
-          
-            let patientDetails = invoice.amb_patient;
-            let referredDetails = invoice.amb_referrer;
-            let transactions = invoice.amb_invoice_trans;
-            let totalGST = 0;
-            let totalDiscount = 0;
-            let totalPrice = 0 ;
-            console.log("data transaction in history table..." , transactions);
-            transactions.forEach((ele : any) => {
-              if(ele.comments.includes("GST")){
-                   totalGST = totalGST + ele.amount;
-              }
-               if(ele.comments.includes("Discount")){
-                   totalDiscount = totalDiscount + (- ele.amount);
-              }
-              if(ele.comments.includes("Price")){
-                   totalPrice = totalPrice + ele.amount;
-              }
-              console.log("total gst is..." , totalGST);
-            });
-            return {
-              invoiceId: invoice.pk,
-              date: dayjs(invoice.updatedAt).toISOString(),
-              name: patientDetails?.name,
-              mobile: patientDetails.mobile,
-              // tests : [],
-              referredBy: referredDetails?.name,
-              totalGST : totalGST,
-              totalDiscount : totalDiscount,
-              totalPrice : totalPrice,
-              balance: balance,
-              status: invoice?.status,
-              patientInfo: patientDetails,
-              // Actions : HTMLInputElement
+    if(fromDate || toDate){
+         invoiceData = await getInvoice(diagnosticCentreId, fromDate?.format('YYYY-MM-DD') , toDate?.format('YYYY-MM-DD'), "A");
+    }
+    else{
+        invoiceData = await getInvoice(diagnosticCentreId, today , today,  "A");
+    }
+     const newData = invoiceData.map((invoice: any) => {
+          let balance = 0
+          invoice.amb_invoice_trans.forEach((amountIn: any) => {
+            balance = balance + amountIn.amount
+          })
+
+          let patientDetails = invoice.amb_patient;
+          let referredDetails = invoice.amb_referrer;
+          let transactions = invoice.amb_invoice_trans;
+          let totalGST = 0;
+          let totalDiscount = 0;
+          let totalPrice = 0;
+          transactions.forEach((ele: any) => {
+            if (ele.comments.includes("GST")) {
+              totalGST = totalGST + ele.amount;
             }
-          
+            if (ele.comments.includes("Discount")) {
+              totalDiscount = totalDiscount + (- ele.amount);
+            }
+            if (ele.comments.includes("Price")) {
+              totalPrice = totalPrice + ele.amount;
+            }
+            console.log("total gst is...", totalGST);
+          });
+          return {
+            invoiceId: invoice.pk,
+            date: dayjs(invoice.updatedAt).toISOString(),
+            name: patientDetails?.name,
+            mobile: patientDetails.mobile,
+            // tests : [],
+            referredBy: referredDetails?.name,
+            totalGST: totalGST,
+            totalDiscount: totalDiscount,
+            totalPrice: totalPrice,
+            balance: balance,
+            status: invoice?.status,
+            patientInfo: patientDetails,
+            // Actions : HTMLInputElement
+          }
+
         }).filter(Boolean)
 
         setData(newData);
-      })()
-  }, [])
+  };
 
+  useEffect(() => { 
+    fetchInvoiceData();
+  }, [branch?.pk])
 
-  const filteredData = useMemo(() => {
-    console.log("from date is..." , fromDate);
-    return data.filter((row) => {
-      const visit = dayjs(row.date);
-      return (
-        (!fromDate || dayjs(row.date).isSameOrAfter(fromDate, "day")) &&
-        (!toDate || dayjs(row.date).isSameOrBefore(toDate, "day"))
-      );
-    });
-  }, [data, fromDate, toDate]);
+  const handleFilteredInvoices = () => {
+    fetchInvoiceData();
+  }
 
   const columns = useMemo<MRT_ColumnDef<Patient>[]>(
     () => [
@@ -156,30 +153,30 @@ const PatientHistoryTable = () => {
         header: 'Referred By',
         size: 150,
       },
-       {
+      {
         accessorKey: 'totalGST',
-        header:  'GST',
+        header: 'GST',
         size: 100,
       },
-       {
+      {
         accessorKey: 'totalDiscount',
         header: 'Discount',
         size: 100,
       },
-       {
+      {
         accessorKey: 'totalPrice',
         header: 'Total Price',
         size: 150,
       },
-     
+
     ],
     [fromDate, toDate]
   );
 
   const table = useMaterialReactTable({
     columns,
-    data: filteredData,
-     initialState: { pagination: { pageSize: 5, pageIndex: 0, } },
+    data: data,
+    initialState: { pagination: { pageSize: 5, pageIndex: 0, } },
     enableColumnFilters: true,
     ...MRT_Localization_EN,
     muiTopToolbarProps: {
@@ -201,6 +198,9 @@ const PatientHistoryTable = () => {
           onChange={(newValue) => setToDate(newValue)}
           slotProps={{ textField: { size: "small" } }}
         />
+        <Button startIcon={<Search />} variant="outlined" onClick={handleFilteredInvoices}>
+          Search 
+        </Button>
       </Box>
     ),
   });

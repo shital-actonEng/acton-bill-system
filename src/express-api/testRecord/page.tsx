@@ -36,4 +36,24 @@ const getTest = async () =>{
     }
 }
 
-export { addTest , getTest }
+const updateTest = async (data : any) => {
+    console.log("update data is.. ", data)
+    try {
+        const responce = await fetch(URL , {
+            method : "PUT",
+            headers : {
+                 "Content-Type": "application/json"
+            },
+            body : JSON.stringify(data)
+        })
+        if(!responce.ok)
+        {
+            throw new Error(`HTTP Error ! status : ${responce.status}`);
+        }
+    } catch (error) {
+        console.error("Error Editing Test:", error);
+         throw error; 
+    }
+}
+
+export { addTest , getTest , updateTest}
