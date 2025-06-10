@@ -21,76 +21,7 @@ type patient ={
 }
 
 const PatientDashboard = () => {
-  // Sample patient data (this should come from API in a real-world app)
-  // const demoData = [
-  //   {
-  //     id: 1,
-  //     patientName: "Shital Konduskar",
-  //     birthDate: "1999-05-15", 
-  //     email : "shital@gmail.com",
-  //     phone: 1234567898,
-  //     abhaId : "12345fGH",
-  //     age: 25,
-  //     gender : "Female",
-  //     address: "27A sector , Pradhikaran-Akurdi , Pune",
-  //   },
-  //   {
-  //     id: 2,
-  //     patientName: "Rahul Desai",
-  //     birthDate: "1999-05-15", 
-  //     email : "rahul@gmail.com",
-  //     phone: 1234567898,
-  //     abhaId : "12345fGH",
-  //     age: 25,
-  //     gender : "Female",
-  //     address: "27A sector , Pradhikaran-Akurdi , Pune",
-  //   },
-  //   {
-  //     id: 3,
-  //     patientName: "Shital Konduskar",
-  //     birthDate: "1999-05-15", 
-  //     email : "shital.konduskar@gmail.com",
-  //     phone: 7888134950,
-  //     abhaId : "12345fGH",
-  //     age: 25,
-  //     gender : "Female",
-  //     address: "27A sector , Pradhikaran-Akurdi , Pune",
-  //   },
-  //   {
-  //     id: 4,
-  //     patientName: "Advik Kulkarni",
-  //     birthDate: "2022-05-15", 
-  //     email : "advik@gmail.com",
-  //     phone: 1234567898,
-  //     abhaId : "12345fGH",
-  //     age: 3,
-  //     gender : "Female",
-  //     address: "27A sector , Pradhikaran-Akurdi , Pune",
-  //   },
-  //   {
-  //     id: 5,
-  //     patientName: "Suraj ingale",
-  //     birthDate: "2000-06-11", 
-  //     email : "suraj@gmail.com",
-  //     phone: 1234567898,
-  //     abhaId : "12345fGH",
-  //     age: 25,
-  //     gender : "Female",
-  //     address: "27A sector , Pradhikaran-Akurdi , Pune",
-  //   },
-  //   {
-  //     id: 6,
-  //     patientName: "Priyanka Wagh",
-  //     birthDate: "1999-05-15", 
-  //     email : "priyanka@gmail.com",
-  //     phone: 1234567898,
-  //     abhaId : "12345fGH",
-  //     age: 25,
-  //     gender : "Female",
-  //     address: "27A sector , Pradhikaran-Akurdi , Pune",
-  //   },
-  // ];
-
+ 
   // State to track the selected patient (edit mode) or a new patient (add mode)
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -124,11 +55,10 @@ const PatientDashboard = () => {
    }
  };
 
- const handleLoadData = async ()=>{
-  if(demoData.length === 0 && !loading){
+ const handleLoadData = async (value : any)=>{
     try{
       setLoading(true);
-      const result = await getPatients();
+      const result = await getPatients(value);
     setDemoData(result);
     }
     catch(error){
@@ -136,9 +66,7 @@ const PatientDashboard = () => {
     }
     finally{
       setLoading(false);
-    }
-  }
-    
+    }  
  }
 
   return (
@@ -170,10 +98,18 @@ const PatientDashboard = () => {
                               // value={modality}
                               open = {open}
                               loading = {loading}
-                              onOpen={()=>{
-                                setOpen(true)
-                                handleLoadData()
-                              }}
+                              // onOpen={()=>{
+                              //   setOpen(true)
+                              //   handleLoadData()
+                              // }}
+
+                               onInputChange={(event, value) => {
+                                if (value.length >= 4) {
+                                      setOpen(true)
+                                 handleLoadData(value)
+                                }
+                            }}
+
                               onClose={()=>{
                                 setOpen(false)
                               }}

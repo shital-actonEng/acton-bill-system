@@ -10,10 +10,12 @@ const addPatient = async (data : any) => {
             },
             body : JSON.stringify(data)
         })
+        const result = responce.json();
         if(!responce.ok)
         {
             throw new Error(`HTTP Error ! status : ${responce.status}`);
         }
+         return result;
     } catch (error) {
         console.error("Error adding patient:", error);
          throw error; 
@@ -39,9 +41,11 @@ const updatePatient = async (data : any) => {
     }
 }
 
-const getPatients = async () =>{
+const getPatients = async (name?: string ) =>{
     try {
-        const responce = await fetch(url);
+        let URL = url;
+        URL = name ? `${url}?name=${name}` : url 
+        const responce = await fetch(URL);
         console.log(responce);
         if(!responce.ok){
             throw new Error(`HTTP Error ! status : ${responce.status}`);

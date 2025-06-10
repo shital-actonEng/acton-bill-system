@@ -12,6 +12,7 @@ import { addPatient, updatePatient } from '@/express-api/patient/page';
 import 'react-phone-input-2/lib/style.css';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useBillingStore } from '@/stores/billingStore';
 
 const PhoneInput = dynamic(() => import('react-phone-input-2'), {
   ssr: false,
@@ -32,7 +33,8 @@ type FormValues = {
 
 const AddEditPatient = ({ patientData }: any) => {
   const router = useRouter();
-  const { control, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm<FormValues>({
+  const {updateState} = useBillingStore();
+  const { control, handleSubmit, reset, setValue, formState: { errors } } = useForm<FormValues>({
     defaultValues: {
       patientName: '',
       birthDate: null,
@@ -59,7 +61,8 @@ const AddEditPatient = ({ patientData }: any) => {
     return { years, months };
   };
 
-  const onSubmit = (data: FormValues, proceed: boolean = false) => {
+  const onSubmit = async (data: FormValues, proceed: boolean = false) => {
+    let returnPatientID ; 
     const payload = {
       name: data.patientName,
       mobile: data.phone,
@@ -84,12 +87,14 @@ const AddEditPatient = ({ patientData }: any) => {
       // updatePatientDetails(pk, payload);
       updatePatient(payloadWithPk);
     } else {
-      addPatient(payload);
+      returnPatientID = await addPatient(payload);
     }
     handleClear();
 
     if (proceed) {
       router.push('/registerpatient');
+      updateState({ patientSelected : returnPatientID })
+      console.log("patient id is...", returnPatientID);
     }
   };
 

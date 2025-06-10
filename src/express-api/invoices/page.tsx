@@ -30,7 +30,6 @@ function appendTransations(login: any, invoiceId: any, compositeInvoice: any) {
 }
 
 function updateStatus(invoiceId: any, status: any) {
-    console.log("inside express update status")
     return fetch(`${url}/${invoiceId}/status`, {
         method: "PUT",
         headers: {
@@ -55,9 +54,6 @@ const getInvoice = async (diagnosticCentreId?: number, fromDate?: string, toDate
          if(fromDate || toDate){
             URL = `${url}?diagnosticCentreId=${diagnosticCentreId}&fromDate=${fromDate}&toDate=${toDate}&status=${status}` 
          }
-         console.log("date form url...", URL);
-        // const queryStatusURL = status ? `${url}?status=${status}` : url
-        // const queryDiagnosticCentreIdURL = diagnosticCentreId ? `${url}?diagnosticCentreId=${diagnosticCentreId}&status=${status}` : queryStatusURL
         const responce = await fetch(URL);
         if (!responce.ok) {
             throw new Error(`HTTP Error ! status : ${responce.status}`);
@@ -96,7 +92,6 @@ const getPrintinvoice = async (id : any) => {
     try {
         const printInvoiceURL = `api/printInvoice?invoiceId=${id}` ;
         const responce = await fetch(printInvoiceURL);
-        console.log("print invoice is..." , responce.url);
         if(!responce.ok){
              throw new Error(`HTTP Error ! status : ${responce.status}`);
         }

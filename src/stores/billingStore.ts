@@ -62,7 +62,7 @@ interface BillingState {
     totalAdditionalCharges: number;
     isDisabled: boolean;
     patientSelected: Patient | null;
-    referredDoctor: ReferrenceType[];
+    referredDoctor: ReferrenceType | null;
     testTableData: TestTable[];
     additionalChargeTable : AdditionalChargeTable[];
     transactionTableData : transactionTableData[];
@@ -78,7 +78,7 @@ export const useBillingStore = create<BillingState>((set) => ({
     totalAdditionalCharges: 0,
     isDisabled: false,
     patientSelected: null,
-    referredDoctor: [],
+    referredDoctor: null,
     testTableData: [],
     additionalChargeTable : [],
     transactionTableData : [],

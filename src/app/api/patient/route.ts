@@ -7,7 +7,9 @@ const URL = `${apiUrl}/patient`
 
 export async function GET(req : NextRequest){
     try {
-        const res = await fetch(URL , {
+        const name = req.nextUrl.searchParams.get('name');
+        let url = name ? `${URL}?name=${name}` : URL ;
+        const res = await fetch(url , {
             method : 'GET',
             headers : {
                 'Content-Type' :'application/json' 

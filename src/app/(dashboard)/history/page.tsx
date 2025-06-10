@@ -1,5 +1,5 @@
 import PatientHistoryTable from '@/components/PatientHistoryTable'
-import { Box, Button, Container, Paper, Typography } from '@mui/material'
+import { Box, Container, Paper, Typography } from '@mui/material'
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import React from 'react'
 

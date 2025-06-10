@@ -104,7 +104,7 @@ const RegisterPatientForm = () => {
 
     const { subTotalPrice, testTableData, referredDoctor, patientSelected, additionalChargeTable, totalAdditionalCharges, invoicePk, totalBillingAmount, transactionTableData, updateState } = useBillingStore();
     const [allTests, setAllTests] = useState<any[]>([]);
-    const {selectedBranch} = useBranchStore();
+    const { selectedBranch } = useBranchStore();
     let fullTransaction: { amount: number; trans_type: string; payment_type: string; comments: string }[] = [];
 
     function ccyFormat(num: number) {
@@ -131,10 +131,10 @@ const RegisterPatientForm = () => {
         return invoiceData;
     };
 
-    const loadPatientData = async () => {
+    const loadPatientData = async (value : any) => {
         try {
             setLoading(true);
-            const result = await getPatients();
+            const result = await getPatients(value);
             setPatientData(result);
         } catch (error) {
             console.log("failed to load patient data")
@@ -156,7 +156,6 @@ const RegisterPatientForm = () => {
         const matchedInvoice = invoiceData.find((invoice: any) => invoice.patient_fk === patient?.pk);
         if (matchedInvoice) {
             const transDetails = matchedInvoice.amb_invoice_trans;
-            console.log("transaction is...", transDetails);
             fullTransaction.push(...transDetails);
             updateState({ transactionTableData: transDetails });
             setIsInvoice(true);
@@ -169,14 +168,15 @@ const RegisterPatientForm = () => {
                 updateState({ referredDoctor: referrerAvailable })
             }
             else {
-                updateState({ referredDoctor: [] })
+                updateState({ referredDoctor: null })
             }
 
             const newTests = selectedTests.map((test) => {
                 const matchingitem = ambInvoiceItems.find(item => item?.diagnostic_test_fk == test.pk)
-                const aggregateDueVal = Number(matchingitem?.meta_details?.price) - Number(matchingitem?.meta_details?.consession) + Number(matchingitem.meta_details?.gst)
-                let gstPer = Number(matchingitem.meta_details?.gst) * 100 / Number(matchingitem?.meta_details?.price);
+                let priceConsseion = Number(matchingitem?.meta_details?.price) - Number(matchingitem.meta_details?.consession)
                 let consessionPer = Number(matchingitem.meta_details?.consession) * 100 / Number(matchingitem?.meta_details?.price);
+                let gstPer = Number(matchingitem.meta_details?.gst) * 100 / priceConsseion;
+                const aggregateDueVal = Number(matchingitem?.meta_details?.price) - Number(matchingitem?.meta_details?.consession) + Number(matchingitem.meta_details?.gst)
                 return {
                     id: test?.pk,
                     name: test?.protocol,
@@ -233,7 +233,7 @@ const RegisterPatientForm = () => {
             updateState({
                 testTableData: [],
                 additionalChargeTable: [],
-                referredDoctor: [],
+                referredDoctor: null,
                 transactionTableData: [],
                 isDisabled: false,
                 totalAdditionalCharges: 0,
@@ -283,6 +283,7 @@ const RegisterPatientForm = () => {
             if (testTableData.length > 0) {
                 let totalTestPrice = 0;
                 let totalConsession = 0;
+                let consessionPrice = 0;
                 let totalGst = 0;
                 let entries = [];
                 const newTransactions = testTableData.forEach((test) => {
@@ -293,10 +294,10 @@ const RegisterPatientForm = () => {
                     if (test.consession && test.consession > 0) {
                         totalConsession = (totalConsession + (test.consession * test.price / 100))
                     }
-
+                    consessionPrice = test.price - (test.consession * test.price / 100)
                     // GST - Debit
                     if (test.gst && test.gst > 0) {
-                        totalGst = totalGst + (test.gst * test.price / 100);
+                        totalGst = totalGst + (test.gst * consessionPrice / 100);
                     }
                 });
 
@@ -380,13 +381,14 @@ const RegisterPatientForm = () => {
             let newitemFks = [];
             if (testTableData.length > 0) {
                 const testFk = testTableData.map((t) => {
+                    let priceConsseion = Number(t.price) - Number(t?.price * t?.consession / 100)
                     return (
                         {
                             diagnostic_test_fk: t?.id,
                             meta_details: {
                                 price: t?.price,
                                 consession: Number(t?.price * t?.consession / 100),
-                                gst: Number(t?.price * t?.gst / 100)
+                                gst: Number(priceConsseion * t?.gst / 100)
                             }
                         }
                     )
@@ -410,18 +412,18 @@ const RegisterPatientForm = () => {
             }
 
             compositeInvoice = {
-                invoice: { patient_fk: patientid, referrer_fk: referrerId , diagnostic_centre_fk: diagnosticcentre },
+                invoice: { patient_fk: patientid, referrer_fk: referrerId, diagnostic_centre_fk: diagnosticcentre },
                 items: newitemFks,
                 trans: fullTransaction
             }
-            console.log("composite invoice...", compositeInvoice);
 
-            printInvoiceId = await handleAddInvoice(login, compositeInvoice)          
+            printInvoiceId = await handleAddInvoice(login, compositeInvoice)
         }
-       
+
         router.push('/registeredpatients');
 
         const imageUrl = `${window.location.origin}/medicalInvoiceLogo.avif`;
+        const IsreferredBy = referredDoctor?.name ? ` ${referredDoctor?.name}` : ``;
         const htmlContent = `
         <html>
             <head>
@@ -451,11 +453,11 @@ const RegisterPatientForm = () => {
                      <div> <h2 style="color:#dddddd; margin: 0;"> ${selectedBranch?.name} </h2> </div>
                      </div> 
                                 <div style="display:flex; justify-content: space-between;"> 
-                                    <div style="width:25%">  
+                                    <div style="width:50%">  
                                         <b>Patient</b> : ${patientSelected?.name} <br/>
                                         <b>Age/Sex</b> :  ${patientSelected?.meta_details.ageYear}/${patientSelected?.meta_details.gender} <br/>
-                                        <b>Address</b> : ${patientSelected?.meta_details?.address} <br/>
                                         <b>mobile</b> : ${patientSelected?.mobile} <br/>
+                                        <b>Referred By</b> : ${IsreferredBy} <br/>
                                     </div>
                                     <div>  
                                         <b>DATE</b> :  <br/>
@@ -468,22 +470,22 @@ const RegisterPatientForm = () => {
 
                             <table>
                                     <tr>
-                                        <th>Data</th>
+                                        <th>Investigations</th>
                                         <th>Charges</th>
-                                         <th>GST</th>
-                                        <th>Discount</th>
+                                         <th>GST%</th>
+                                        <th>Discount%</th>
                                         <th>SubTotal</th>
                                     </tr>
                                     ${testTableData.map(test => `
                                             <tr>
                                             <td>${test.name}</td>
                                             <td>${test.price}</td>
-                                            <td>${test.gst}%</td>
-                                            <td>${test.consession}%</td>
+                                            <td>${test.gst}</td>
+                                            <td>${test.consession}</td>
                                             <td>${test.aggregateDue}</td>
                                             </tr>
                                         `).join('')
-                                     }
+            }
                                        ${additionalChargeTable.map(charge => `
                                                 <tr>
                                                   <td>${`Additional Charges`}</td>
@@ -493,7 +495,7 @@ const RegisterPatientForm = () => {
                                                     <td>${charge.subtTotalCharges}</td>
                                                 </tr>
                                             `).join('')
-                                        }
+            }
                                          <tr>
                                             <td colspan="4" style="text-align:right">Total</td>
                                             <td>${totalBillingAmount}</td>
@@ -512,13 +514,13 @@ const RegisterPatientForm = () => {
         }
         addPrintInvoice(printData)
 
-         updateState({
+        updateState({
             testTableData: [],
             patientSelected: null,
             additionalChargeTable: [],
             totalAdditionalCharges: 0,
             isDisabled: false,
-            referredDoctor: [],
+            referredDoctor: null,
             transactionTableData: [],
             totalBillingAmount: 0
         });
@@ -526,13 +528,13 @@ const RegisterPatientForm = () => {
 
     const handleAddInvoice = async (login: any, compositeInvoice: any) => {
         const data = await addInvoice(login, compositeInvoice);
-        console.log("data for invoice...", data);
         // updateState({invoicePk : data.pk})
         return data.pk;
     }
 
     useEffect(() => {
         const fetchData = async () => {
+            console.log("test api");
             const allTestsResult = await getTest();
             setAllTests(allTestsResult);
         };
@@ -550,7 +552,7 @@ const RegisterPatientForm = () => {
                 transactionTableData: [],
                 totalAdditionalCharges: 0,
                 isDisabled: false,
-                referredDoctor: [],
+                referredDoctor: null,
                 totalBillingAmount: 0
             });
         }
@@ -581,14 +583,20 @@ const RegisterPatientForm = () => {
                             // value={modality}
                             open={openPatient}
                             loading={loading}
-                            onOpen={() => {
-                                setOpenPatient(true)
-                                loadPatientData()
-                            }}
+                            // onOpen={() => {
+                            //     setOpenPatient(true)
+                            //     loadPatientData()
+                            // }}
                             onClose={() => {
                                 setOpenPatient(false)
                             }}
                             onChange={(e, newValue) => patientsearchData(newValue)}
+                            onInputChange={(event, value) => {
+                                if (value.length >= 4) {
+                                      setOpenPatient(true)
+                                    loadPatientData(value); 
+                                }
+                            }}
                             size="small"
                             className="w-full md:w-1/2"
                             getOptionLabel={(option) => option.name}

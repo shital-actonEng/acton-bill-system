@@ -1,4 +1,3 @@
-import React from 'react'
 
 const URL = 'api/testRecord'
 
@@ -37,7 +36,6 @@ const getTest = async () =>{
 }
 
 const updateTest = async (data : any) => {
-    console.log("update data is.. ", data)
     try {
         const responce = await fetch(URL , {
             method : "PUT",

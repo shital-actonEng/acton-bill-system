@@ -225,6 +225,7 @@ const BillingTable = () => {
     columns,
     data,
     initialState: { pagination: { pageSize: 5, pageIndex: 0, } },
+     enableDensityToggle : false ,
   });
 
   return (

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -18,7 +18,7 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import { MRT_Localization_EN } from 'material-react-table/locales/en';
 import { getInvoice } from "@/express-api/invoices/page";
 import { useBranchStore } from "@/stores/branchStore";
-import { Search} from "@mui/icons-material";
+import { Search } from "@mui/icons-material";
 
 // Extend dayjs with plugins
 dayjs.extend(isSameOrAfter);
@@ -55,8 +55,11 @@ type Patient = {
 }
 
 const PatientHistoryTable = () => {
-  const [fromDate, setFromDate] = useState<Dayjs | null>(null);
-  const [toDate, setToDate] = useState<Dayjs | null>(null);
+  // const [fromDate, setFromDate] = useState<Dayjs | null>(null);
+  const todayDate = dayjs(new Date());
+  const fromDateRef = useRef<Dayjs | null>(dayjs(todayDate));
+  // const [toDate, setToDate] = useState<Dayjs | null>(null);
+  const toDateRef = useRef<Dayjs | null>(dayjs(todayDate));
   const [data, setData] = useState<Patient[]>([]);
   const branch = useBranchStore((state) => state.selectedBranch);
 
@@ -64,60 +67,62 @@ const PatientHistoryTable = () => {
     const diagnosticCentreId = branch?.pk;
     // const invoiceData = await getInvoice(diagnosticCentreId, "A");
     const today = dayjs(new Date()).format('YYYY-MM-DD');
-     let invoiceData ;
+    let invoiceData;
     // const invoiceData = await getInvoice("A");
-    if(fromDate || toDate){
-         invoiceData = await getInvoice(diagnosticCentreId, fromDate?.format('YYYY-MM-DD') , toDate?.format('YYYY-MM-DD'), "A");
+    const fromDate = fromDateRef.current;
+    const toDate = toDateRef.current;
+    if (fromDate || toDate) {
+      invoiceData = await getInvoice(diagnosticCentreId, fromDate?.format('YYYY-MM-DD'), toDate?.format('YYYY-MM-DD'), "A");
     }
-    else{
-        invoiceData = await getInvoice(diagnosticCentreId, today , today,  "A");
+    else {
+      invoiceData = await getInvoice(diagnosticCentreId, today, today, "A");
     }
-     const newData = invoiceData.map((invoice: any) => {
-          let balance = 0
-          invoice.amb_invoice_trans.forEach((amountIn: any) => {
-            balance = balance + amountIn.amount
-          })
+    const newData = invoiceData.map((invoice: any) => {
+      let balance = 0
+      invoice.amb_invoice_trans.forEach((amountIn: any) => {
+        balance = balance + amountIn.amount
+      })
 
-          let patientDetails = invoice.amb_patient;
-          let referredDetails = invoice.amb_referrer;
-          let transactions = invoice.amb_invoice_trans;
-          let totalGST = 0;
-          let totalDiscount = 0;
-          let totalPrice = 0;
-          transactions.forEach((ele: any) => {
-            if (ele.comments.includes("GST")) {
-              totalGST = totalGST + ele.amount;
-            }
-            if (ele.comments.includes("Discount")) {
-              totalDiscount = totalDiscount + (- ele.amount);
-            }
-            if (ele.comments.includes("Price")) {
-              totalPrice = totalPrice + ele.amount;
-            }
-            console.log("total gst is...", totalGST);
-          });
-          return {
-            invoiceId: invoice.pk,
-            date: dayjs(invoice.updatedAt).toISOString(),
-            name: patientDetails?.name,
-            mobile: patientDetails.mobile,
-            // tests : [],
-            referredBy: referredDetails?.name,
-            totalGST: totalGST,
-            totalDiscount: totalDiscount,
-            totalPrice: totalPrice,
-            balance: balance,
-            status: invoice?.status,
-            patientInfo: patientDetails,
-            // Actions : HTMLInputElement
-          }
+      let patientDetails = invoice.amb_patient;
+      let referredDetails = invoice.amb_referrer;
+      let transactions = invoice.amb_invoice_trans;
+      let totalGST = 0;
+      let totalDiscount = 0;
+      let totalPrice = 0;
+      transactions.forEach((ele: any) => {
+        if (ele.comments.includes("GST")) {
+          totalGST = totalGST + ele.amount;
+        }
+        if (ele.comments.includes("Discount")) {
+          totalDiscount = totalDiscount + (- ele.amount);
+        }
+        if (ele.comments.includes("Price")) {
+          totalPrice = totalPrice + ele.amount;
+        }
+        console.log("total gst is...", totalGST);
+      });
+      return {
+        invoiceId: invoice.pk,
+        date: dayjs(invoice.updatedAt).toISOString(),
+        name: patientDetails?.name,
+        mobile: patientDetails.mobile,
+        // tests : [],
+        referredBy: referredDetails?.name,
+        totalGST: totalGST,
+        totalDiscount: totalDiscount,
+        totalPrice: totalPrice,
+        balance: balance,
+        status: invoice?.status,
+        patientInfo: patientDetails,
+        // Actions : HTMLInputElement
+      }
 
-        }).filter(Boolean)
+    }).filter(Boolean)
 
-        setData(newData);
+    setData(newData);
   };
 
-  useEffect(() => { 
+  useEffect(() => {
     fetchInvoiceData();
   }, [branch?.pk])
 
@@ -170,7 +175,7 @@ const PatientHistoryTable = () => {
       },
 
     ],
-    [fromDate, toDate]
+    [fromDateRef.current, toDateRef.current]
   );
 
   const table = useMaterialReactTable({
@@ -178,6 +183,7 @@ const PatientHistoryTable = () => {
     data: data,
     initialState: { pagination: { pageSize: 5, pageIndex: 0, } },
     enableColumnFilters: true,
+    enableDensityToggle: false,
     ...MRT_Localization_EN,
     muiTopToolbarProps: {
       sx: {
@@ -188,18 +194,20 @@ const PatientHistoryTable = () => {
       <Box display="flex" alignItems="center" gap={2} px={2}>
         <DatePicker
           label="From"
-          value={fromDate}
-          onChange={(newValue) => setFromDate(newValue)}
+          value={fromDateRef.current}
+          // onChange={(newValue) => setFromDate(newValue)}
+          onChange={(newValue) => (fromDateRef.current = newValue)}
           slotProps={{ textField: { size: "small" } }}
         />
         <DatePicker
           label="To"
-          value={toDate}
-          onChange={(newValue) => setToDate(newValue)}
+          value={toDateRef.current}
+          // onChange={(newValue) => setToDate(newValue)}
+          onChange={(newValue) => (toDateRef.current = newValue)}
           slotProps={{ textField: { size: "small" } }}
         />
         <Button startIcon={<Search />} variant="outlined" onClick={handleFilteredInvoices}>
-          Search 
+          Search
         </Button>
       </Box>
     ),

@@ -8,7 +8,7 @@ import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import { useForm, Controller } from 'react-hook-form';
 import { addTest, getTest, updateTest } from '@/express-api/testRecord/page';
 import { useBranchStore } from '@/stores/branchStore';
-import { useGetApiStore } from '@/stores/getApiStore';
+import { getModalities } from '@/express-api/modalities/page';
 
 type Test = {
   pk: number;
@@ -17,6 +17,7 @@ type Test = {
   protocol: string;
   price: string;
   diagnostic_centre_fk: string;
+  modality_type_fk: number;
   meta_details: {
     gst: string;
     discount_min_range: string;
@@ -24,8 +25,14 @@ type Test = {
     referrel_bonus: string;
     referrel_bonus_percentage: string;
   };
-  deleted: string;
+  deleted: boolean;
 };
+
+type Modality = {
+  pk: number;
+  name: string;
+  description: string;
+}
 
 
 const TestRecords = () => {
@@ -35,7 +42,7 @@ const TestRecords = () => {
       bodyPart: '',
       test: '',
       price: '',
-      gst: '',
+      gst: '0',
       referrelBonusPercentage: '',
       referrelBonus: '',
       discountMinRange: '',
@@ -43,16 +50,14 @@ const TestRecords = () => {
     }
   });
 
-  const [modality, setModality] = useState("");
-  const [testData, setTestData] = useState<{ modality: string; body_part: string; protocol: string; price: string; diagnostic_centre_fk: string; }[]>([]);
+  // const [modality, setModality] = useState("");
+  const [testData, setTestData] = useState<Test[]>([]);
   const [filteredModality, setFilteredModality] = useState<{ id: number, label: string }[]>([]);
-  const [uniqueModality, setUniqueModality] = useState<{ id: number, label: string }[]>([]);
+  const [uniqueModality, setUniqueModality] = useState<Modality[]>([]);
+  const [selectedModality, setSelectedModality] = useState("");
   const [bodyPartValue, setBodyPartValue] = useState("");
   const [selectedTest, setSelectedTest] = useState<Test>()
   const branch = useBranchStore((state) => state.selectedBranch);
-  // const {modalitiesData , fetchModalitiesData} = useGetApiStore()
-  const modalitiesData = useGetApiStore((state) => state.modalitiesData);
-  const fetchModalitiesData = useGetApiStore((state) => state.fetchModalitiesData);
   let [testOptions, setTestOptions] = useState<Test[]>([]);
   const [isTestCheck, setIsTestCheck] = useState(false);
   let foundTest: Test | undefined;
@@ -60,31 +65,24 @@ const TestRecords = () => {
   const gstItem = [0, 5, 12, 18, 28];
 
   useEffect(() => {
-    setTestData(jsonData);
-    const uniqueModalities = jsonData
-      .filter((item, index, self) =>
-        index === self.findIndex((t) => t.modality === item.modality)
-      )
-      .map((item, index) => ({
-        id: index,
-        label: item.modality,
-      }));
-    setUniqueModality(uniqueModalities);
-    fetchModalitiesData();
-
-  }, []);
-
-  // set test option by fetching all Tests 
-  useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await getTest();
+        const resultTest = await getTest();
+        const resultModalities = await getModalities();
+
+        const uniqueModalityFiltered: Modality[] = Array.from(
+          new Map(resultModalities.map((item: Modality) => [item.description, item])).values()
+        ) as Modality[];
+
+        setUniqueModality(uniqueModalityFiltered);
+
         if (!branch) return;
-        const filteredResult = result.filter((item: any) => 
+        const filteredResult = resultTest.filter((item: any) =>
           item.diagnostic_centre_fk === branch.pk && item.deleted === null
-      );
+        );
+
         setTestOptions(filteredResult);
-        console.log("tests are...", testOptions);
+        setTestData(filteredResult);
       } catch (error) {
         console.error("Error fetching test data:", error);
       }
@@ -94,28 +92,22 @@ const TestRecords = () => {
 
 
   const handleModality = (selectmodality: any) => {
-    // console.log("new value is...", selectmodality);
-    setModality(selectmodality);
     if (selectmodality === null) {
+       setTestOptions(testData);
+       setSelectedModality("");
       return;
     }
-    reset((prev) => ({
-      ...prev,
-      // modality: selectmodality.label
-      modality: selectmodality
-    }));
-    const modalities = testData.filter((test) =>
-      test.modality.toLowerCase().includes(selectmodality.toLowerCase())
-    );
-    const uniqueBodyParts = modalities
-      .filter((item, index, self) =>
-        index === self.findIndex((t) => t.body_part === item.body_part)
-      )
-      .map((item, index) => ({
+    setSelectedModality(selectmodality);
+    let selectedModalityObj = uniqueModality.find((m) => m.description.toLowerCase() === selectmodality.toLowerCase());
+
+     const filterTest = testData.filter((t) => t.modality_type_fk === selectedModalityObj?.pk)
+    const uniqueBodyParts = filterTest.map((item, index) => ({
         id: index,
         label: item.body_part,
-      }));
+      }))
     setFilteredModality(uniqueBodyParts);
+
+    setTestOptions(filterTest);
   };
 
   const handleBodyParts = (body_parts: any) => {
@@ -137,13 +129,12 @@ const TestRecords = () => {
   const handleTest = (e: any, test: any, source: any) => {
     setSelectedTest(test);
     foundTest = testOptions.find((t) => t.protocol == test)
-    console.log("finded test is...", foundTest);
-
     if (foundTest) {
+        let modalityFound = uniqueModality.find((m) => m.pk === foundTest?.modality_type_fk )
       setSelectedTest(foundTest);
       // Set values in form from found test
       setValue('test', foundTest.protocol);
-      setValue('modality', foundTest.modality);
+      setValue('modality', modalityFound?.description || '');
       setValue('bodyPart', foundTest.body_part);
       setValue('price', foundTest.price);
       setValue('gst', foundTest.meta_details.gst);
@@ -153,9 +144,9 @@ const TestRecords = () => {
       setValue('discountMaxRange', foundTest.meta_details.discount_max_range);
 
       // Update Modality & Body Part UI selections
-      setModality(foundTest.modality);
+      // setModality(foundTest.modality);
       setBodyPartValue(foundTest.body_part);
-
+      setSelectedModality(modalityFound?.description || "");
       setIsTestCheck(true)
     } else {
       // If user types a new test not in options
@@ -179,7 +170,8 @@ const TestRecords = () => {
       discountMaxRange: ''
     });
     setBodyPartValue("");
-    setModality("");
+    setSelectedModality("");
+    // setModality("");
 
   };
 
@@ -194,10 +186,10 @@ const TestRecords = () => {
       console.warn("Form validation failed");
       return;
     }
-    // console.log("Test data is...", data);
-    if (data) { 
+    let selectedModalityObj = uniqueModality.find((m) => m.description.toLowerCase() === selectedModality.toLowerCase());
+    if (data) {
       const payload = {
-        modality: data.modality,
+        // modality: selectedModality,
         body_part: data.bodyPart,
         protocol: data.test,
         price: data.price,
@@ -208,8 +200,10 @@ const TestRecords = () => {
           referrel_bonus: data.referrelBonus,
           referrel_bonus_percentage: data.referrelBonusPercentage
         },
-        diagnostic_centre_fk: branch?.pk
+        diagnostic_centre_fk: branch?.pk,
+        modality_type_fk: selectedModalityObj?.pk
       }
+      console.log("payload is...", payload);
       addTest(payload);
     }
     handleClear();
@@ -220,7 +214,7 @@ const TestRecords = () => {
 
     const updatedTest: Test = {
       ...selectedTest,
-      deleted: "yes", 
+      deleted: true,
     };
     console.log("found delete test is...", updatedTest);
     updateTest(updatedTest);
@@ -232,20 +226,20 @@ const TestRecords = () => {
   const watchReferrelBonus = watch('referrelBonus');
   const watchPrice = watch('price');
 
-  const calculateBonusInAmount = () =>{
+  const calculateBonusInAmount = () => {
     const price = Number(watchPrice);
-      const bonusPercentage = Number(watchReferrelBonusPercentage);
-      const referrelBonusAmount = (price * bonusPercentage) / 100;
-      setValue('referrelBonus', referrelBonusAmount.toString());
+    const bonusPercentage = Number(watchReferrelBonusPercentage);
+    const referrelBonusAmount = (price * bonusPercentage) / 100;
+    setValue('referrelBonus', referrelBonusAmount.toString());
   }
 
-  const calculateBonusInPercentage = () =>{
-     const price = Number(watchPrice);
-      const referrelBonusAmount = Number(watchReferrelBonus);
-      if (price !== 0) {
-        const bonusPercentage = (referrelBonusAmount * 100) / price;
-        setValue('referrelBonusPercentage', bonusPercentage.toString());
-      }
+  const calculateBonusInPercentage = () => {
+    const price = Number(watchPrice);
+    const referrelBonusAmount = Number(watchReferrelBonus);
+    if (price !== 0) {
+      const bonusPercentage = (referrelBonusAmount * 100) / price;
+      setValue('referrelBonusPercentage', bonusPercentage.toString());
+    }
   }
 
   return (
@@ -263,23 +257,23 @@ const TestRecords = () => {
           <Autocomplete
             disablePortal
             id="combo-box-modality"
-            options={uniqueModality.map((m) => m.label)}
+            // options={uniqueModality}
+            // value={selectedModality || null}
+            options={uniqueModality.map((m) => m.description)}
+            value={selectedModality}
             onChange={(e, newValue) => handleModality(newValue)}
             size="small"
             className="w-full md:w-1/2"
-            // getOptionLabel={(option) => option.label}
-            value={modality || null}
-            getOptionLabel={(option) => typeof option === 'string' ? option : option}
-            // isOptionEqualToValue={(option, value) => option.label === value.label}
-            // renderOption={(props, option, { index }) => (
-            //   <li {...props} key={`${option.label}-${index}`}>
-            //     {option.label}
-            //   </li>
-            // )}
             renderInput={(params) => (
-              <TextField {...params} label="Select Modality" variant="outlined" required />
+              <TextField
+                {...params}
+                label="Select Modality"
+                variant="outlined"
+                required
+              />
             )}
           />
+
         </div>
 
         <Divider className="my-6" />
@@ -295,6 +289,7 @@ const TestRecords = () => {
               options={filteredModality}
               value={bodyPartValue || null}
               onChange={(e, newValue) => handleBodyParts(newValue)}
+              onInputChange={(e, newValue) => handleBodyParts(newValue)}
               size="small"
               className="w-full md:w-11/12"
               renderOption={(props, option, { index }) => (
@@ -307,13 +302,13 @@ const TestRecords = () => {
               )}
             />
 
-              {/* Select Test */}
+            {/* Select Test */}
             <Autocomplete
               freeSolo
               disablePortal
               options={testOptions.map((test) => test.protocol)}
               value={selectedTest?.protocol}
-                className="w-full md:w-11/12"
+              className="w-full md:w-11/12"
               onChange={(e, newValue, source) => handleTest(e, newValue, 'change')}
               onInputChange={(e, newValue, source) => handleTest(e, newValue, 'input')}
               renderInput={(params) => (
@@ -331,6 +326,7 @@ const TestRecords = () => {
               <Controller
                 name="price"
                 control={control}
+                rules={{ required: "Price is required" }}
                 render={({ field }) => (
                   <TextField
                     {...field}

@@ -7,6 +7,8 @@ import { getReferrer } from '@/express-api/referrer/page';
 import { getTest } from '@/express-api/testRecord/page';
 import { useBranchStore } from '@/stores/branchStore';
 import { useBillingStore } from '@/stores/billingStore';
+import { useGlobalApiStore } from '@/stores/globalApiStore';
+import { getModalities } from '@/express-api/modalities/page';
 
 
 // Utility function
@@ -68,7 +70,12 @@ const TestRow: React.FC<TestRowProps> = React.memo(
                 <TableCell align="center" className='py-0'>
                     <TextField
                         id={`consession-${data.id}`}
-                        label="Consession%"
+                        // label="Consession%"
+                        label={<>
+                            Consession (
+                            <CurrencyRupee fontSize="inherit" />
+                            {((data.consession * data.price) / 100)})
+                        </>}
                         variant="standard"
                         // type="number"
                         size="small"
@@ -80,7 +87,12 @@ const TestRow: React.FC<TestRowProps> = React.memo(
                 <TableCell align="center" className='py-0'>
                     <TextField
                         id={`gst-${data.id}`}
-                        label="GST%"
+                        // label="GST%"
+                        label={<>
+                            GST (
+                            <CurrencyRupee fontSize="inherit" />
+                            {((data.gst * (data.price - ((data.consession * data.price) / 100))) / 100)})
+                        </>}
                         variant="standard"
                         // type="number"
                         size="small"
@@ -119,7 +131,9 @@ type Test = {
     body_part: string;
     protocol: string;
     price: string;
+    deleted: boolean;
     diagnostic_centre_fk: string;
+     modality_type_fk: number;
     meta_details: {
         gst: string;
         discount_min_range: string;
@@ -129,57 +143,30 @@ type Test = {
     };
 };
 
-// type TestTable = {
-//     id: number;
-//     name: string; price: number;
-//     consession: number; gst: number;
-//     comment: string; aggregateDue: number;
-//     discountMin: string; discountMax: string
-// }
+type Modality = {
+    pk: number;
+    name: string;
+    description: string;
+}
 
-type TestChargeTableProps = {
-    // onTotalTestChange: (total: number) => void;
-    // onTestChange: (testTable: TestTable[]) => void;
-    // onReferrerChange: ({ }) => void;
-};
 
-const TestPriceTable: React.FC<TestChargeTableProps> = () => {
-    // const [referredDoctor, setReferredDoctor] = useState({});
+const TestPriceTable = () => {
     const [loading, setLoading] = useState(false);
     const [selectReferreing, setSelectReferreing] = useState([]);
-    const [uniqueBodyParts, setUniqueBodyParts] = useState<{
-        modality: string; body_part: string; protocol: string; price: string; diagnostic_centre_fk: string; meta_details: {
-            gst: string;
-            discount_min_range: string;
-            discount_max_range: string;
-            referrel_bonus: string;
-            referrel_bonus_percentage: string
-        }
-    }[]>([]);
-
+    const [uniqueModalities, setUniqueModalities] = useState<Modality[]>([]);
+    const [uniqueBodyParts, setUniqueBodyParts] = useState<Test[]>([]);
+    const [selectedModality, setSelectedModality] = useState("");
     const [selectedTest, setSelectedTest] = useState<Test[]>([]);
-    // const [testData, setTestData] = useState<{
-    //     pk : number ;
-    //     modality: string; body_part: string; protocol: string; price: string; diagnostic_centre_fk: string; meta_details: {
-    //         gst: string;
-    //         discount_min_range: string;
-    //         discount_max_range: string;
-    //         referrel_bonus: string;
-    //         referrel_bonus_percentage: string
-    //     }
-    // }[]>([]);
     const [testData, setTestData] = useState<Test[]>([]);
-    // const [testTableData, setTestTableData] = useState<{ id: number; name: string; price: number; consession: number; gst: number; comment: string; aggregateDue: number; discountMin: string; discountMax: string }[]>([]);
-    // const [testTableData, setTestTableData] = useState<TestTable[]>([]);
     const [consessionUpto, setConsessionUpto] = useState<{ discountMin: string; discountMax: string; name: string } | undefined>();
-    // const [subTotalPrice, setSubTotalPrice] = useState(0);
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const open = Boolean(anchorEl);
     const branch = useBranchStore((state) => state.selectedBranch);
-    const { updateState , isDisabled } = useBillingStore();
+    const { updateState, isDisabled } = useBillingStore();
     const subTotalPrice = useBillingStore((state) => state.subTotalPrice);
     const testTableData = useBillingStore((state) => state.testTableData);
-    const referredDoctor = useBillingStore((state) => state.referredDoctor );
+    const referredDoctor = useBillingStore((state) => state.referredDoctor);
+
 
     const loadReferral = async () => {
         try {
@@ -193,25 +180,23 @@ const TestPriceTable: React.FC<TestChargeTableProps> = () => {
             setLoading(false);
         }
     }
-    const uniqueModalities = useMemo(() => {
-        const result = getUniqueOptions(jsonData, "modality");
-        return result;
-    }, [jsonData]);
-
-    // const uniqueBodyPart = useMemo(() => {
-    //     if (!jsonData) return [];
-    //     const result = getUniqueOptions(jsonData, "body_part");
-    //     return result;    
-    // }, [jsonData]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const result = await getTest();
+                const resultModalities = await getModalities();
+
+                const uniqueModalityFiltered: Modality[] = Array.from(
+                    new Map(resultModalities.map((item: Modality) => [item.description, item])).values()
+                ) as Modality[];
+
+                setUniqueModalities(uniqueModalityFiltered);
+
                 if (!branch) return;
-                const filteredResult = result.filter((item : any) =>
-                     item.diagnostic_centre_fk === branch.pk && item.deleted == null
-            );
+                const filteredResult = result.filter((item: any) =>
+                    item.diagnostic_centre_fk === branch.pk && item.deleted == null
+                );
                 setTestData(filteredResult);
                 setSelectedTest(filteredResult);
                 const resultBodyParts = getUniqueOptions(result, "modality");
@@ -224,15 +209,18 @@ const TestPriceTable: React.FC<TestChargeTableProps> = () => {
     }, [branch])
 
     const handleModality = (selectmodality: any) => {
-        const modalities = testData.filter((test) =>
-            test.modality.toLowerCase().includes(selectmodality.label.toLowerCase())
-        )
-        // for filtered and unique body parts according to modality
-        const uniqueBodyParts = modalities
-            .filter((item, index, self) =>
-                index === self.findIndex((t) => t.body_part === item.body_part)
-            );
-        setUniqueBodyParts(uniqueBodyParts);
+
+        if (selectmodality === null) {
+            setSelectedTest(testData);
+            setSelectedModality("");
+            return;
+        }
+        setSelectedModality(selectmodality);
+        let selectedModalityObj = uniqueModalities.find((m) => m.description.toLowerCase() === selectmodality.toLowerCase());
+
+        const filterTest = testData.filter((t) => t.modality_type_fk === selectedModalityObj?.pk)
+        setUniqueBodyParts(filterTest);
+        setSelectedTest(filterTest);
     }
 
     const handleBodyParts = (body_parts: any) => {
@@ -256,7 +244,7 @@ const TestPriceTable: React.FC<TestChargeTableProps> = () => {
         const aggregateDueVal = Number(item.price) + gstCal;
         const newTest = {
             id: item.pk,
-            name:  item.protocol,
+            name: item.protocol,
             price: Number(item.price),
             gst: Number(item.meta_details.gst),
             consession: 0,
@@ -266,7 +254,7 @@ const TestPriceTable: React.FC<TestChargeTableProps> = () => {
             discountMax: item.meta_details.discount_max_range
         }
 
-        updateState({ testTableData : [...testTableData , newTest] })
+        updateState({ testTableData: [...testTableData, newTest] })
     }
 
     useEffect(() => {
@@ -300,11 +288,11 @@ const TestPriceTable: React.FC<TestChargeTableProps> = () => {
 
     const handleConsessionChange = (id: number, e: any) => {
         const value = e.target.value;
-        const updateTestTable =  testTableData.map((item) => {
+        const updateTestTable = testTableData.map((item) => {
             if (item.id === id) {
                 const aggregateDue = (item.price - (item.price * Number(value) / 100))
-                // const gstAmount = item.gst * aggregateDue / 100
-                const gstAmount = item.gst * item.price / 100
+                const gstAmount = item.gst * aggregateDue / 100
+                // const gstAmount = item.gst * item.price / 100
                 return {
                     ...item,
                     consession: Number(value),
@@ -312,9 +300,9 @@ const TestPriceTable: React.FC<TestChargeTableProps> = () => {
                 }
             }
             return item
-        } 
+        }
         )
-        updateState({testTableData : updateTestTable})
+        updateState({ testTableData: updateTestTable })
     };
 
     const handleGstChange = (id: number, e: any) => {
@@ -326,11 +314,11 @@ const TestPriceTable: React.FC<TestChargeTableProps> = () => {
             item.id === id ? { ...item, comment: event.target.value } : item
         );
         // setTestTableData(updatedData);
-        updateState({testTableData : updatedData});
+        updateState({ testTableData: updatedData });
     };
 
     const handleReferrer = (e: any) => {
-        updateState({referredDoctor : e.target.value});
+        updateState({ referredDoctor: e.target.value });
     }
 
     return (
@@ -342,11 +330,11 @@ const TestPriceTable: React.FC<TestChargeTableProps> = () => {
                         <Select
                             labelId="referred_doctor"
                             id="referred_doctor"
-                            value={referredDoctor.name ?? ""}
+                            value={referredDoctor?.name ?? ""}
                             onChange={handleReferrer}
                             onOpen={loadReferral}
                             displayEmpty
-                            disabled = {isDisabled}
+                            disabled={isDisabled}
                             renderValue={(selected) => {
                                 if (selected === "") {
                                     return "Referred Doctor";
@@ -386,18 +374,12 @@ const TestPriceTable: React.FC<TestChargeTableProps> = () => {
                     disablePortal
                     id="combo-box-modality"
                     // Map testData to include an id (using index if no unique id exists)
-                    options={uniqueModalities}
-                    disabled = {isDisabled}
+                    options={uniqueModalities.map((m) => m.description)}
+                    value={selectedModality}
+                    disabled={isDisabled}
                     onChange={(e, newValue) => handleModality(newValue)}
                     size="small"
                     className="w-full md:w-[45%]"
-                    getOptionLabel={(option) => option.label}
-                    isOptionEqualToValue={(option, value) => option.label === value.label}
-                    renderOption={(props, option, { index }) => (
-                        <li {...props} key={`${option.label}-${index}`}>
-                            {option.label}
-                        </li>
-                    )}
                     renderInput={(params) => (
                         <TextField {...params} label="Select Modality" variant="outlined" />
                     )}
@@ -410,7 +392,7 @@ const TestPriceTable: React.FC<TestChargeTableProps> = () => {
                     options={uniqueBodyParts.map((t, index) => ({ id: index, label: t.body_part }))}
                     onChange={(e, newValue) => handleBodyParts(newValue)}
                     size="small"
-                    disabled = {isDisabled}
+                    disabled={isDisabled}
                     className="w-full md:w-[45%]"
                     getOptionLabel={(option) => option.label}
                     isOptionEqualToValue={(option, value) => option.label === value.label}
@@ -428,7 +410,7 @@ const TestPriceTable: React.FC<TestChargeTableProps> = () => {
                 <Autocomplete
                     disablePortal
                     id="combo-box-test"
-                    disabled = {isDisabled}
+                    disabled={isDisabled}
                     // Map testData to include an id (using index if no unique id exists)
                     options={selectedTest.map((t, index) => ({ id: index, label: t.protocol }))}
                     onChange={(e, newValue) => handleTestTable(newValue)}

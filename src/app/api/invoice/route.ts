@@ -16,7 +16,6 @@ export async function GET(req:NextRequest) {
          if(fromDate || toDate){
             url = `${URL}?diagnostic_centre_fk=${diagnosticCentreId}&fromDate=${fromDate}&toDate=${toDate}&status=${status}` 
          }
-         console.log("inside route date form...", url);
         const res = await fetch(url , {
             method : 'GET',
             headers : {

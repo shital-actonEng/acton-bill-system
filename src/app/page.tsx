@@ -1,15 +1,24 @@
 "use client"
-import { Checkbox } from '@mui/material';
-import Button from '@mui/material/Button';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-// import CsvToJsonConverter from '@/components/CsvToJsonConverter';
+
+import { getTest } from "@/express-api/testRecord/page";
+import { useEffect } from "react";
+import { useGlobalApiStore } from "@/stores/globalApiStore";
 
 export default function Home() {
+  const {updateApiState} = useGlobalApiStore();
+
+   useEffect(() => {
+          const fetchData = async () => {
+              try {
+                  const resultTest = await getTest();
+                  updateApiState({ globalTestData : resultTest })
+              } catch (error) {
+                  console.error("Error fetching test data:", error);
+              }
+          };
+          fetchData();
+      }, [])
+
   return (
     <div >
       {/* <CsvToJsonConverter /> */}
