@@ -147,7 +147,7 @@ const ReferralDashboard = () => {
               />
             ) : (
               <Typography className="font-semibold text-base" align="center">
-                Search for a Physician or click   "Add New Physician"   to create a new record.
+                {'Search for a Physician or click   "Add New Physician"   to create a new record.'}
               </Typography>
             )}
         </Paper>

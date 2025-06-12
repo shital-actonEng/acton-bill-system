@@ -8,7 +8,7 @@ const URL = `${apiUrl}/patient`
 export async function GET(req : NextRequest){
     try {
         const name = req.nextUrl.searchParams.get('name');
-        let url = name ? `${URL}?name=${name}` : URL ;
+        const url = name ? `${URL}?name=${name}` : URL ;
         const res = await fetch(url , {
             method : 'GET',
             headers : {

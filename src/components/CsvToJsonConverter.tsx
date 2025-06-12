@@ -39,7 +39,7 @@
 // export default CsvToJsonConverter;
 
 import React from 'react';
-import { GetStaticProps, NextPage } from 'next';
+import { GetStaticProps } from 'next';
 
 
 interface CsvDataItem {

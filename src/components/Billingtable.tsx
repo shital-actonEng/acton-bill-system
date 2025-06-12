@@ -4,10 +4,9 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
   type MRT_ColumnDef,
-  type MRT_Cell
 } from 'material-react-table';
 import { getInvoice, getPrintinvoice, updateStatus } from '@/express-api/invoices/page';
-import { Alert, Chip, IconButton, Pagination, Snackbar, SnackbarCloseReason, Tooltip } from '@mui/material';
+import { Alert, Chip, IconButton, Snackbar, SnackbarCloseReason, Tooltip } from '@mui/material';
 import { Edit, Print, CheckCircle } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
 import { useBillingStore } from '@/stores/billingStore';
@@ -66,7 +65,7 @@ const BillingTable = () => {
 
   const handleDispatch = async (rowData: any) => {
     const invoicePk = rowData.invoiceId;
-    const data = await updateStatus(invoicePk, "A");
+     await updateStatus(invoicePk, "A");
     // router.push('/history')
     setIsDispatch(true);
   }
@@ -113,8 +112,8 @@ const BillingTable = () => {
       async () => {
         const invoiceData = await fetchInvoiceData();
         const newData = invoiceData.map((invoice: any) => {
-          let patientDetails = invoice.amb_patient;
-          let referredDetails = invoice.amb_referrer;
+          const patientDetails = invoice.amb_patient;
+          const referredDetails = invoice.amb_referrer;
           const date = new Date(invoice.createdAt);
           let balance = 0
           invoice.amb_invoice_trans.forEach((amountIn: any) => {

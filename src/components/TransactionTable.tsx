@@ -20,7 +20,7 @@ const TransactionTable = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {filteredTransaction.map((data, index) => (
+                        {filteredTransaction.map((data) => (
                             <TableRow key={data.pk}>
                                  <TableCell>
                                     {/* {data.updatedAt} */}

@@ -1,5 +1,4 @@
-import { Box, Button, Container, Paper, Typography } from '@mui/material'
-import Link from 'next/link'
+import { Box, Container, Paper, Typography } from '@mui/material'
 import React from 'react'
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import RegisterPatientForm from '@/components/RegisterPatientForm';

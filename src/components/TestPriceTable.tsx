@@ -1,13 +1,11 @@
-import { Alert, Autocomplete, FormControl, IconButton, MenuItem, Popover, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from '@mui/material';
+import { Alert, Autocomplete, FormControl, IconButton, MenuItem, Popover, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip } from '@mui/material';
 import Link from 'next/link';
-import React, { useEffect, useMemo, useState } from 'react'
-import jsonData from '../../data/testsData.json';
+import React, { useEffect, useState } from 'react'
 import { AddCircle, DeleteOutline, CurrencyRupee } from '@mui/icons-material';
 import { getReferrer } from '@/express-api/referrer/page';
 import { getTest } from '@/express-api/testRecord/page';
 import { useBranchStore } from '@/stores/branchStore';
 import { useBillingStore } from '@/stores/billingStore';
-import { useGlobalApiStore } from '@/stores/globalApiStore';
 import { getModalities } from '@/express-api/modalities/page';
 
 
@@ -43,7 +41,7 @@ interface TestRowProps {
     data: TestData;
     handlePopoverOpen: (event: React.MouseEvent<HTMLElement>, consessionUpto: any) => void;
     handlePopoverClose: () => void;
-    handleConsessionChange: (id: number, event: React.ChangeEvent<HTMLInputElement>) => void;
+    handleConsessionChange: (id: number, event: React.ChangeEvent<HTMLInputElement> , consessionUpto: any) => void;
     handleGstChange: (id: number, event: React.ChangeEvent<HTMLInputElement>) => void;
     handleCommentChange: (id: number, event: React.ChangeEvent<HTMLInputElement>) => void;
     deleteTest: (data: TestData) => void;
@@ -80,7 +78,7 @@ const TestRow: React.FC<TestRowProps> = React.memo(
                         // type="number"
                         size="small"
                         value={data.consession || ""}
-                        onChange={(e) => handleConsessionChange(data.id, e)}
+                        onChange={(e) => handleConsessionChange(data.id, e , consessionUpto)}
                         InputLabelProps={{ style: { fontSize: '0.75rem' } }}
                     />
                 </TableCell>
@@ -166,7 +164,7 @@ const TestPriceTable = () => {
     const subTotalPrice = useBillingStore((state) => state.subTotalPrice);
     const testTableData = useBillingStore((state) => state.testTableData);
     const referredDoctor = useBillingStore((state) => state.referredDoctor);
-
+    const [isConsessionRange , setIsConsessionRange] = useState(false);
 
     const loadReferral = async () => {
         try {
@@ -199,7 +197,7 @@ const TestPriceTable = () => {
                 );
                 setTestData(filteredResult);
                 setSelectedTest(filteredResult);
-                const resultBodyParts = getUniqueOptions(result, "modality");
+                // const resultBodyParts = getUniqueOptions(result, "modality");
                 setUniqueBodyParts(result);
             } catch (error) {
                 console.error("Error fetching test data:", error);
@@ -216,7 +214,7 @@ const TestPriceTable = () => {
             return;
         }
         setSelectedModality(selectmodality);
-        let selectedModalityObj = uniqueModalities.find((m) => m.description.toLowerCase() === selectmodality.toLowerCase());
+        const selectedModalityObj = uniqueModalities.find((m) => m.description.toLowerCase() === selectmodality.toLowerCase());
 
         const filterTest = testData.filter((t) => t.modality_type_fk === selectedModalityObj?.pk)
         setUniqueBodyParts(filterTest);
@@ -286,8 +284,27 @@ const TestPriceTable = () => {
         setAnchorEl(null);
     };
 
-    const handleConsessionChange = (id: number, e: any) => {
+    const handleConsessionChange = (id: number, e: any , consessionUptoVal: any) => {
         const value = e.target.value;
+        console.log("consession is upto..." , consessionUptoVal);
+        console.log("consession value..." , value);
+        setConsessionUpto(consessionUptoVal);
+        let discountMin;
+        let discountMax;
+        if(consessionUptoVal){
+           let  discountMinParse = Number(consessionUptoVal?.discountMin)
+           let  discountMaxParse = Number(consessionUptoVal?.discountMax)
+            discountMin = isNaN(discountMinParse) ? 0 : discountMinParse
+            discountMax = isNaN(discountMaxParse) ? 100 : discountMaxParse
+        }
+
+        if(value < discountMin  || value > discountMax){
+            setIsConsessionRange(true);
+        }
+        else{
+            setIsConsessionRange(false);
+        }
+
         const updateTestTable = testTableData.map((item) => {
             if (item.id === id) {
                 const aggregateDue = (item.price - (item.price * Number(value) / 100))
@@ -305,7 +322,7 @@ const TestPriceTable = () => {
         updateState({ testTableData: updateTestTable })
     };
 
-    const handleGstChange = (id: number, e: any) => {
+    const handleGstChange = () => {
 
     }
 
@@ -427,6 +444,14 @@ const TestPriceTable = () => {
                         <TextField {...params} label="Select Tests" variant="outlined" />
                     )}
                 />
+
+                  {/* Alert for tests discount or consession enters wrong */} 
+                  {
+                    isConsessionRange ?
+                          <Alert severity="error" className='text-sm w-11/12'>You can give only  {consessionUpto?.discountMin}   to   {consessionUpto?.discountMax}% of consession for {consessionUpto?.name || "this Test"}.</Alert>
+                    : null
+                  }
+              
             </div>
 
             {/* Alert for tests discount or consession */}
@@ -446,8 +471,9 @@ const TestPriceTable = () => {
                 onClose={handlePopoverClose}
                 disableRestoreFocus
             >
-                <Alert severity="error" className='text-sm'>You can give  {consessionUpto?.discountMin}   to   {consessionUpto?.discountMax}% of consession for {consessionUpto?.name || "this Test"}.</Alert>
+                <Alert severity="warning" className='text-sm'>You can give  {consessionUpto?.discountMin}   to   {consessionUpto?.discountMax}% of consession for {consessionUpto?.name || "this Test"}.</Alert>
             </Popover>
+
 
             {/* Tests and price tabe */}
             <TableContainer className='mt-5' >

@@ -1,5 +1,5 @@
 import { FormControl, IconButton, InputAdornment, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { CurrencyRupee, AddCircle, DeleteOutline } from '@mui/icons-material'
 import { useBillingStore } from '@/stores/billingStore';
 
@@ -12,7 +12,7 @@ const AdditionalChargeTable = () => {
      const additionalChargeTable = useBillingStore((state) => state.additionalChargeTable);
      const totalAdditionalCharges = useBillingStore((state) => state.totalAdditionalCharges);
 
-    const handleAdditionalCharges = (e: any) => {
+    const handleAdditionalCharges = (e: React.ChangeEvent<HTMLInputElement>) => {
         const charges = Number(e.target.value);
         setAdditionalCharges(charges);
     }
@@ -42,7 +42,6 @@ const AdditionalChargeTable = () => {
     }
 
     const deleteCharges = (data: any) => {
-        const total = additionalCharges - (additionalCharges * gstTaxAdditional / 100)
         updateState({totalAdditionalCharges : totalAdditionalCharges - Number(data?.subtTotalCharges)})
         const updateData = additionalChargeTable.filter((item) => item.id !== data.id )
         updateState({ additionalChargeTable : updateData });
@@ -132,7 +131,7 @@ const AdditionalChargeTable = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {additionalChargeTable.map((data, index) => (
+                        {additionalChargeTable.map((data) => (
                             <TableRow key={data.id}>
                                 <TableCell className='py-0'>
                                     {data.description}

@@ -161,7 +161,7 @@ const PatientDashboard = () => {
               />
             ) : (
               <Typography  className="font-semibold text-base" align="center">
-                Search for a patient or click   "Add New Patient"   to create a new record.
+                {'Search for a patient or click  "Add New Patient"   to create a new record.'}
               </Typography>
             )}
           </Container>

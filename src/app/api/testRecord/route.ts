@@ -4,7 +4,7 @@ import { NextRequest , NextResponse } from "next/server";
 const apiUrl = process.env.NEXT_PUBLIC_BACKEND_LOCAL_API_URL;
 const URL = `${apiUrl}/diagnosticTest`
 
-export async function GET(req : NextRequest){
+export async function GET(){
     try {
         const res = await fetch(URL , {
             method : 'GET',

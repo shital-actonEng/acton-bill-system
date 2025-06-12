@@ -89,6 +89,24 @@ type patient = {
     }
 }
 
+type Test = {
+    pk: number;
+    modality: string;
+    body_part: string;
+    protocol: string;
+    price: string;
+    deleted: boolean;
+    diagnostic_centre_fk: string;
+     modality_type_fk: number;
+    meta_details: {
+        gst: string;
+        discount_min_range: string;
+        discount_max_range: string;
+        referrel_bonus: string;
+        referrel_bonus_percentage: string;
+    };
+};
+
 const RegisterPatientForm = () => {
     const [tabValue, setTabValue] = useState(0);
     const [balanceRemaining, setBalanceRemaining] = useState(0);
@@ -102,10 +120,10 @@ const RegisterPatientForm = () => {
     const transactiondetailsRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
 
-    const { subTotalPrice, testTableData, referredDoctor, patientSelected, additionalChargeTable, totalAdditionalCharges, invoicePk, totalBillingAmount, transactionTableData, updateState } = useBillingStore();
-    const [allTests, setAllTests] = useState<any[]>([]);
+    const { subTotalPrice, testTableData, referredDoctor, patientSelected, additionalChargeTable, totalAdditionalCharges, invoicePk, totalBillingAmount, updateState } = useBillingStore();
+    const [allTests, setAllTests] = useState<Test[]>([]);
     const { selectedBranch } = useBranchStore();
-    let fullTransaction: { amount: number; trans_type: string; payment_type: string; comments: string }[] = [];
+    const fullTransaction: { amount: number; trans_type: string; payment_type: string; comments: string }[] = [];
 
     function ccyFormat(num: number) {
         return `${num.toFixed(2)}`;
@@ -173,9 +191,9 @@ const RegisterPatientForm = () => {
 
             const newTests = selectedTests.map((test) => {
                 const matchingitem = ambInvoiceItems.find(item => item?.diagnostic_test_fk == test.pk)
-                let priceConsseion = Number(matchingitem?.meta_details?.price) - Number(matchingitem.meta_details?.consession)
-                let consessionPer = Number(matchingitem.meta_details?.consession) * 100 / Number(matchingitem?.meta_details?.price);
-                let gstPer = Number(matchingitem.meta_details?.gst) * 100 / priceConsseion;
+                const priceConsseion = Number(matchingitem?.meta_details?.price) - Number(matchingitem.meta_details?.consession)
+                const consessionPer = Number(matchingitem.meta_details?.consession) * 100 / Number(matchingitem?.meta_details?.price);
+                const gstPer = Number(matchingitem.meta_details?.gst) * 100 / priceConsseion;
                 const aggregateDueVal = Number(matchingitem?.meta_details?.price) - Number(matchingitem?.meta_details?.consession) + Number(matchingitem.meta_details?.gst)
                 return {
                     id: test?.pk,
@@ -219,7 +237,7 @@ const RegisterPatientForm = () => {
 
             setBalanceRemaining(balanceRem);
             setInitialBalance(balanceRem);
-            let totalBilling = newTestCharge + newAdditionalCharge
+            const totalBilling = newTestCharge + newAdditionalCharge
             updateState({
                 testTableData: newTests,
                 additionalChargeTable: newAddition,
@@ -246,14 +264,14 @@ const RegisterPatientForm = () => {
         }
     }
 
-    const handleAmountChange = (e: any) => {
+    const handleAmountChange = () => {
         // setSelectPaymentMode(e.target.value)
         const value = parseFloat(amountPaidRef.current?.value || '0');
         setBalanceRemaining(initialBalance - value);
     };
 
     const handleConfirmBill = async () => {
-        let login = "Shital"
+        const login = "Shital"
         let compositeInvoice = {}
         let printInvoiceId = 0;
         if (isInvoice) {
@@ -267,7 +285,7 @@ const RegisterPatientForm = () => {
                     comments: transactiondetailsRef.current?.value || "",
                 })
             }
-            let trans = fullTransaction.map((t) => { return ({ ...t, invoice_fk: invoicePk }) })
+            const trans = fullTransaction.map((t) => { return ({ ...t, invoice_fk: invoicePk }) })
             let compositeInvoice = {
                 trans: trans
             }

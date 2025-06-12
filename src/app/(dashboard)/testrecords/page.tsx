@@ -3,7 +3,6 @@
 import { Autocomplete, Box, Button, Container, Divider, FormControl, InputAdornment, InputLabel, MenuItem, Paper, Select, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Vaccines, Save, Clear, DeleteOutline } from '@mui/icons-material';
-import jsonData from '../../../../data/testsData.json';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import { useForm, Controller } from 'react-hook-form';
 import { addTest, getTest, updateTest } from '@/express-api/testRecord/page';
@@ -16,7 +15,7 @@ type Test = {
   body_part: string;
   protocol: string;
   price: string;
-  diagnostic_centre_fk: string;
+  diagnostic_centre_fk: number;
   modality_type_fk: number;
   meta_details: {
     gst: string;
@@ -58,7 +57,7 @@ const TestRecords = () => {
   const [bodyPartValue, setBodyPartValue] = useState("");
   const [selectedTest, setSelectedTest] = useState<Test>()
   const branch = useBranchStore((state) => state.selectedBranch);
-  let [testOptions, setTestOptions] = useState<Test[]>([]);
+  const [testOptions, setTestOptions] = useState<Test[]>([]);
   const [isTestCheck, setIsTestCheck] = useState(false);
   let foundTest: Test | undefined;
 
@@ -77,7 +76,7 @@ const TestRecords = () => {
         setUniqueModality(uniqueModalityFiltered);
 
         if (!branch) return;
-        const filteredResult = resultTest.filter((item: any) =>
+        const filteredResult = resultTest.filter((item: Test) =>
           item.diagnostic_centre_fk === branch.pk && item.deleted === null
         );
 
@@ -91,14 +90,14 @@ const TestRecords = () => {
   }, [branch])
 
 
-  const handleModality = (selectmodality: any) => {
+  const handleModality = (selectmodality: string | null) => {
     if (selectmodality === null) {
        setTestOptions(testData);
        setSelectedModality("");
       return;
     }
     setSelectedModality(selectmodality);
-    let selectedModalityObj = uniqueModality.find((m) => m.description.toLowerCase() === selectmodality.toLowerCase());
+    const selectedModalityObj = uniqueModality.find((m) => m.description.toLowerCase() === selectmodality.toLowerCase());
 
      const filterTest = testData.filter((t) => t.modality_type_fk === selectedModalityObj?.pk)
     const uniqueBodyParts = filterTest.map((item, index) => ({
@@ -126,7 +125,7 @@ const TestRecords = () => {
     }));
   };
 
-  const handleTest = (e: any, test: any, source: any) => {
+  const handleTest = (e: any, test: any) => {
     setSelectedTest(test);
     foundTest = testOptions.find((t) => t.protocol == test)
     if (foundTest) {
@@ -186,7 +185,7 @@ const TestRecords = () => {
       console.warn("Form validation failed");
       return;
     }
-    let selectedModalityObj = uniqueModality.find((m) => m.description.toLowerCase() === selectedModality.toLowerCase());
+    const selectedModalityObj = uniqueModality.find((m) => m.description.toLowerCase() === selectedModality.toLowerCase());
     if (data) {
       const payload = {
         // modality: selectedModality,
@@ -309,8 +308,8 @@ const TestRecords = () => {
               options={testOptions.map((test) => test.protocol)}
               value={selectedTest?.protocol}
               className="w-full md:w-11/12"
-              onChange={(e, newValue, source) => handleTest(e, newValue, 'change')}
-              onInputChange={(e, newValue, source) => handleTest(e, newValue, 'input')}
+              onChange={(e, newValue, source) => handleTest(e, newValue)}
+              onInputChange={(e, newValue, source) => handleTest(e, newValue)}
               renderInput={(params) => (
                 <TextField
                   {...params}

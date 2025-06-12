@@ -24,22 +24,6 @@ import { Search } from "@mui/icons-material";
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
-// Sample data type
-type PatientInfo = {
-  pk: number,
-  name: string,
-  mobile: string,
-  meta_details: {
-    abhaId: string,
-    address: string,
-    ageMonth: number,
-    ageYear: number,
-    birthDate: Date,
-    email: string,
-    gender: string
-  }
-}
-
 type Patient = {
   invoiceId: number,
   date: Date,
@@ -83,9 +67,9 @@ const PatientHistoryTable = () => {
         balance = balance + amountIn.amount
       })
 
-      let patientDetails = invoice.amb_patient;
-      let referredDetails = invoice.amb_referrer;
-      let transactions = invoice.amb_invoice_trans;
+      const patientDetails = invoice.amb_patient;
+      const referredDetails = invoice.amb_referrer;
+      const transactions = invoice.amb_invoice_trans;
       let totalGST = 0;
       let totalDiscount = 0;
       let totalPrice = 0;

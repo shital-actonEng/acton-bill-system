@@ -7,16 +7,6 @@ const STORAGE_LOC = "invoices"
 
 let browser : any ;
 
-const getbrowserInstance = async() => {
-  if(!browser){
-    browser = await puppeteer.launch({
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
-         headless: true,
-    });
-  }
-  return browser;
-}
-
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const id = searchParams.get('invoiceId');
@@ -41,7 +31,7 @@ export async function GET(req: NextRequest) {
 }
 
 function getReportDirectory(invoiceId : number) {
-    let path = `${STORAGE_LOC}/${invoiceId}`
+    const path = `${STORAGE_LOC}/${invoiceId}`
     if (!fs.existsSync(path)) {
         fs.mkdirSync(path , {recursive : true} )
     }
@@ -54,8 +44,8 @@ function getReportDirectory(invoiceId : number) {
          headless: true,
     });
     //  browser = await getbrowserInstance();
-    let parentDir = getReportDirectory(invoiceId)
-    let outputPath = `${parentDir}/${invoiceId}.pdf`
+    const parentDir = getReportDirectory(invoiceId)
+    const outputPath = `${parentDir}/${invoiceId}.pdf`
     // const context = await browser.createBrowserContext()
     // const page = await context.newPage();
     const page = await browser.newPage();

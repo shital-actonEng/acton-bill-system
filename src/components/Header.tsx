@@ -15,7 +15,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Avatar, Button, Collapse, FormControl, FormControlLabel, InputLabel, MenuItem, Select } from '@mui/material';
+import { Collapse, FormControl, FormControlLabel, InputLabel, MenuItem, Select } from '@mui/material';
 import ProfileAvatar from '@/components/ProfileAvatar';
 import Image from 'next/image';
 import Link from 'next/link';

@@ -2,7 +2,7 @@
 
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import { useThemeStore } from '@/stores/themeStore';
-import { theme, darkTheme, blueTheme } from '@/theme/theme';
+import { theme, darkTheme } from '@/theme/theme';
 
 export default function ThemeWrapper({ children }: { children: React.ReactNode }) {
   const mode = useThemeStore((state) => state.mode);

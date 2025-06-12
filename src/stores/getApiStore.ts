@@ -1,6 +1,5 @@
 import { getModalities } from '@/express-api/modalities/page';
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 
 type Store = {
     modalitiesData: any[],
