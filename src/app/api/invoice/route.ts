@@ -24,7 +24,7 @@ export async function GET(req:NextRequest) {
         })
         const data = await res.json();
         return NextResponse.json(data);
-    } catch (error) {
+    } catch{
         return NextResponse.json({message : 'Failed to fetch Invoice detailed'} , {status : 500})
     }
 }
@@ -41,7 +41,7 @@ export async function POST(req:NextRequest) {
         })
         const result = await res.json();
         return NextResponse.json(result);
-    } catch (error) {
+    } catch {
         return NextResponse.json({message : "Failed to add invoice detailed"},{ status : 500 } )
     }
 }

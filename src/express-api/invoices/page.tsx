@@ -1,7 +1,7 @@
 const url = `/api/invoice`
 
 async function addInvoice(login: any, compositeInvoice: any) {
-    let newCompositeInvoice = appendCreds(login, compositeInvoice)
+    const newCompositeInvoice = appendCreds(login, compositeInvoice)
     const response = await fetch("/api/invoice", {
         method: "POST",
         headers: {
@@ -19,7 +19,7 @@ async function addInvoice(login: any, compositeInvoice: any) {
 }
 
 function appendTransations(login: any, invoiceId: any, compositeInvoice: any) {
-    let newCompositeInvoice = appendCreds(login, compositeInvoice)
+    const newCompositeInvoice = appendCreds(login, compositeInvoice)
     return fetch(`${url}/${invoiceId}/trans`, {
         method: "POST",
         headers: {
@@ -41,8 +41,8 @@ function updateStatus(invoiceId: any, status: any) {
 
 
 function appendCreds(login: any, compositeInvoice: any) {
-    let trs = compositeInvoice.trans.map((t: any) => { return ({ ...t, created_by: login }) })
-    let newCompositeInvoice = { ...compositeInvoice, trans: trs }
+    const trs = compositeInvoice.trans.map((t: any) => { return ({ ...t, created_by: login }) })
+    const newCompositeInvoice = { ...compositeInvoice, trans: trs }
     return newCompositeInvoice
 }
 

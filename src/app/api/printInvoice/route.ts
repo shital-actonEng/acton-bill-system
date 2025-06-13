@@ -5,7 +5,7 @@ import { NextRequest } from "next/server";
 
 const STORAGE_LOC = "invoices"
 
-let browser : any ;
+let browser: any;
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -25,23 +25,41 @@ export async function GET(req: NextRequest) {
   return new Response(buffer, {
     headers: {
       'Content-Type': 'application/pdf',
-      'Content-Disposition': 'inline', 
+      'Content-Disposition': 'inline',
     },
   });
 }
 
-function getReportDirectory(invoiceId : number) {
-    const path = `${STORAGE_LOC}/${invoiceId}`
-    if (!fs.existsSync(path)) {
-        fs.mkdirSync(path , {recursive : true} )
-    }
-    return path
+function getReportDirectory(invoiceId: number) {
+  const path = `${STORAGE_LOC}/${invoiceId}`
+  if (!fs.existsSync(path)) {
+    fs.mkdirSync(path, { recursive: true })
+  }
+  return path
 }
 
- export async function generatePdfReport(htmlReport : any , invoiceId : number) {
-   browser = await puppeteer.launch({
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
-         headless: true,
+// export async function generatePdfReport(htmlReport: any, invoiceId: number) {
+//   browser = await puppeteer.launch({
+//     args: ['--no-sandbox', '--disable-setuid-sandbox'],
+//     headless: true,
+//   });
+//   //  browser = await getbrowserInstance();
+//   const parentDir = getReportDirectory(invoiceId)
+//   const outputPath = `${parentDir}/${invoiceId}.pdf`
+//   // const context = await browser.createBrowserContext()
+//   // const page = await context.newPage();
+//   const page = await browser.newPage();
+//   await page.setContent(htmlReport)
+//   await page.pdf({ path: `${outputPath}`, format: 'A4', margin: { top: "50px", right: "50px", bottom: "100px", left: "50px" }, printBackground: true })
+//   // await context.close()
+//   await page.close();
+// }
+
+export async function POST(req: NextRequest) {
+  async function generatePdfReport(htmlReport: any, invoiceId: number) {
+    browser = await puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      headless: true,
     });
     //  browser = await getbrowserInstance();
     const parentDir = getReportDirectory(invoiceId)
@@ -50,12 +68,10 @@ function getReportDirectory(invoiceId : number) {
     // const page = await context.newPage();
     const page = await browser.newPage();
     await page.setContent(htmlReport)
-    await page.pdf({path: `${outputPath}`, format: 'A4', margin: { top: "50px", right: "50px", bottom: "100px", left: "50px" }, printBackground: true})
+    await page.pdf({ path: `${outputPath}`, format: 'A4', margin: { top: "50px", right: "50px", bottom: "100px", left: "50px" }, printBackground: true })
     // await context.close()
     await page.close();
-}
-
-export async function POST(req: NextRequest) {
+  }
   try {
     const data = await req.json();
     await generatePdfReport(data.html, data.invoiceId);

@@ -10,21 +10,21 @@ import { getModalities } from '@/express-api/modalities/page';
 
 
 // Utility function
-const getUniqueOptions = (data: any[], key: string) => {
-    const seen = new Set();
-    return data
-        .filter((item) => {
-            if (!seen.has(item[key])) {
-                seen.add(item[key]);
-                return true;
-            }
-            return false;
-        })
-        .map((item, index) => ({
-            id: index,
-            label: item[key],
-        }));
-};
+// const getUniqueOptions = (data: any[], key: string) => {
+//     const seen = new Set();
+//     return data
+//         .filter((item) => {
+//             if (!seen.has(item[key])) {
+//                 seen.add(item[key]);
+//                 return true;
+//             }
+//             return false;
+//         })
+//         .map((item, index) => ({
+//             id: index,
+//             label: item[key],
+//         }));
+// };
 interface TestData {
     id: number;
     name: string;
@@ -41,9 +41,9 @@ interface TestRowProps {
     data: TestData;
     handlePopoverOpen: (event: React.MouseEvent<HTMLElement>, consessionUpto: any) => void;
     handlePopoverClose: () => void;
-    handleConsessionChange: (id: number, event: React.ChangeEvent<HTMLInputElement> , consessionUpto: any) => void;
-    handleGstChange: (id: number, event: React.ChangeEvent<HTMLInputElement>) => void;
-    handleCommentChange: (id: number, event: React.ChangeEvent<HTMLInputElement>) => void;
+    handleConsessionChange: (id: number, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, consessionUpto: any) => void;
+    handleGstChange: (id: number, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,) => void;
+    handleCommentChange: (id: number, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,) => void;
     deleteTest: (data: TestData) => void;
 }
 
@@ -78,7 +78,7 @@ const TestRow: React.FC<TestRowProps> = React.memo(
                         // type="number"
                         size="small"
                         value={data.consession || ""}
-                        onChange={(e) => handleConsessionChange(data.id, e , consessionUpto)}
+                        onChange={(e) => handleConsessionChange(data.id, e, consessionUpto)}
                         InputLabelProps={{ style: { fontSize: '0.75rem' } }}
                     />
                 </TableCell>
@@ -123,6 +123,8 @@ const TestRow: React.FC<TestRowProps> = React.memo(
     }
 );
 
+TestRow.displayName = "TestRow"
+
 type Test = {
     pk: number;
     modality: string;
@@ -131,7 +133,7 @@ type Test = {
     price: string;
     deleted: boolean;
     diagnostic_centre_fk: string;
-     modality_type_fk: number;
+    modality_type_fk: number;
     meta_details: {
         gst: string;
         discount_min_range: string;
@@ -147,10 +149,24 @@ type Modality = {
     description: string;
 }
 
+type ReferrenceType = {
+    name: string;
+    pk: number;
+    meta_details: {
+        mobile: number;
+        email: string;
+        medicalDegree: string;
+        prn: string;
+        bonusInPercentage: string;
+        bonus: string;
+        address: string
+    }
+}
+
 
 const TestPriceTable = () => {
     const [loading, setLoading] = useState(false);
-    const [selectReferreing, setSelectReferreing] = useState([]);
+    const [selectReferreing, setSelectReferreing] = useState<ReferrenceType[]>([]);
     const [uniqueModalities, setUniqueModalities] = useState<Modality[]>([]);
     const [uniqueBodyParts, setUniqueBodyParts] = useState<Test[]>([]);
     const [selectedModality, setSelectedModality] = useState("");
@@ -164,13 +180,14 @@ const TestPriceTable = () => {
     const subTotalPrice = useBillingStore((state) => state.subTotalPrice);
     const testTableData = useBillingStore((state) => state.testTableData);
     const referredDoctor = useBillingStore((state) => state.referredDoctor);
-    const [isConsessionRange , setIsConsessionRange] = useState(false);
+    const [isConsessionRange, setIsConsessionRange] = useState(false);
 
     const loadReferral = async () => {
         try {
             setLoading(true);
             const result = await getReferrer();
             setSelectReferreing(result);
+            console.log("all referrel are...", result);
         } catch (error) {
             console.log("Failed to load referrer", error);
         }
@@ -284,24 +301,24 @@ const TestPriceTable = () => {
         setAnchorEl(null);
     };
 
-    const handleConsessionChange = (id: number, e: any , consessionUptoVal: any) => {
+    const handleConsessionChange = (id: number, e: any, consessionUptoVal: any) => {
         const value = e.target.value;
-        console.log("consession is upto..." , consessionUptoVal);
-        console.log("consession value..." , value);
+        console.log("consession is upto...", consessionUptoVal);
+        console.log("consession value...", value);
         setConsessionUpto(consessionUptoVal);
-        let discountMin;
-        let discountMax;
-        if(consessionUptoVal){
-           let  discountMinParse = Number(consessionUptoVal?.discountMin)
-           let  discountMaxParse = Number(consessionUptoVal?.discountMax)
-            discountMin = isNaN(discountMinParse) ? 0 : discountMinParse
-            discountMax = isNaN(discountMaxParse) ? 100 : discountMaxParse
+        let discountMin = 0;
+        let discountMax = 100;
+        if (consessionUptoVal) {
+            discountMin = Number(consessionUptoVal?.discountMin)
+            discountMax = Number(consessionUptoVal?.discountMax)
+            // discountMin = isNaN(discountMinParse) ? 0 : discountMinParse
+            // discountMax = isNaN(discountMaxParse) ? 100 : discountMaxParse
         }
 
-        if(value < discountMin  || value > discountMax){
+        if (value < discountMin || value > discountMax) {
             setIsConsessionRange(true);
         }
-        else{
+        else {
             setIsConsessionRange(false);
         }
 
@@ -335,7 +352,9 @@ const TestPriceTable = () => {
     };
 
     const handleReferrer = (e: any) => {
-        updateState({ referredDoctor: e.target.value });
+        const selectedPk = e.target.value;
+        const selectedRef = selectReferreing.find((ref) => ref.pk === selectedPk);
+        updateState({ referredDoctor: selectedRef });
     }
 
     return (
@@ -365,7 +384,7 @@ const TestPriceTable = () => {
                                 </MenuItem>
                             ) : (
                                 selectReferreing.map((data, index) => (
-                                    <MenuItem value={data} key={index}>
+                                    <MenuItem value={data.pk} key={index}>
                                         {data.name}
                                     </MenuItem>
                                 ))
@@ -445,13 +464,13 @@ const TestPriceTable = () => {
                     )}
                 />
 
-                  {/* Alert for tests discount or consession enters wrong */} 
-                  {
+                {/* Alert for tests discount or consession enters wrong */}
+                {
                     isConsessionRange ?
-                          <Alert severity="error" className='text-sm w-11/12'>You can give only  {consessionUpto?.discountMin}   to   {consessionUpto?.discountMax}% of consession for {consessionUpto?.name || "this Test"}.</Alert>
-                    : null
-                  }
-              
+                        <Alert severity="error" className='text-sm w-11/12'>You can give only  {consessionUpto?.discountMin}   to   {consessionUpto?.discountMax}% of consession for {consessionUpto?.name || "this Test"}.</Alert>
+                        : null
+                }
+
             </div>
 
             {/* Alert for tests discount or consession */}

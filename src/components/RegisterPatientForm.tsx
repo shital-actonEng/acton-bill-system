@@ -89,6 +89,17 @@ type patient = {
     }
 }
 
+type InvoiceItems = {
+    pk: number;
+    diagnostic_test_fk : number;
+    invoice_fk : number;
+    meta_details: {
+        consession : number;
+        gst : number;
+        price : number;
+    }
+}
+
 type Test = {
     pk: number;
     modality: string;
@@ -154,7 +165,7 @@ const RegisterPatientForm = () => {
             setLoading(true);
             const result = await getPatients(value);
             setPatientData(result);
-        } catch (error) {
+        } catch {
             console.log("failed to load patient data")
         }
         finally {
@@ -178,7 +189,8 @@ const RegisterPatientForm = () => {
             updateState({ transactionTableData: transDetails });
             setIsInvoice(true);
             updateState({ isDisabled: true, invoicePk: matchedInvoice?.pk })
-            const ambInvoiceItems = matchedInvoice.amb_invoice_items
+            const ambInvoiceItems : InvoiceItems[] = matchedInvoice.amb_invoice_items
+            console.log("amb invoice items are..." , ambInvoiceItems)
             const selectedTestIds = ambInvoiceItems.map(item => item.diagnostic_test_fk);
             const selectedTests = allTests.filter(test => selectedTestIds.includes(test.pk) && test.pk !== 1)
             const referrerAvailable = matchedInvoice.amb_referrer
@@ -191,10 +203,10 @@ const RegisterPatientForm = () => {
 
             const newTests = selectedTests.map((test) => {
                 const matchingitem = ambInvoiceItems.find(item => item?.diagnostic_test_fk == test.pk)
-                const priceConsseion = Number(matchingitem?.meta_details?.price) - Number(matchingitem.meta_details?.consession)
-                const consessionPer = Number(matchingitem.meta_details?.consession) * 100 / Number(matchingitem?.meta_details?.price);
-                const gstPer = Number(matchingitem.meta_details?.gst) * 100 / priceConsseion;
-                const aggregateDueVal = Number(matchingitem?.meta_details?.price) - Number(matchingitem?.meta_details?.consession) + Number(matchingitem.meta_details?.gst)
+                const priceConsseion = Number(matchingitem?.meta_details?.price) - Number(matchingitem?.meta_details?.consession)
+                const consessionPer = Number(matchingitem?.meta_details?.consession) * 100 / Number(matchingitem?.meta_details?.price);
+                const gstPer = Number(matchingitem?.meta_details?.gst) * 100 / priceConsseion;
+                const aggregateDueVal = Number(matchingitem?.meta_details?.price) - Number(matchingitem?.meta_details?.consession) + Number(matchingitem?.meta_details?.gst)
                 return {
                     id: test?.pk,
                     name: test?.protocol,
@@ -286,7 +298,7 @@ const RegisterPatientForm = () => {
                 })
             }
             const trans = fullTransaction.map((t) => { return ({ ...t, invoice_fk: invoicePk }) })
-            let compositeInvoice = {
+            const compositeInvoice = {
                 trans: trans
             }
 
@@ -303,8 +315,8 @@ const RegisterPatientForm = () => {
                 let totalConsession = 0;
                 let consessionPrice = 0;
                 let totalGst = 0;
-                let entries = [];
-                const newTransactions = testTableData.forEach((test) => {
+                const entries = [];
+                testTableData.forEach((test) => {
                     // Base test price - Debit
                     totalTestPrice = totalTestPrice + test.price;
 
@@ -353,7 +365,7 @@ const RegisterPatientForm = () => {
                 const result = [];
                 let totalCharge = 0;
                 let totalGst = 0;
-                const newCharge = additionalChargeTable.forEach((charge) => {
+                additionalChargeTable.forEach((charge) => {
                     // base charge price 
                     totalCharge = totalCharge + Number(charge.additionalCharges)
                     // GST - Debit
@@ -392,14 +404,14 @@ const RegisterPatientForm = () => {
                 })
             }
 
-            let patientid = patientSelected?.pk ? patientSelected.pk : "";
-            let referrerId = referredDoctor ? referredDoctor.pk : "";
-            let diagnosticcentre = selectedBranch ? selectedBranch.pk : "";
+            const patientid = patientSelected?.pk ? patientSelected.pk : "";
+            const referrerId = referredDoctor ? referredDoctor.pk : "";
+            const diagnosticcentre = selectedBranch ? selectedBranch.pk : "";
 
-            let newitemFks = [];
+            const newitemFks = [];
             if (testTableData.length > 0) {
                 const testFk = testTableData.map((t) => {
-                    let priceConsseion = Number(t.price) - Number(t?.price * t?.consession / 100)
+                    const priceConsseion = Number(t.price) - Number(t?.price * t?.consession / 100)
                     return (
                         {
                             diagnostic_test_fk: t?.id,

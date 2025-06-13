@@ -4,15 +4,8 @@ import { NextRequest, NextResponse } from 'next/server'
 const apiUrl = process.env.NEXT_PUBLIC_BACKEND_LOCAL_API_URL;
 const URL = `${apiUrl}/invoice`
 
-
-type Context = {
-  params: {
-    invoiceId: string
-  }
-}
-
-export async function POST(req: NextRequest, { params }: Context) {
-  const { invoiceId } = params
+export async function POST(req: NextRequest, { params }: { params: Promise<{ invoiceId: string }> }) {
+  const { invoiceId } = await params ;
   const backendUrl = `${URL}/${invoiceId}/trans`
   const body = await req.json()
 

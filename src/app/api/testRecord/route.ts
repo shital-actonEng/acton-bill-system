@@ -14,7 +14,7 @@ export async function GET(){
         })
         const data = await res.json();
         return NextResponse.json(data);
-    } catch (error) {
+    } catch {
         return NextResponse.json({message : 'Failed to fetch Patients'} , {status : 500})
     }
 }
@@ -49,7 +49,7 @@ export async function PUT(req:NextRequest) {
         })
         const result = await res.json();
         return NextResponse.json(result);
-    } catch (error) {
+    } catch {
         return NextResponse.json({message : "Failed to update patient details"} , {status : 500})
     }
 }

@@ -15,12 +15,10 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Collapse, FormControl, FormControlLabel, InputLabel, MenuItem, Select } from '@mui/material';
+import {FormControl, FormControlLabel, InputLabel, MenuItem, Select } from '@mui/material';
 import ProfileAvatar from '@/components/ProfileAvatar';
 import Image from 'next/image';
 import Link from 'next/link';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
 import Switch from '@mui/material/Switch';
 import { useThemeStore } from '@/stores/themeStore';
 import { usePathname } from 'next/navigation';
@@ -225,7 +223,7 @@ export default function Header({ children }: { children: React.ReactNode }) {
     ]
     const [branchOption, setBranchOption] = React.useState<{ pk: number; name: string; ae_title: string }[]>([])
     const [loading, setLoading] = React.useState(false);
-    const [openList, setOpenList] = React.useState<Record<number, boolean>>({});
+    // const [openList, setOpenList] = React.useState<Record<number, boolean>>({});
     const branch = useBranchStore((state) => state.selectedBranch);
     const setBranch = useBranchStore((state) => state.setSelectedBranch);
     const [hasHydrated, setHasHydrated] = React.useState(false);
@@ -234,9 +232,9 @@ export default function Header({ children }: { children: React.ReactNode }) {
         setHasHydrated(true);
     }, []);
 
-    const handleClick = (id: any) => {
-        setOpenList((prevOpen) => ({ ...prevOpen, [id]: !prevOpen[id] }));
-    };
+    // const handleClick = (id: any) => {
+    //     setOpenList((prevOpen) => ({ ...prevOpen, [id]: !prevOpen[id] }));
+    // };
 
     const toggleTheme = useThemeStore((state) => state.toggleTheme);
 
@@ -357,7 +355,7 @@ export default function Header({ children }: { children: React.ReactNode }) {
                                 <Link href={menu.path || "#"} passHref legacyBehavior>
                                     <ListItemButton
                                         selected={pathname === menu.path}
-                                        onClick={() => menu.nestedItems && handleClick(menu.id)}
+                                        onClick={() => menu}
                                         sx={[
                                             {
                                                 px: 2.5
@@ -402,11 +400,11 @@ export default function Header({ children }: { children: React.ReactNode }) {
                                             ]}
                                         >
                                             {menu.name}
-                                            {menu.nestedItems && menu.id !== undefined && (openList[menu.id] ? <ExpandLess /> : <ExpandMore />)}
+                                            {/* {menu.nestedItems && menu.id !== undefined && (openList[menu.id] ? <ExpandLess /> : <ExpandMore />)} */}
                                         </ListItemText>
                                     </ListItemButton>
                                 </Link>
-                                {menu.nestedItems && (
+                                {/* {menu.nestedItems && (
                                     <Collapse in={openList[menu.id]} timeout="auto" unmountOnExit>
                                         <List component="div" disablePadding>
                                             {menu.nestedItems.map((nested) => (
@@ -444,7 +442,7 @@ export default function Header({ children }: { children: React.ReactNode }) {
                                             ))}
                                         </List>
                                     </Collapse>
-                                )}
+                                )} */}
 
                             </ListItem>
                         )

@@ -129,7 +129,7 @@ const TestRecords = () => {
     setSelectedTest(test);
     foundTest = testOptions.find((t) => t.protocol == test)
     if (foundTest) {
-        let modalityFound = uniqueModality.find((m) => m.pk === foundTest?.modality_type_fk )
+        const modalityFound = uniqueModality.find((m) => m.pk === foundTest?.modality_type_fk )
       setSelectedTest(foundTest);
       // Set values in form from found test
       setValue('test', foundTest.protocol);
@@ -308,8 +308,8 @@ const TestRecords = () => {
               options={testOptions.map((test) => test.protocol)}
               value={selectedTest?.protocol}
               className="w-full md:w-11/12"
-              onChange={(e, newValue, source) => handleTest(e, newValue)}
-              onInputChange={(e, newValue, source) => handleTest(e, newValue)}
+              onChange={(e, newValue) => handleTest(e, newValue)}
+              onInputChange={(e, newValue) => handleTest(e, newValue)}
               renderInput={(params) => (
                 <TextField
                   {...params}
