@@ -14,7 +14,7 @@ export default function Home() {
   //         };
   //         fetchData();
   //     }, [])
-
+console.log("API:", process.env.NEXT_PUBLIC_BACKEND_LOCAL_API_URL);
   return (
     <div >
       {/* <CsvToJsonConverter /> */}
