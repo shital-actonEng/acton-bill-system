@@ -1,4 +1,4 @@
- const url = `/api/diagnosticCenter`
+ const url = `/api/diagnosticcentre`
 
  const getDiagnosticCenter = async () =>{
      try {
